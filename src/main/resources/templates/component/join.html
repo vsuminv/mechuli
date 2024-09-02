@@ -1,6 +1,16 @@
-<form th:fragment="join" method="post" id="joinForm" >
-  <label for="userId"></label>
-  <input id="userId" type="text">
-  <label for="userPw"></label>
-  <input id="userPw" type="text">
+<form th:fragment="join" action="join" method="post" id="join" >
+ <div class="rounded-md p-2 max-w-lg shadow-md bg-gray-300">
+      <div class="flex-row gap-x-10 space-y-3 mt-4 align-middle bg-gray-300">
+        <div class="h-7 px-4 text-left align-middle font-bold ">
+            <label for="userId" class="w-20 inline-block text-left ">UserId</label>
+          <input  type="text" id="userId" name="userId"  placeholder="id" class="text-center px-4 py-2 " required>
+        </div>
+        <div class="h-7 px-4 text-left align-middle font-bold">
+            <label for="userPw" class="w-20 inline-block text-left">UserPW</label>
+          <input  type="text" id="userPw" name="userPw" placeholder="password" class=" text-center px-4 py-2 " required>
+
+        </div>
+        <button type="submit" class="w-full mt-5 bg-blue-300 text-gray-500 py-2 rounded-md font-semibold tracking-tight">join</button>
+      </div>
+ </div>
 </form>
