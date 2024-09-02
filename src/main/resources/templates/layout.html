@@ -1,0 +1,9 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:insert="~{default/head :: head}"></div>
+<body class="flex min-h-screen w-full flex-col text-gray-600 bg-muted/40">
+<header th:insert="~{default/header :: header}"></header>
+<main th:insert="~{default/main :: main}"></main>
+<footer th:insert="~{default/footer :: footer}"></footer>
+<script th:src="@{/js/common.js}"></script>
+</body>
+</html>

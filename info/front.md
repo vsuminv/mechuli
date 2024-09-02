@@ -68,7 +68,8 @@ tailwind CLI 빌드를 진행합니다.
 
 # 3. Gradle로 node 빌드하기
 
-tailwindcss 가 node 모듈로 설치했기 때문에 Spring boot 빌드시 npm build가 같이 진행되야 실행됩니다. 다행히 gradle build에 node를 빌드해주는 좋은 plugin이 있습니다.
+tailwindcss 가 node 모듈로 설치했기 때문에 Spring boot 빌드시 npm build가 같이 진행되야 실행됩니다.
+다행히 gradle build에 node를 빌드해주는 좋은 plugin이 있습니다.
 
 ```
 plugins {
