@@ -1,14 +1,17 @@
 server:
-  port : 8081
+  port : 8000
 
 spring:
   devtools:
     livereload:
       enabled: true
 
+  config:
+    import: optional:file:.env[.properties]
+
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -16,17 +19,23 @@ spring:
         format_sql: true
         default_batch_fetch_size: 1000
 
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/pushop?&serverTimezone=Asia/Seoul
-#    username: test
-#    password: sa
 
 
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
 
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:test
-#  sql:
-#    init:
-#      mode: always
+  sql:
+    init:
+      mode: always
+
+
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://localhost:3306/pushop?&serverTimezone=Asia/Seoul
+  #    username: test
+  #    password: sa
+
+
