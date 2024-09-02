@@ -17,7 +17,7 @@
 
 ```
 dependencies {
-	//basic
+		//basic
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
@@ -30,14 +30,17 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-
-	// Data
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+	// DB
 //	runtimeOnly 'com.mysql:mysql-connector-j'
-//	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.h2database:h2'
 
-}
+
 ```
 ## 구현 기능
 - 로그인/회원가입
