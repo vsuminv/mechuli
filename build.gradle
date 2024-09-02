@@ -58,8 +58,7 @@ node {
 	/**
 	 * node version
 	 */
-	version = "20.16.0"
-
+	version = "20.17.0"
 	/**
 	 * npm version
 	 */
