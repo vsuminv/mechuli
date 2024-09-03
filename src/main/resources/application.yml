@@ -1,10 +1,17 @@
 server:
-  port : 8000
+  port : 8081
 
 spring:
   devtools:
     livereload:
       enabled: true
+  web:
+    resources:
+      static-locations: classpath:/static/
+  thymeleaf:
+    cache: false # 개발 시에는 캐시를 끄는 것이 좋습니다.
+    prefix: classpath:/templates/
+    suffix: .html
 
   config:
     import: optional:file:.env[.properties]
