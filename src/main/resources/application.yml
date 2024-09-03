@@ -1,5 +1,5 @@
 server:
-  port : 8000
+  port : 8081
 
 spring:
   devtools:
@@ -37,3 +37,10 @@ spring:
   #    password: sa
 
 
+
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:test
+#  sql:
+#    init:
+#      mode: always
