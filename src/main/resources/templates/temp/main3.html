@@ -1,0 +1,4 @@
+<main th:fragment="main(content)" class="main-container flex flex-col min-h-screen">
+    <!-- 전달받은 content 프래그먼트를 렌더링 -->
+    <div th:replace="~{::${content}}"></div>
+</main>
