@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/default/head :: head}"></head>
+<body class="flex flex-col min-h-screen">
+<!-- Header -->
+<header th:insert="~{/default/header :: header}" class="flex-shrink-0 mb-16"></header>
+
+<!-- Main Content -->
+<main th:fragment="main" class="main-container flex-grow flex flex-col items-center p-4 mt-16">
+    <!-- 슬라이드 쇼 컨테이너 -->
+    <div class="w-full max-w-4xl flex flex-col items-center">
+        <!-- 슬라이드 섹션 -->
+        <div class="relative w-full">
+            <!-- 첫 번째 슬라이드 -->
+            <div class="mb-8 flex flex-col items-start">
+                <!-- 텍스트 줄바꿈 설정 -->
+                <h2 class="font-bold text-lg bg-yellow-300 p-2 whitespace-normal w-24 mb-2">#한식 기반</h2>
+                <!-- 슬라이드 내용 및 화살표 버튼 컨테이너 -->
+                <div class="flex items-center">
+                    <!-- 왼쪽 화살표 버튼 -->
+                    <button class="mr-2 bg-yellow-300 rounded-full p-2">
+                        <span class="text-lg">&#9664;</span> <!-- 왼쪽 화살표 아이콘 -->
+                    </button>
+                    <!-- 슬라이드 내용 -->
+                    <div class="flex overflow-hidden w-full space-x-2">
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                    </div>
+                    <!-- 오른쪽 화살표 버튼 -->
+                    <button class="ml-2 bg-yellow-300 rounded-full p-2">
+                        <span class="text-lg">&#9654;</span> <!-- 오른쪽 화살표 아이콘 -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- 두 번째 슬라이드 -->
+            <div class="mb-8 flex flex-col items-start">
+                <!-- 텍스트 줄바꿈 설정 -->
+                <h2 class="font-bold text-lg bg-yellow-300 p-2 whitespace-normal w-24 mb-2">#고소한맛 기반</h2>
+                <!-- 슬라이드 내용 및 화살표 버튼 컨테이너 -->
+                <div class="flex items-center">
+                    <!-- 왼쪽 화살표 버튼 -->
+                    <button class="mr-2 bg-yellow-300 rounded-full p-2">
+                        <span class="text-lg">&#9664;</span> <!-- 왼쪽 화살표 아이콘 -->
+                    </button>
+                    <!-- 슬라이드 내용 -->
+                    <div class="flex overflow-hidden w-full space-x-2">
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                    </div>
+                    <!-- 오른쪽 화살표 버튼 -->
+                    <button class="ml-2 bg-yellow-300 rounded-full p-2">
+                        <span class="text-lg">&#9654;</span> <!-- 오른쪽 화살표 아이콘 -->
+                    </button>
+                </div>
+            </div>
+
+            <!-- 세 번째 슬라이드 -->
+            <div class="mb-8 flex flex-col items-start">
+                <!-- 텍스트 줄바꿈 설정 -->
+                <h2 class="font-bold text-lg bg-yellow-300 p-2 whitespace-normal w-24 mb-2">#수민맛집 기반</h2>
+                <!-- 슬라이드 내용 및 화살표 버튼 컨테이너 -->
+                <div class="flex items-center">
+                    <!-- 왼쪽 화살표 버튼 -->
+                    <button class="mr-2 bg-yellow-300 rounded-full p-2">
+                        <span class="text-lg">&#9664;</span> <!-- 왼쪽 화살표 아이콘 -->
+                    </button>
+                    <!-- 슬라이드 내용 -->
+                    <div class="flex overflow-hidden w-full space-x-2">
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                        <div class="w-32 h-32 bg-gray-300 rounded"></div>
+                    </div>
+                    <!-- 오른쪽 화살표 버튼 -->
+                    <button class="ml-2 bg-yellow-300 rounded-full p-2">
+                        <span class="text-lg">&#9654;</span> <!-- 오른쪽 화살표 아이콘 -->
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+
+<!-- 기존 footer.html의 내용을 삽입하고 그 위에 별 모양 버튼 추가 -->
+<footer class="fixed bottom-0 w-full p-4 bg-[#fef445] bg-opacity-20 h-24 flex justify-between items-end">
+    <!-- 왼쪽 별 버튼 -->
+    <button class="relative flex items-center justify-center p-2">
+        <img src="/image/star.png" alt="왼쪽 별" class="w-16 h-16">
+        <span class="absolute inset-0 flex items-center justify-center text-black font-bold">SNS</span>
+        <!-- 별 이미지 위에 텍스트 겹치기 -->
+    </button>
+
+    <!-- 기존 푸터 내용 삽입 -->
+    <div class="absolute left-1/2 transform -translate-x-1/2 -top-8 w-28 h-28 bg-[#fef445] bg-opacity-70 rounded-full flex justify-center items-center">
+        <a href="#" class="text-black">
+            <img src="/image/mechuri_logo.png" class="h-24 mx-auto">
+        </a>
+    </div>
+
+    <!-- 오른쪽 별 버튼 -->
+    <button class="relative flex items-center justify-center p-2">
+        <img src="/image/star.png" alt="오른쪽 별" class="w-16 h-16">
+        <span class="absolute inset-0 flex items-center justify-center text-black font-bold">mypage</span>
+        <!-- 별 이미지 위에 텍스트 겹치기 -->
+    </button>
+</footer>
+
+<!-- JavaScript 파일 추가 -->
+<script src="/js/header.js"></script>
+<script src="/js/slider.js"></script>
+</body>
+</html>
