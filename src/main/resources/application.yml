@@ -26,8 +26,6 @@ spring:
         format_sql: true
         default_batch_fetch_size: 1000
 
-
-
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test
@@ -44,3 +42,10 @@ spring:
   #    password: sa
 
 
+
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:test
+#  sql:
+#    init:
+#      mode: always
