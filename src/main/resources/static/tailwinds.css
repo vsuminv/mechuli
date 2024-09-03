@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.my_content{
+    min-width: 700px !important;
+    max-width: 700px !important;
+}
+header{
+    z-index: 99;
+}
+footer {
+    z-index: 99;
+}
+
+.search{
+    min-width: 670px !important;
+    max-width: 670px !important;
+    margin:3px  !important;
+}
+

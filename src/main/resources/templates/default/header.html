@@ -1,10 +1,12 @@
-<header th:fragment="header" class="flex  items-center border-b px-4 bg-background md:px-6">
-<div>
- </div>
-  <div>
- <img class="mx-auto h-24 w-auto" th:src="@{/img/mechuri_logo.png}">
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        메추리
-      </h2>
-    </div>
+<header th:fragment="header" class="sticky bg-yellow-100">
+
+ <img class="mx-auto h-24" th:src="@{/img/mechuri_logo.png}">
+
+    <div>
+          <label for="search" class="sr-only"></label>
+          <input id="search" name="search" type="search" autocomplete="search" required
+                 class="appearance-none rounded-none relative block w-full px-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                 placeholder="search">
+        </div>
+
 </header>
