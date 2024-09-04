@@ -1,0 +1,42 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:insert="~{/default/head :: head}"></div>
+
+<body>
+
+
+
+<div class="가게상세 Page">
+
+<main th:insert="~{/default/main :: main}" class="bg-yellow-100 bg-opacity-80"></main>
+
+<footer th:insert="~{/default/footer :: footer}" class="bottom-0 sticky"></footer>
+</div>
+
+
+</body>
+</html>
+
+
+
+<div th:fragment="detailPage">
+
+
+  <div th:insert="~{/component/usersearch :: usersearch}"></div> </br></br></br></br></br></br></br></br>
+
+
+    <div th:insert="~{/component/user :: user}"></div> </br></br></br></br></br></br></br></br>
+
+
+    <div th:insert="~{/component/userlatest :: userlatest}"></div> </br></br></br></br></br></br></br></br>
+
+
+    <div th:insert="~{/component/userparty :: userparty}"></div> </br></br></br></br></br></br></br></br>
+
+
+    <div th:insert="~{/component/userupdate :: userupdate}"></div> </br></br></br></br></br></br></br></br>
+
+
+    <div th:insert="~{/component/userupdate :: userupdate}"></div> </br></br></br></br></br></br></br></br>
+
+
+</div>

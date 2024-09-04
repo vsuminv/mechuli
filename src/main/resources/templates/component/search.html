@@ -1,0 +1,50 @@
+<div th:fragment="search">
+<div class="h-20 mx-auto w-full shadow flex flex-col items-center px-4">
+    <div class="flex justify-center w-full relative">
+        <form class="w-3/4 mt-6 relative h-20" action="#" method="GET" id="mainSearchForm">
+            <div class="flex items-center relative">
+                <input type="text" id="searchInput" placeholder="검색어를 입력하세요"
+                       class="h-16 w-full p-2 border border-yellow-400 rounded-5
+                       text-center bg-white bg-opacity-70 focus:outline-none focus:ring-1 focus:ring-yellow-400"
+                       onfocus="hideTitle()" onblur="showTitle()" />
+            </div>
+            <!-- 카테고리 목록 -->
+            <div id="categoryList" class="bg-white shadow-md rounded mt-1 hidden w-full"
+                 style="top: calc(100% + 4px); left: 0; z-index: 500;">
+                <div class="category-container grid grid-cols-5">
+                    <!-- 카테고리 버튼들 -->
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="전체">전체</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="양식">양식</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="중식">중식</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="일식">일식</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="멕시코">멕시코</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="패스트푸드">패스트푸드</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="족발">족발</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="국수">국수</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="치킨">치킨</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="타코야키">타코야키</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="파스타">파스타</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="햄버거">햄버거</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="국수">국수</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button" data-category="치킨">치킨</button>
+                    <button class="text-sm p-1 bg-gray-200 rounded hover:bg-gray-300 category-button flex items-center space-x-1" data-category="기타" id="otherCategoryButton">
+                        기타
+                        <img src="/image/search.png" alt="검색" class="w-6 h-6">
+                    </button>
+                    <!-- 기타 선택 시 추가로 검색창을 표시 -->
+                </div>
+            </div>
+
+            <!-- '기타' 선택 시 나타나는 말풍선 -->
+            <div id="bubbleInput" class="hidden bubble-input-container">
+                <input type="text" id="otherCategoryInput" placeholder="카테고리를 입력하세요"
+                       class="p-2 flex-grow">
+                <button id="otherCategorySearchButton" class="ml-2">
+                    <img src="/image/search.png" alt="검색" class="w-6 h-6">
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</div>
