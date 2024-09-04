@@ -1,6 +1,5 @@
 package com.example.mechuli.config;
 
-import com.example.mechuli.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,13 +10,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
-    private final UserDetailService userDetailService;
 
     @Bean
     public BCryptPasswordEncoder encodePWD() {
@@ -43,6 +42,13 @@ public class SecurityConfig {
                         .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
                         .permitAll()
                 )
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                        .logoutSuccessUrl("/")
+                )
+                .exceptionHandling(exception -> exception
+                        .accessDeniedPage("/logout")
+                );
 
         return http.build();
     }
