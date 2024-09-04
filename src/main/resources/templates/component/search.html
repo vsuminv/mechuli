@@ -1,4 +1,4 @@
-<div th:fragment="search">
+<div th:fragment="search" sec:authorize="isAuthenticated()" >
 <div class="h-20 mx-auto w-full shadow flex flex-col items-center px-4">
     <div class="flex justify-center w-full relative">
         <form class="w-3/4 mt-6 relative h-20" action="#" method="GET" id="mainSearchForm">
@@ -35,7 +35,6 @@
                 </div>
             </div>
 
-            <!-- '기타' 선택 시 나타나는 말풍선 -->
             <div id="bubbleInput" class="hidden bubble-input-container">
                 <input type="text" id="otherCategoryInput" placeholder="카테고리를 입력하세요"
                        class="p-2 flex-grow">

@@ -8,7 +8,6 @@
 1. 페이지 layout 컨셉 설정 및 적용 , 컴포넌트(버튼 등) design 컨셉 설정 및 적용,  
 2. Page {login  /  join   /  join2  }  
 3. Component { mainSearch / button / search } 
-
 ---
 
 #### - 나중에 할 거
@@ -36,6 +35,7 @@ myPage 위주 작업
 2. Page {  myPage  /  userUpate  /  partyDial  }
 3. Component {  userSearch  /  partySearch  /  foodList  /  storeList  /  partyList  }
 4. PPT 컨셉,개요 정립
+5. merge join2 on to join
 
 --- 
 
@@ -43,7 +43,8 @@ myPage 위주 작업
 1. 시간에 따라 백그라운드 색 조절 하기.(점심 밝게 저녁 어둡게) 
 2. 최근 같이 식사한 그룹 생성.-> 레디스로 해야하나 
 3. list들 걍 Map으로 api 뽑자 
-
+4. 로그인 onclic으로 join,login 화면 전환하기. request로 전환 X
+5. joinBtn 화면 전환시 db 검증 예외처리.- js로 하는게 편할듯
 ---
 
 #### - 비고 
