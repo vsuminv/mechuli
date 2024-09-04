@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -17,11 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/test")
-    public ResponseEntity api_test() {
 
-        return new ResponseEntity<>("hihi", HttpStatus.OK);
-    }
     @PostMapping("/join")
     public String join(@RequestBody User user) {
         return userService.Join(user);
@@ -32,7 +29,6 @@ public class UserController {
         return userService.login(user);
 
     }
-
 }
 
 
