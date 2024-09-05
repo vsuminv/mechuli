@@ -34,9 +34,4 @@ public class CrawlingNaverMap {
         this.webDriver = new ChromeDriver(options);
         restaurants = new ArrayList<>();
     }
-
-    @Override
-    public List<Restaurants> crawling(){
-
-    }
 }
