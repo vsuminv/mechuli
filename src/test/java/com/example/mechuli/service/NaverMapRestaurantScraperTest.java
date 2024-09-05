@@ -20,6 +20,7 @@ public class NaverMapRestaurantScraperTest {
 
     private WebDriver driver;
     private WebDriverWait wait;
+    private JavascriptExecutor jsExecutor;
 
     @BeforeEach
     public void setUp() {
@@ -135,6 +136,9 @@ public class NaverMapRestaurantScraperTest {
                 } else {
                     System.out.println("Found " + listItems.size() + " restaurants on this page.");
 
+                    // 페이지 끝까지 스크롤
+                    scrollToEndOfPage();
+
                     for (WebElement listItem : listItems) {
                         try {
                             // 식당 이름 추출
@@ -190,9 +194,17 @@ public class NaverMapRestaurantScraperTest {
         }
 
         System.out.println("Total unique restaurants found: " + restaurantNames.size());
-        System.out.println("Total unique addresses found: " + restaurantAddresses.size());
     }
 
+    // 페이지 끝까지 스크롤하는 메소드
+    private void scrollToEndOfPage() {
+        jsExecutor.executeScript("window.scrollTo(0, document.body.scrollHeight)");
+        try {
+            Thread.sleep(2000);  // 스크롤 후 페이지가 로드될 시간을 기다림
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     @AfterEach
     public void tearDown() {
         // 드라이버 종료
