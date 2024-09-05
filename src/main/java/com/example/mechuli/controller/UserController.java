@@ -1,7 +1,6 @@
 package com.example.mechuli.controller;
 
 import com.example.mechuli.model.UserEntity;
-import com.example.mechuli.repository.UserRepository;
 import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,26 +14,32 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-@RequestMapping("/auth/")
 public class UserController {
 
-    private final UserRepository userRepo;
     private final UserService userService;
     private final BCryptPasswordEncoder encoder;
 
-    @GetMapping("/loginForm")
+    @GetMapping("")
+    public String mainTest() {
+        return "home";
+    }
+    @GetMapping("/login")
     public String loginForm(){
-        return "pages/loginForm";
+        return "contents/loginForm";
     }
     @GetMapping("/login/error")
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg","아이디 또는 비밀번호를 확인해주세요");
-        return "pages/loginForm";
+        return "contents/loginForm";
     }
-    @GetMapping("/joinForm")
+    @GetMapping("myPage")
+    public String myPage() {
+        return "/contents/myPage";
+    }
+    @GetMapping("/join")
     public String joinForm(Model model) {
         model.addAttribute("user",new UserEntity());
-        return "pages/joinForm";
+        return "contents/joinForm";
     }
     @PostMapping("/joinProc")
     public String register(@ModelAttribute UserEntity user, Model model) {
@@ -43,23 +48,10 @@ public class UserController {
             userService.register(createdUser);
         } catch (BadRequestException e){
             model.addAttribute("errorMessage",e.getMessage());
-            return "pages/joinForm";
+            return "contents/joinForm";
         }
         return "redirect:/";
     }
-
-
-
-//    @PostMapping("/join")
-//    public String join(@RequestBody UserEntity user) {
-//        return userService.register(user);
-//
-//    }
-//    @PostMapping("/login")
-//    public String login(@RequestBody UserEntity user) {
-//        return userService.login(user);
-//
-//    }
 }
 
 

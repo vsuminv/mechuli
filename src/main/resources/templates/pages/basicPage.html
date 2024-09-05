@@ -2,35 +2,21 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <th:block th:replace="~{default/config :: config}"></th:block>
     <body>
+        <div class="left">
+            <th:block th:insert="~{default/left :: left}"></th:block>
+        </div>
+
         <div class="page">
-        <th:block th:insert="~{default/header :: header}"></th:block>
-        <th:block layout:fragment="main"></th:block>
-        <th:block th:insert="~{default/footer :: footer}"></th:block>
+            <th:block th:insert="~{default/header :: header}"></th:block>
+            <th:block layout:fragment="main"></th:block>
+            <th:block th:insert="~{default/footer :: footer}"></th:block>
+        </div>
+
+        <div class="right">
+            <th:block th:insert="~{default/right :: right}"></th:block>
         </div>
     </body>
 </html>
-
-<!--<div th:fragment="main" class="">-->
-<!-- <th:block sec:authorize="isAnonymous()">-->
-<!--    <th:block th:insert="~{/default/loginPage :: login}"></th:block>-->
-<!--    </th:block>-->
-<!--</div>-->
-
-<!--Session ok-->
-<!--<header th:insert="~{/default/header :: header}" class="top-0 sticky">-->
-<!--</header>-->
-<!--<main th:insert="~{/default/main :: main}" class="bg-yellow-100 bg-opacity-80">-->
-
-<!--    <th:block th:if="${session.customer!=null}">-->
-<!--    <div th:insert="~{/default/login :: login}"></div>-->
-<!--    </th:block>-->
-
-<!--    <th:block th:if="${session.customer!=null}">-->
-<!--    <div th:insert="~{/default/join :: join}"></div>-->
-<!--    </th:block>-->
-
-<!--</main>-->
-
-
