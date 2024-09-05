@@ -31,7 +31,7 @@ myPage 위주 작업
 --- 
 
 #### - 오늘 할 거
-1. 컴포넌트 분배와 역할 정의하고 도식화 
+1. 컴포넌트 분배와 역할 정의하고 도식화
 2. Page {  myPage  /  userUpate  /  partyDial  }
 3. Component {  userSearch  /  partySearch  /  foodList  /  storeList  /  partyList  }
 4. PPT 컨셉,개요 정립
@@ -40,17 +40,51 @@ myPage 위주 작업
 --- 
 
 #### - 나중에 할 거
-1. 시간에 따라 백그라운드 색 조절 하기.(점심 밝게 저녁 어둡게) 
-2. 최근 같이 식사한 그룹 생성.-> 레디스로 해야하나 
-3. list들 걍 Map으로 api 뽑자 
+1. 시간에 따라 백그라운드 색 조절 하기.(점심 밝게 저녁 어둡게)
+2. 최근 같이 식사한 그룹 생성.-> 레디스로 해야하나
+3. list들 걍 Map으로 api 뽑자
 4. 로그인 onclic으로 join,login 화면 전환하기. request로 전환 X
 5. joinBtn 화면 전환시 db 검증 예외처리.- js로 하는게 편할듯
 ---
 
-#### - 비고 
-- 
+#### - 비고
+- 한게 없음
 
 --- 
+
+### - 9.5
+myPage 위주 작업
+
+--- 
+
+#### - 오늘 할 거
+1. Page {  myPage  /  userUpate  /  partyDial  }
+2. Component {  userSearch  /  partySearch  /  foodList  /  storeList  /  partyList  }
+3. PPT 컨셉,개요 정립
+4. grid 잡기 위해 right,left 생성.
+5. Test 편의성을 위해 right-grid에 버튼들 생성.
+6. 스무스한 렌더링 config.js 에서 추가.
+
+--- 
+
+#### - 나중에 할 거
+1. 업데이트 페이지 진입 전, 로그인 페이지 가져와서 비밀번호 확인시키기.
+2. 업데이트 페이지에서 아이디,닉네임 잠구기.
+3. title 옆에 favicon icon 집어넣고싶다.
+4. footer에 걍 myPage 아이콘 넣자.
+5. footer에 sns 연동 넣기. 팝업 메뉴로 하면 좋을듯.
+6. left에 앱으로 연결 QR코드 박기
+7. 실시간 회원가입 항목별 조건 체크 
+
+---
+
+#### - 비고
+- 한게 없음.
+
+--- 
+
+
+
 
 
 ## 일지 

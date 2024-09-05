@@ -21,14 +21,14 @@ public class UserEntity extends BaseEntity {
     private String userPw;
 
     private String roleType;
-//    private String oath;
+    private String oath;
 
 
     public static UserEntity createUser(UserEntity userEntity, PasswordEncoder passwordEncoder) {
         return UserEntity.builder()
                 .userId(userEntity.getUserId())
                 .userPw(passwordEncoder.encode(userEntity.getUserPw()))
-//                .roleType(RoleType.ADMIN.getKey())
+                .roleType(RoleType.ADMIN.getKey())
                 .build();
 
 
@@ -39,13 +39,13 @@ public class UserEntity extends BaseEntity {
         this.userId = userId;
     }
 
-//    public User update(String oauthProvideCompany) {
-//        this.oauth = oauthProvideCompany;
-//        this.roleType = RoleType.OAUTH.getKey();
-//        return this;
-//    }
+    public UserEntity update(String oauthProvideCompany) {
+        this.oath = oauthProvideCompany;
+        this.roleType = RoleType.OAUTH.getKey();
+        return this;
+    }
 
-//    public String getRoleType() {
-//        return this.roleType;
-//    }
+    public String getRoleType() {
+        return this.roleType;
+    }
 }

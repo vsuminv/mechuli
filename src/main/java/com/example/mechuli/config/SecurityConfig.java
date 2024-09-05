@@ -31,25 +31,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/img/**").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
-                )
-                .formLogin(login -> login
-                        .loginPage("/auth/loginForm")
-                        .loginProcessingUrl("/auth/loginProc")
-                        .usernameParameter("userId")
-                        .failureUrl("/auth/login/error")
-                        .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                        .logoutSuccessUrl("/")
-                )
-                .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/logout")
                 );
-
         return http.build();
     }
 }
