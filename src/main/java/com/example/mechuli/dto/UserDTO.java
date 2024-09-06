@@ -2,7 +2,6 @@ package com.example.mechuli.dto;
 
 import com.example.mechuli.domain.UserDAO;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,17 +22,18 @@ public class UserDTO {
     private String userPw;
 
     @NotBlank
+//    @Pattern(regexp = "/^[가-힣]+.{2,10}$/", message = "닉네임은 3자이상 10자 이하로 입력해주세요.")
     private String nickname;
 
     @NotBlank
     private String address;
 
 
-    UserDTO(UserDAO userDao) {
-        this.userId = userDao.getUserId();
-        this.userPw = userDao.getUserPw();
-        this.nickname = userDao.getNickname();
-        this.address = userDao.getAddress();
+    UserDTO(UserDAO userDAO) {
+        this.userId = userDAO.getUserId();
+        this.userPw = userDAO.getUserPw();
+        this.nickname = userDAO.getNickname();
+        this.address = userDAO.getAddress();
     }
 
 

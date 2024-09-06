@@ -2,9 +2,11 @@ package com.example.mechuli.controller;
 
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,15 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private final UserService userService;
+
+    // csrf-token 값 받아오려고 넣은 메소드, 개발 끝날 시 제거나 주석처리
+    @GetMapping("/csrf-token")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+        System.out.println(csrfToken);
+        return csrfToken;
+    }
+
 
     // 회원가입 페이지 이동
     @GetMapping("/join")
@@ -42,15 +53,23 @@ public class UserController {
     @ResponseBody
     public String ajaxCheckId(@RequestBody String userId, Model model) {
         model.addAttribute("idCheckResult", userService.checkUserId(userId));
+        System.out.println(userService.checkUserId(userId));
         return "/join :: #idCheck";  // ajax 받는 부분 지정에 따라 변경
     }
 
-    // 닉네임 체크
+    // ajax로 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
+    @RequestMapping(value="/ajaxCheckNickname", method = RequestMethod.POST)
+    @ResponseBody
+    public String ajaxCheckNickname(@RequestBody String nickname, Model model) {
+        model.addAttribute("idCheckResult", userService.checkNickname(nickname));
+        System.out.println(userService.checkNickname(nickname));
+        return "/join :: #nicknameCheck";  // ajax 받는 부분 지정에 따라 변경
+    }
 
 
     ///////////////////////////////////////////////////
 
-    // 로그인 페이지 이동
+//    // 로그인 페이지 이동
 //    @GetMapping("/login")
 //    public String login() {
 //        return "login_form";
@@ -64,7 +83,7 @@ public class UserController {
 //
 ////        userService.findByUserId(userDto);
 //
-//        return "redirect:/";
+//        return "/index";
 //    }
 
 
@@ -93,11 +112,6 @@ public class UserController {
 //
 //
 //    }
-
-
-
-
-    // 닉네임은 아이디 중복체크와 동일 -> 팀 협의로 방식 정의 후 작성 예정
 
 
 }

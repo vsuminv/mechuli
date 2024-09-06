@@ -9,8 +9,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Builder
@@ -19,12 +24,12 @@ import java.util.Date;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "M_USER")
-public class UserDAO {
+public class UserDAO implements UserDetails {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     @Column(name="user_index")
-    private int userIndex;
+    private long userIndex;
 
     @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
@@ -49,12 +54,28 @@ public class UserDAO {
     @Column(name = "update_date", nullable = false)
     private Date updateDate;
 
-    @Builder
-    public UserDAO(String userId, String userPw, String nickname, String address) {
-        this.userId = userId;
-        this.userPw = userPw;
-        this.nickname = nickname;
-        this.address = address;
+//    @Builder
+//    public UserDAO(String userId, String userPw, String nickname, String address) {
+//        this.userId = userId;
+//        this.userPw = userPw;
+//        this.nickname = nickname;
+//        this.address = address;
+//    }
+
+    // 권한 관련 작업을 하기 위한 role return
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("user"));
+    }
+
+    @Override
+    public String getUsername() {
+        return nickname;
+    }
+
+    @Override
+    public String getPassword() {
+        return userPw;
     }
 }
 

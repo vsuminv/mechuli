@@ -4,37 +4,66 @@ import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
     @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     public void save(UserDTO userDTO) {
 
-        UserDAO userDao = UserDAO.builder()
+        UserDAO userDAO = UserDAO.builder()
                 .userId(userDTO.getUserId())
-                .userPw(userDTO.getUserPw())
+                .userPw(bCryptPasswordEncoder.encode(userDTO.getUserPw()))
                 .nickname(userDTO.getNickname())
                 .address(userDTO.getAddress())
                 .build();
 
-        userRepository.save(userDao);
+        userRepository.save(userDAO);
     }
 
     // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음
     public int checkUserId(String userId) {
         int checkResult = 0;
-//        UserDTO userDto = new UserDTO();
-//        userDto.setUserId(userId);
 
         boolean boolResult = userRepository.existsByUserId(userId);
         if(boolResult) checkResult = 1;
         return checkResult;
+    }
+
+    // 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
+    public int checkNickname(String nickname) {
+        int checkResult = 0;
+
+        boolean boolResult = userRepository.existsByNickname(nickname);
+        if(boolResult) checkResult = 1;
+        return checkResult;
+    }
+
+
+    // userId로 사용자 정보 가져옴
+    @Override
+    public UserDAO loadUserByUsername(String userId) throws UsernameNotFoundException {
+
+        UserDAO user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
+        return UserDAO.builder()
+                .userId(user.getUserId())
+                .userPw(user.getUserPw())
+                .nickname(user.getNickname())
+                .address(user.getAddress())
+                .userImg(user.getUserImg())
+                .build();
     }
 
 
