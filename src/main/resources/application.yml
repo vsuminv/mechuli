@@ -17,34 +17,21 @@ spring:
     generate-ddl: true
     show-sql: true
     hibernate:
-<<<<<<< HEAD
-      ddl-auto: update
+
+      ddl-auto: update # 상태 수정 필요
 #      naming:
 #        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 #    properties:
 #      hibernate:
 #        format_sql: true
 #        default_batch_fetch_size: 1000
-=======
-      ddl-auto: update # 상태 수정 필요
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    properties:
-      hibernate:
-        format_sql: true
-        default_batch_fetch_size: 1000
 
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mechuri_test?&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: mechuri
-    password: mechuri
+
 
 logging:
   level:
     org.hibernate.SQL: debug
 
->>>>>>> 8adbae8d34376c7b1edcda774bd811a613476843
 
 #  datasource:
 #    driver-class-name: org.h2.Driver

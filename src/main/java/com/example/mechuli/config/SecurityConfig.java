@@ -1,25 +1,4 @@
-<<<<<<< HEAD
-//package com.example.mechuli.config;
-//
-//import com.example.mechuli.service.UserDetailService;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.web.SecurityFilterChain;
-//
-//@RequiredArgsConstructor
-//@EnableWebSecurity
-//@Configuration
-//public class SecurityConfig {
-//
-//    private final UserDetailService userDetailService;
-//
-=======
+
 package com.example.mechuli.config;
 
 import com.example.mechuli.service.UserService;
@@ -49,12 +28,6 @@ public class SecurityConfig {
 
 
 
->>>>>>> 8adbae8d34376c7b1edcda774bd811a613476843
-//    @Bean
-//    public BCryptPasswordEncoder encodePWD() {
-//        return new BCryptPasswordEncoder();
-//    }
-<<<<<<< HEAD
 //    @Bean
 //    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 //        return authenticationConfiguration.getAuthenticationManager();
@@ -69,7 +42,7 @@ public class SecurityConfig {
 //        return http.build();
 //    }
 //}
-=======
+
 
     @Bean //
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -101,4 +74,3 @@ public class SecurityConfig {
         return new ProviderManager(authProvider);
     }
 }
->>>>>>> 8adbae8d34376c7b1edcda774bd811a613476843
