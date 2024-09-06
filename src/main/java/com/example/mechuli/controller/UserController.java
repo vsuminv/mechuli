@@ -52,8 +52,11 @@ public class UserController {
         }
         return "redirect:/";
     }
+    @GetMapping("/detailStore")
+    public String detailStore() { return "contents/detail/detailStore"; }
 
-
+    @GetMapping("/mainPage")
+    public String mainPage() { return "contents/detail/mainPage"; }
 }
 
 
