@@ -43,9 +43,6 @@ public class UserDAO implements UserDetails {
     @Column(name = "user_img")
     private String userImg;
 
-    @Column(nullable = false)
-    private String address;
-
     @CreatedDate
     @Column(name = "create_date", nullable = false)
     private Date createDate;
