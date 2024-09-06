@@ -9,9 +9,9 @@ let common ={
     // 스무스하게 렌ㄷ더링
     urlCheck: function (){
         let url = window.location.pathname;
-        let id = "nav_"+url.replace("/","").split("/")[0];
+        let id = ""+url.replace("/","").split("/")[0];
         let currentNavBtn = document.getElementById(id);
-        currentNavBtn.classList.add("special_nav_btn");
+        // currentNavBtn.classList.add("special_nav_btn");
     }
 }
 common.init();

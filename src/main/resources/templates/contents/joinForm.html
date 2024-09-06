@@ -2,7 +2,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/pages/basicPage}">
 <th:block layout:fragment="script">
-    <script type="text/javascript" th:src="@{/js/joinPage.js}"></script>
+    <script type="text/javascript" th:src="@{/js/joinPageTest.js}"></script>
 </th:block>
 <main layout:fragment="main">
     <div id="joinPage">
@@ -40,14 +40,14 @@
       </div>
     </form>
     </div>
-  <button type="button" id="join2Btn" onclick="join2Btn()" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-20 rounded-full shadow-2xl uppercase tracking-wider">
+  <button type="button" id="testBtn" onclick="joinBtn()" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-20 rounded-full shadow-2xl uppercase tracking-wider">
           <span class="flex  items-center font-bolder boarder text-yellow-600 shadow-2xl">
             <!-- Heroicon name: solid/lock-closed -->
         임시버튼
           </span>
         </button>
 
-<div class="hidden" id="joinPage2">
+<div id="joinForm2" class="hidden">
     <div class="grid-cols-2" >
       <h2 class="mt-6 text-center text-3xl font-extrabold text-yellow-900">
         메추리 선호 취향 선택(3-5개) <p class="text-sm text-red-500"> 이거 드랍메뉴로 하는게 나을듯 </p>
