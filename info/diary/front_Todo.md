@@ -82,7 +82,12 @@ myPage 위주 작업
 - 한게 없음.
 
 --- 
+### - 9.6
 
+#### 한거
+1. 준호컴에 ide 커뮤니티,h2-console,git 저장.
+2. ide DB navigator 플러그인 설치 후 h2 연결.
+3. 
 
 
 
