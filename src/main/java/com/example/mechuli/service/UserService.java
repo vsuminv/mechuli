@@ -25,7 +25,6 @@ public class UserService implements UserDetailsService {
                 .userId(userDTO.getUserId())
                 .userPw(bCryptPasswordEncoder.encode(userDTO.getUserPw()))
                 .nickname(userDTO.getNickname())
-                .address(userDTO.getAddress())
                 .build();
 
         userRepository.save(userDAO);
@@ -61,7 +60,6 @@ public class UserService implements UserDetailsService {
                 .userId(user.getUserId())
                 .userPw(user.getUserPw())
                 .nickname(user.getNickname())
-                .address(user.getAddress())
                 .userImg(user.getUserImg())
                 .build();
     }
