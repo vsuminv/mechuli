@@ -1,8 +1,10 @@
-package com.example.mechuli.model;
+package com.example.mechuli.domain;
 
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Builder
@@ -19,5 +21,8 @@ public class RestaurantCategory {
 
     @Column(name="category_name")
     private String categoryName;
+
+    @OneToMany( mappedBy = "restaurantCategory")
+    private List<Restaurant> restaurants;
 
 }

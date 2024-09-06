@@ -1,4 +1,4 @@
-package com.example.mechuli.model;
+package com.example.mechuli.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
