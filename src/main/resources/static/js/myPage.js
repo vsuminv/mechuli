@@ -3,7 +3,6 @@
     var myPartyBtn = document.getElementById('myPartyBtn');
     var contentDiv = document.getElementById('content');
 
-
     myAccountBtn.addEventListener('click', function() {
     fetchContent('/contents/my/myTaste');
     setActiveButton(myAccountBtn);
