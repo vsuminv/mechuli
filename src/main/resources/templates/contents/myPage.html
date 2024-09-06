@@ -5,7 +5,7 @@
     <script type="text/javascript" th:src="@{/js/myPage.js}"></script>
 </th:block>
 
-<main layout:fragment="main" class="page grid grid-rows-3 gap-5 m-0 text-yellow-700">
+<main layout:fragment="main" class="page grid grid-rows-3  m-0 text-yellow-700">
 <!--        1-->
         <div class="flex h-50 w-full grid grid-flow-row relative">
             <div class="-translate-y-4 m-auto flex">
@@ -27,7 +27,7 @@
         </div>
 
         <!--  2 content-->
-    <div id="content">
+    <div id="content h-full">
         <div th:replace="~{contents/my/myTaste :: myTaste}"></div>
 <!--        <div th:replace="~{contents/my/myStoreList :: myStoreList}"></div>-->
 <!--        <div th:replace="~{contents/my/myParty :: myParty}"></div>-->
