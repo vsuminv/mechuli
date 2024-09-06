@@ -1,41 +1,35 @@
 package com.example.mechuli.service;
 
-import com.example.mechuli.model.User;
 import com.example.mechuli.model.UserEntity;
 import com.example.mechuli.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepo;
+    private final BCryptPasswordEncoder encoder;
 
-    public String Join(User user) {
-        Optional<UserEntity> findByUserId = userRepo.findByUserId(user.getUserId());
-        if (findByUserId.isPresent()) {
-            return "중복된 ID";
-        }
-        UserEntity ue = UserEntity.builder()
-                .userId(user.getUserId())
-                .userPw(user.getUserPw())
-                .address(user.getAddress())
-                .createDate(user.getCreateDate())
-                .updateDate(user.getUpdateDate())
-                .build();
-
-        userRepo.save(ue);
-
-        return "success";
-
+    public boolean checkUserIdDuplicated(String userId){
+        Optional<UserEntity> user = userRepo.findByUserId(userId);
+        return user.isPresent();
     }
 
-    public String login(User user) {
-        return null;
+    public void register(UserEntity userEntity) throws BadRequestException {
+        if(!checkUserIdDuplicated(userEntity.getUserId())){
+            userRepo.save(userEntity);
+        } else {
+            throw new BadRequestException("이미 사용중인 이메일 입니다.");
+        }
     }
 }
 

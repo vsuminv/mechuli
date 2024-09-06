@@ -1,0 +1,32 @@
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/pages/basicPage}">
+
+<main layout:fragment="main">
+    <div class="page grid grid-flow-row grid-rows-5 gap-4 m-0 text-yellow-700">
+<!--        1-->
+        <div class="flex rounded-lg w-full h-36 m-auto ">
+            <div class="m-auto flex">
+                    <img class="mx-auto w-20 h-20 rounded-full boarder boarder-black shadow-2xl" th:src="@{/img/face.png}">
+                <span class="mt-12 ">{$수미니}</span>
+            </div>
+
+        </div>
+<!--        2-->
+        <div class="bg-yellow-200 rounded-lg w-full h-36 m-auto"><h1>수미니 취향</h1>
+            <div class="mx-auto w-40">[매콤][패스트푸드][중식]</div>
+            <div class="ml-auto bottom-0 bg-yellow-400 w-16 rounded-lg mt-16 shadow-2xl">수정 하기</div>
+        </div>
+        <!--3-->
+        <div class="bg-yellow-200 rounded-lg w-full h-36 m-auto"><h1>수미니 맛집 리스트 게시판</h1>
+            <div class="mx-auto w-24">(게시글 썸네일) 시간 모자라면 걍 a링크나 박자</div>
+        </div>
+<!--3-->
+        <div class="bg-yellow-200 rounded-lg m-4 h-12"><h1 class="mx-auto">sns 공유하기</h1>
+                <div class="flex"><div>-카톡-</div><div>-트위터-</div><div>-인스타-</div>
+                </div>
+        </div>
+</div>
+
+
+</main>
