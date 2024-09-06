@@ -9,7 +9,7 @@
 }
 
 *{
-    font-family: 'MaplestoryOTFBold';
+    font-family: 'MaplestoryOTFBold', serif;
 }
 body {
     margin: 0;
@@ -52,8 +52,11 @@ header {
     /*min-height: 200px !important;*/
 }
 main{
-    max-height: 80vh; !important;
-    min-height: 80vh; !important;
+    display: block;
+    max-height: 80vh !important;
+    min-height: 80vh !important;
+    min-width: 700px !important;
+    max-width: 700px !important;
     grid-row: 2/3; !important;
     overflow-y: scroll; !important;
     scroll-behavior: smooth;
@@ -69,7 +72,11 @@ footer {
     /*min-width: 700px !important;*/
     /*max-width: 700px !important;*/
 }
-
+#content {
+    display: block !important;
+    width: 100%;
+    overflow-y: auto;
+}
 
 /*header .search{*/
 /*    position: sticky;*/
