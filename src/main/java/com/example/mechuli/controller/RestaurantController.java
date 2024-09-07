@@ -6,7 +6,6 @@ import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,16 +22,23 @@ public class RestaurantController {
 
     // 메인페이지 전체조회
     @GetMapping("/all")
-    public List<Restaurant> restaurantall(Model model){
-        List<Restaurant> restaurantList = restaurantService.findall();
-        model.addAttribute("restaurantList",restaurantList);
+//    public String restaurantAll(Model model) {
+//        List<RestaurantDTO> restaurantList = restaurantService.findAll();
+//        model.addAttribute("restaurantList", restaurantList);
+//        return "restaurnatList";
+//    }
+
+    public List<RestaurantDTO> restaurantAll(Model model) {
+        List<RestaurantDTO> restaurantList = restaurantService.findAll();
+        model.addAttribute("restaurantList", restaurantList);
         return restaurantList;
     }
     @GetMapping("/category")
+    // 뷰페이지
 //    public String restaurantCategory(Model model) {
 //        List<RestaurantDTO> categoryRandom = restaurantService.findRandomRestaurantsByCategories(3);
 //        model.addAttribute("categoryRandom", categoryRandom);
-//        return "categoryPage"; // 반환할 뷰 이름
+//        return "categoryPage";
 //    }
     public List<RestaurantDTO> restaurantCategory() {
         List<RestaurantDTO> categoryRandom = restaurantService.findRandomRestaurantsByCategories(3);

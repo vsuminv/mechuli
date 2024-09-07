@@ -19,10 +19,13 @@ public class RestaurantService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public List<Restaurant> findall() {
-        return restaurantRepository.findAll();
-
- }
+    public List<RestaurantDTO> findAll() {
+        // Restaurant 리스트를 RestaurantDTO 리스트로 변환
+        return restaurantRepository.findAll()
+                .stream()
+                .map(RestaurantDTO::new)
+                .collect(Collectors.toList());
+    }
 
     public List<RestaurantDTO> findRandomRestaurantsByCategories(int numCategories) {
         // 모든 카테고리 조회
