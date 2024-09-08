@@ -1,4 +1,3 @@
-create table tb_user;
 
 ALTER TABLE tb_user
     ADD created_at TIMESTAMP;

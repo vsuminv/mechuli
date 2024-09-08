@@ -32,10 +32,6 @@ public class UserController {
         model.addAttribute("loginErrorMsg","아이디 또는 비밀번호를 확인해주세요");
         return "contents/loginForm";
     }
-    @GetMapping("myPage")
-    public String myPage() {
-        return "/contents/myPage";
-    }
     @GetMapping("/join")
     public String joinForm(Model model) {
         model.addAttribute("user",new UserEntity());
@@ -44,13 +40,16 @@ public class UserController {
     @PostMapping("/joinProc")
     public String register(@ModelAttribute UserEntity user, Model model) {
         try {
-            UserEntity createdUser = UserEntity.createUser(user, encoder);
-            userService.register(createdUser);
+            userService.create(user);
         } catch (BadRequestException e){
             model.addAttribute("errorMessage",e.getMessage());
             return "contents/joinForm";
         }
         return "redirect:/";
+    }
+    @GetMapping("/my")
+    public String myPage(Model model) {
+        return "contents/my/myPage";
     }
     @GetMapping("/detailStore")
     public String detailStore() { return "contents/detail/detailStore"; }

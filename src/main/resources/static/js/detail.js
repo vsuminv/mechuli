@@ -92,7 +92,6 @@ function showTable(tableId) {
         table.style.display = 'none';  // display 속성을 none으로 설정하여 테이블 숨김
         table.classList.add('hidden'); // 'hidden' 클래스 추가
     });
-
     // 선택된 테이블만 표시
     const selectedTable = document.getElementById(tableId);
     if (selectedTable) {
@@ -100,12 +99,10 @@ function showTable(tableId) {
         selectedTable.classList.remove('hidden'); // 'hidden' 클래스 제거
     }
 }
-
 // 모달 열기 이벤트
 addReviewButton.addEventListener('click', function () {
     modal.classList.remove('hidden');  // 모달의 'hidden' 클래스 제거
 });
-
 // 모달 닫기 이벤트
 cancelButton.addEventListener('click', function () {
     modal.classList.add('hidden');  // 모달의 'hidden' 클래스 추가
