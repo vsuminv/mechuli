@@ -1,24 +1,35 @@
 package com.example.mechuli.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/test/")
 public class TestController {
-    @GetMapping("/signin")
-    public String showLoginPage() {
-        return "component/login";
+
+    @GetMapping("")
+    public String mainTest() {
+        return "home";
     }
-    @GetMapping("/signup")
-    public String showSignupPage() {
-        return "component/join";
+    @GetMapping("login")
+    public String loginForm(){
+        return "contents/loginForm";
     }
-    @GetMapping("/signup2")
-    public String showSignup2Page() {
-        return "component/join2";
+    @GetMapping("join")
+    public String joinForm() {
+
+        return "/contents/joinFrom";
     }
-    @GetMapping("/mainview")
-    public String showMainView() {
-        return "component/mainview";
+    @GetMapping("myPage")
+    public String myPage() {
+
+        return "/contents/myPage";
+    }
+    @GetMapping("join2")
+    public String joinFomr2(Model model) {
+        model.addAttribute("join2");
+        return "contents/joinFrom";
     }
 }

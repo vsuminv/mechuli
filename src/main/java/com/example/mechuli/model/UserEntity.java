@@ -2,41 +2,50 @@ package com.example.mechuli.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-
+@Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Table(name = "tb_user")
-@Entity
-public class UserEntity implements UserDetails {
+public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
+    @Column(name = "userId", nullable = false)
     private String userId;
+    @Column(name = "userPw", nullable = false)
     private String userPw;
-    private String address;
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+    private String roleType;
+    private String oath;
+
+
+    public static UserEntity createUser(UserEntity userEntity, PasswordEncoder passwordEncoder) {
+        return UserEntity.builder()
+                .userId(userEntity.getUserId())
+                .userPw(passwordEncoder.encode(userEntity.getUserPw()))
+                .roleType(RoleType.ADMIN.getKey())
+                .build();
+
+
     }
 
-    @Override
-    public String getPassword() {
-        return "";
+    @Builder
+    public UserEntity(String userId) {
+        this.userId = userId;
     }
 
-    @Override
-    public String getUsername() {
-        return "";
+    public UserEntity update(String oauthProvideCompany) {
+        this.oath = oauthProvideCompany;
+        this.roleType = RoleType.OAUTH.getKey();
+        return this;
+    }
+
+    public String getRoleType() {
+        return this.roleType;
     }
 }

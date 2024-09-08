@@ -1,3 +1,90 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+    font-family: 'MaplestoryOTFBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    font-family: 'MaplestoryOTFBold', serif;
+}
+body {
+    margin: 0;
+    padding: 0;
+    /*height: 100vh;*/
+    background: #fff9da;
+    max-height: 100vh;
+    min-height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 32vw 36vw 32vw;
+    grid-template-rows:10vh 80vh 10vh;
+    overflow-y: hidden;
+}
+.left {
+    grid-column: 1/2; !important;
+    grid-row: 2;
+}
+.right{
+    grid-column: 3/4; !important;
+    grid-row: 2;
+    text-align: center;
+}
+.page{
+    grid-column: 2/3; !important;
+    max-height: 90vh; !important;
+    min-height: 90vh; !important;
+    min-width: 700px !important;
+    max-width: 700px !important;
+    margin: 0 auto; !important;
+    background: #fbf4cc; !important;
+}
+header {
+    grid-row: 1/2;!important;
+    z-index: 99 !important;
+    width: 100% !important;
+    min-height: 10vh;
+    /*min-width: 700px !important;*/
+    /*max-width: 700px !important;*/
+    /*min-height: 200px !important;*/
+}
+main{
+    display: block;
+    max-height: 80vh !important;
+    min-height: 80vh !important;
+    min-width: 700px !important;
+    max-width: 700px !important;
+    grid-row: 2/3; !important;
+    overflow-y: scroll; !important;
+    scroll-behavior: smooth;
+    scrollbar-gutter: auto;
+    scrollbar-width: none;
+}
+footer {
+    min-height: 10vh;
+    grid-column: 2/3; !important;
+    grid-row: -3/-2; !important;
+    bottom:0; !important;
+    z-index: 99 !important;
+    /*min-width: 700px !important;*/
+    /*max-width: 700px !important;*/
+}
+#content {
+    display: block !important;
+    width: 100%;
+    overflow-y: auto;
+}
+
+/*hea
+
+
+
+der .search{*/
+/*    position: sticky;*/
+/*    min-width: 670px !important;*/
+/*    max-width: 670px !important;*/
+/*    margin:3px  !important;*/
+/*}
