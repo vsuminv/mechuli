@@ -2,10 +2,6 @@ let common ={
     init : function () {
         document.addEventListener("DOMContentLoaded", this.urlCheck);
     },
-
-
-    
-    
     // 스무스하게 렌ㄷ더링
     urlCheck: function (){
         let url = window.location.pathname;

@@ -24,7 +24,7 @@ public class UserService {
         return user.isPresent();
     }
 
-    public void register(UserEntity userEntity) throws BadRequestException {
+    public void create(UserEntity userEntity) throws BadRequestException {
         if(!checkUserIdDuplicated(userEntity.getUserId())){
             userRepo.save(userEntity);
         } else {

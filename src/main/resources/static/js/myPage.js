@@ -1,64 +1,107 @@
-    var myAccountBtn = document.getElementById('myAccountBtn');
-    var myStoreListBtn = document.getElementById('myStoreListBtn');
-    var myPartyBtn = document.getElementById('myPartyBtn');
-    var contentDiv = document.getElementById('content');
+document.addEventListener('DOMContentLoaded', function() {
+    const myAccountBtn = document.getElementById('myAccountBtn');
+    const myStoreListBtn = document.getElementById('myStoreListBtn');
+    const myPartyBtn = document.getElementById('myPartyBtn');
+    const contentDiv = document.getElementById('content');
+
+    const buttons = [myAccountBtn, myStoreListBtn, myPartyBtn];
+
+    function setActiveButton(activeButton) {
+        buttons.forEach(button => {
+            button.classList.remove('bg-yellow-500');
+            button.classList.add('bg-yellow-200');
+        });
+        activeButton.classList.remove('bg-yellow-200');
+        activeButton.classList.add('bg-yellow-500');
+    }
+
+    function loadContent(url) {
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                contentDiv.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                contentDiv.innerHTML = '<p>콘텐츠를 불러오는 데 실패했습니다.</p>';
+            })
+            .finally(() => {
+                // 데이터 로드 성공 여부와 관계없이 캐러셀 설정
+                setupCarousel('carousel');
+                setupCarousel('review-carousel');
+            });
+    }
 
     myAccountBtn.addEventListener('click', function() {
-    fetchContent('/contents/my/myTaste');
-    setActiveButton(myAccountBtn);
-});
+        loadContent('/contents/my/myTaste', '내 취향');
+        setActiveButton(myAccountBtn);
+    });
 
     myStoreListBtn.addEventListener('click', function() {
-    fetchContent('/contents/my/myStoreList');
-    setActiveButton(myStoreListBtn);
-});
+        loadContent('/contents/my/myStoreList', '내 맛집 리스트');
+        setActiveButton(myStoreListBtn);
+    });
 
     myPartyBtn.addEventListener('click', function() {
-    fetchContent('/contents/my/myParty');
-    setActiveButton(myPartyBtn);
+        loadContent('/contents/my/myParty', '내 친구');
+        setActiveButton(myPartyBtn);
+    });
+
+    // 초기 로드
+    // myAccountBtn.click();
+    // myStoreListBtn.click();
+    // myPartyBtn.click();
 });
 
+function setupCarousel(carouselId) {
+    const carousel = document.getElementById(carouselId);
+    if (!carousel) return; // 캐러셀이 없으면 함수 종료
 
-    // 테스트 동안만 패치 쓰고 백 완료되면 아래 메서드 history.pushState() 로 변경.
-    function fetchContent(url) {
-    fetch(url)
-    .then(function(response) {
-    return response.text();
-})
-    .then(function(data) {
-    contentDiv.innerHTML = data;
-})
-    .catch(function(error) {
-    console.log('콘솔:', error);
-});
+    const content = carousel.querySelector('.flex');
+    const prevBtn = carousel.querySelector('button:first-of-type');
+    const nextBtn = carousel.querySelector('button:last-of-type');
+    let position = 0;
+    const itemWidth = carouselId === 'carousel' ? 144 : 272; // 32 + 4(mr-4) for store list, 64 + 4(mr-4) for reviews
+
+    nextBtn.addEventListener('click', () => {
+        const maxPosition = content.scrollWidth - carousel.clientWidth;
+        if (position > -maxPosition) {
+            position -= itemWidth;
+            position = Math.max(position, -maxPosition);
+            content.style.transform = `translateX(${position}px)`;
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (position < 0) {
+            position += itemWidth;
+            position = Math.min(position, 0);
+            content.style.transform = `translateX(${position}px)`;
+        }
+    });
+
+    // 터치 스와이프 지원
+    let startX;
+    let isDragging = false;
+
+    content.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].pageX - position;
+    });
+
+    content.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+            e.preventDefault();
+            const x = e.touches[0].pageX - startX;
+            const maxPosition = -(content.scrollWidth - carousel.clientWidth);
+            position = Math.max(Math.min(x, 0), maxPosition);
+            content.style.transform = `translateX(${position}px)`;
+        }
+    });
+
+    content.addEventListener('touchend', () => {
+        isDragging = false;
+        const itemPosition = Math.round(position / itemWidth) * itemWidth;
+        position = Math.max(Math.min(itemPosition, 0), -(content.scrollWidth - carousel.clientWidth));
+        content.style.transform = `translateX(${position}px)`;
+    });
 }
-
-    // function updateContent(url) {
-    //     fetch(url)
-    //         .then(function(response) {
-    //             return response.text();
-    //         })
-    //         .then(function(data) {
-    //             contentDiv.innerHTML = data;
-    //             history.pushState(null, 'nodata', url);
-    //         })
-    //         .catch(function(error) {
-    //             console.log('Error:', error);
-    //             contentDiv.innerHTML = '콘솔';
-    //         });
-    // }
-
-
-
-
-
-    function setActiveButton(button) {
-        var buttons = document.querySelectorAll('.flex-row-l button');
-        buttons.forEach(function(btn) {
-            btn.classList.remove('bg-yellow-300','bg-yellow-500');
-            btn.classList.add('bg-yellow-200');
-        });
-
-        button.classList.remove('bg-yellow-200');
-        button.classList.add('bg-yellow-500');
-    }
