@@ -19,7 +19,6 @@ public class Subscription {
     @JoinColumn(name = "user_id",nullable = false, referencedColumnName = "user_index")
     private UserDAO userId;
 
-    @ManyToOne
-    @JoinColumn(name = "usbuser_id",referencedColumnName = "user_index")
-    private UserDAO subuserId;
+    @Column(name = "subuser_id")
+    private Long subuserId;
 }

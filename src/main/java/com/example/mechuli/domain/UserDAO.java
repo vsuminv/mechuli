@@ -64,11 +64,11 @@ public class UserDAO implements UserDetails {
 
     @OneToMany( mappedBy = "userDAO")
     private List<MyRestaurantList> myRestaurantLists;
+
     @OneToMany(mappedBy = "userId")
     private List<Subscription> subscriptions;
 
-    @OneToMany(mappedBy = "subuserId")
-    private List<Subscription> subscribedBy;
+
 
 
 
