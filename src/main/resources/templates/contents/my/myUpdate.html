@@ -1,0 +1,101 @@
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/pages/basicPage}">
+
+<main layout:fragment="main">
+
+<form class="mt-8 mx-34 space-y-6 grid-cols-1" action="#" method="POST">
+      <input type="hidden" name="remember" value="true">
+        <div>
+
+          <label for="username" class="sr-only">아이디</label><span class="ml-36 text-yellow-700">아이디</span>
+          <input id="username" name="username" type="text" autocomplete="username" required class="shadow-2xl rounded-none block mx-auto w-3/5 h-14 px-3 py-2 border border-red-100 placeholder-opacity-40 placeholder-yellow-900 text-yellow-800 rounded-t-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim" placeholder="아이디를 입력하세요">
+        </div>
+        <div>
+          <label for="password" class="sr-only">비밀번호</label><span class="ml-36 text-yellow-700">비밀번호</span>
+          <input id="password" name="password" type="password" autocomplete="current-password" required class="shadow-2xl mx-auto w-3/5 h-14 rounded-none  block px-3 py-2 border border-red-100 placeholder-opacity-40 placeholder-yellow-900 text-yellow-700 rounded-b-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim" placeholder="비밀번호를 입력하세요">
+        </div>
+          <div>
+          <label for="password2" class="sr-only">비밀번호2</label><span class="ml-36 text-yellow-700">비밀번호 확인</span>
+          <input id="password2" name="password2" type="text" autocomplete="password2" required class=" shadow-2xl rounded-none block mx-auto w-3/5 h-14 px-3 py-2 border border-red-100 placeholder-opacity-40 placeholder-yellow-900 text-yellow-800 rounded-t-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim" placeholder="비번을 다시 입력하세요">
+        </div>
+          <div>
+          <label for="nick" class="sr-only">nick</label><span class="ml-36 text-yellow-700">닉네임</span>
+          <input id="nick" name="nick" type="text" autocomplete="nick" required class=" shadow-2xl rounded-none block mx-auto w-3/5 h-14 px-3 py-2 border border-red-100 placeholder-opacity-40 placeholder-yellow-900 text-yellow-800 rounded-t-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim" placeholder="닉을 입력하세요">
+        </div>
+          <div>
+          <label for="address" class="sr-only">주소</label><span class="ml-36 text-yellow-700">주소</span>
+          <input id="address" name="address" type="text" autocomplete="address" required class=" shadow-2xl rounded-none block mx-auto w-3/5 h-14 px-3 py-2 border border-red-100 placeholder-opacity-40 placeholder-yellow-900 text-yellow-800 rounded-t-md focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim" placeholder="주소를 입력하세요">
+        </div>
+      <div class="w-full flex">
+<!--        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md bg-yellow-200 hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">-->
+        <button type="submit" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-20 rounded-full shadow-2xl uppercase tracking-wider">
+          <span class="flex  items-center font-bolder boarder text-yellow-600 shadow-2xl">
+            <!-- Heroicon name: solid/lock-closed -->
+        수 정          </span>
+        </button>
+      </div>
+    </form>
+
+<div class="hidden" id="join2Page">
+    <div class="grid-cols-2" >
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-yellow-900">
+        메추리 선호 취향 선택(3-5개) <p class="text-sm text-red-500"> 이거 드랍메뉴로 하는게 나을듯 </p>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-5 gap-2 overflow-y-auto h-48 ">
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">동남아</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">분식</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">중식</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">일식</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">멕시코</button>
+
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">퓨전</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">홍콩</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">치킨</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">탕코아</button>
+
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">패스트푸드</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">족발</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">곱창</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">찜닭</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">삼겹살</button>
+
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">매운</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">고소</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">느끼</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">담백</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">짠맛</button>
+
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">뜨거운</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">차가운</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">신맛</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">떡볶이</button>
+      <button class="bg-yellow-200 hover:bg-yellow-500  font-bold py-1 px-2 rounded">짬뽕</button>
+    </div>
+
+    <div class="flex mt-6">
+      <button class="w-1/2 bg-yellow-600 hover:bg-yellow-700  font-bold py-2 px-4 rounded-l">
+        이전
+      </button>
+      <button class="w-1/2 bg-yellow-200 hover:bg-yellow-400  font-bold py-2 px-4 rounded-r">
+        완료
+      </button>
+    </div>
+</div>
+
+    <script>
+  function join2Btn() {
+      const test = document.getElementById('join2');
+
+      if (test.class.charAt() === 'hidden') {
+          test.class = 'block';
+      } else {
+          test.class = 'hidden';
+      }
+  }
+</script>
+</main>
+
+</main>

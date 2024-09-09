@@ -1,0 +1,165 @@
+# Design 진행 상황
+
+### - 9.3 
+초석 쌓기
+
+---
+#### - 오늘 할 거
+1. 페이지 layout 컨셉 설정 및 적용 , 컴포넌트(버튼 등) design 컨셉 설정 및 적용,  
+2. Page {login  /  join   /  join2  }  
+3. Component { mainSearch / button / search } 
+---
+
+#### - 나중에 할 거
+1. 입체감 주기 {선 두께와 각도 조절, shadow 적용}
+2. 텍스트 사이즈,공간 정립하기
+3. loading page. (새 발자국 생각중)
+4. 하단 디자인 자갈밭
+
+--- 
+#### - 비고
+1. 메이플스토리 폰트 적용 
+
+--- 
+
+
+
+
+### - 9.4
+myPage 위주 작업
+
+--- 
+
+#### - 오늘 할 거
+1. 컴포넌트 분배와 역할 정의하고 도식화
+2. Page {  myPage  /  userUpate  /  partyDial  }
+3. Component {  userSearch  /  partySearch  /  foodList  /  storeList  /  partyList  }
+4. PPT 컨셉,개요 정립
+5. merge join2 on to join
+
+--- 
+
+#### - 나중에 할 거
+1. 시간에 따라 백그라운드 색 조절 하기.(점심 밝게 저녁 어둡게)
+2. 최근 같이 식사한 그룹 생성.-> 레디스로 해야하나
+3. list들 걍 Map으로 api 뽑자
+4. 로그인 onclic으로 join,login 화면 전환하기. request로 전환 X
+5. joinBtn 화면 전환시 db 검증 예외처리.- js로 하는게 편할듯
+---
+
+#### - 비고
+- 한게 없음
+
+--- 
+
+### - 9.5
+myPage 위주 작업
+
+--- 
+
+#### - 오늘 할 거
+1. Page {  myPage  /  userUpate  /  partyDial  }
+2. Component {  userSearch  /  partySearch  /  foodList  /  storeList  /  partyList  }
+3. PPT 컨셉,개요 정립
+4. grid 잡기 위해 right,left 생성.
+5. Test 편의성을 위해 right-grid에 버튼들 생성.
+6. 스무스한 렌더링 config.js 에서 추가.
+
+--- 
+
+#### - 나중에 할 거
+1. 업데이트 페이지 진입 전, 로그인 페이지 가져와서 비밀번호 확인시키기.
+2. 업데이트 페이지에서 아이디,닉네임 잠구기.
+3. title 옆에 favicon icon 집어넣고싶다.
+4. footer에 걍 myPage 아이콘 넣자.
+5. footer에 sns 연동 넣기. 팝업 메뉴로 하면 좋을듯.
+6. left에 앱으로 연결 QR코드 박기
+7. 실시간 회원가입 항목별 조건 체크 
+
+---
+
+#### - 비고
+- 한게 없음.
+
+--- 
+### - 9.6
+
+#### 한거
+1. 준호컴에 ide 커뮤니티,h2-console,git 저장.
+2. ide DB navigator 플러그인 설치 후 h2 연결.
+
+#### 나중에 할 거
+1.
+2.
+
+---
+#### 비고
+
+
+---
+### 9.8
+
+#### 한거
+1. background 색, header 제거. 
+2. footer 조정. 
+3. swagger setting
+4. 가입,로그인 텍스트 안에 체크박스 유효성 실시간 체크
+#### 나중에 할 거
+1. 내가 쓴 리뷰에서 하단에 가게명,날짜 정도 나오면 좋을듯
+2. 서버 검색 측 엔드포인트
+3. 페이저블, 페이지네이션.
+4. 상세보기 페이지 merge 
+5. joinPage 아이디,닉 중복검사 할때 api 콜하고 값 받아서 체크표시. 
+6. 에러메세지 띄우기 팀원간 논의
+7. default 색상 재정의. 
+---
+#### 비고
+1. [회원가입 유효성 검사](https://xetown.com/questions/1420104)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## 일지 
+
+### 색감 편.
+
+- 야식에 해당하는 음식 광고는 대체로 배경이 어둡더라. 반대로 점심 음식 광고들은 대체로 밝으며 선명함.
+
+
+### ux 편.
+
+- 인디케이터 :
+- 버튼 : 
+- 
+
+
+
+----
+---- 
+---- 
+---- 
+---- 
+
+
+##### 인디케이터
+- 장점 : 영역 차지 비율 낮음!
+- 정보를 명확하게 전달 가능함
+- 단점 : 텍스트가 많은 배너에서는 사용 X
+
+
