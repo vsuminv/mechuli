@@ -61,6 +61,11 @@ public class UserDAO implements UserDetails {
 
     private List<RestaurantCategory> restaurantCategory;
 
+    @OneToMany(mappedBy = "userId")
+    private List<Subscription> subscriptions;
+
+    @OneToMany(mappedBy = "subuserId")
+    private List<Subscription> subscribedBy;
 
 
 
