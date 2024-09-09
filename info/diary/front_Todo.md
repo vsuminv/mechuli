@@ -117,12 +117,20 @@ myPage 위주 작업
 1. [회원가입 유효성 검사](https://xetown.com/questions/1420104)
 
 
+---
+### 9.9
 
+#### 한거
+1. main.dev에 백,프론트 병합
+2. webconfig,UserController 수정.{controller GetMapping 메서드들 WebConfig에 등록함}
+3. tailwind 색,자간 등 등록
 
+#### 나중에 할 거
 
+---
+#### 비고
 
-
-
+----
 
 
 
