@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-//@Controller
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -27,24 +26,14 @@ public class UserController {
         return csrfToken;
     }
 
-
-    // 회원가입 페이지 이동
-    @GetMapping("/join")
-    public String join() {
-        return "/join";
-    }
-
     // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
     @PostMapping("/join")
     public String join(@Valid @RequestBody UserDTO userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/join";
         }
-
         userService.save(userDto);
-
-
-        return "/index";
+        return "/home";
     }
 
     // id, nickname 중복 체크
@@ -68,15 +57,6 @@ public class UserController {
         return "/join :: #nicknameCheck";  // ajax 받는 부분 지정에 따라 변경
     }
 
-
-    ///////////////////////////////////////////////////
-
-//    // 로그인 페이지 이동
-//    @GetMapping("/login")
-//    public String login() {
-//        return "login_form";
-//    }
-//
 //    @PostMapping("/login")
 //    public String login(@Valid BindingResult bindingResult, @RequestBody UserDTO userDto) {
 //        if (bindingResult.hasErrors()) {
