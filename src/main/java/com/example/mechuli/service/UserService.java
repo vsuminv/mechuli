@@ -4,13 +4,16 @@ package com.example.mechuli.service;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -19,7 +22,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
+    @Transactional
     public void save(UserDTO userDTO) {
 
         UserDAO userDAO = UserDAO.builder()
@@ -35,8 +38,10 @@ public class UserService implements UserDetailsService {
     public int checkUserId(String userId) {
         int checkResult = 0;
 
+
         boolean boolResult = userRepository.existsByUserId(userId);
         if(boolResult) checkResult = 1;
+        log.info("sadasdads {}",userId);
         return checkResult;
     }
 

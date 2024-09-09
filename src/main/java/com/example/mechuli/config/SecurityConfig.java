@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -44,9 +45,13 @@ public class SecurityConfig {
 
     @Bean //
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
+//                .csrf((csrf) -> csrf
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all").permitAll()
+                        .requestMatchers("/", "/login", "/joinPage", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all").permitAll()
 //                        .requestMatchers("/admin").hasRole("ADMIN")
 //                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
 
@@ -58,8 +63,7 @@ public class SecurityConfig {
                         .failureUrl("/"))   // 에러 시 처리 방법 논의 후 수정 예정
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true))
-        ;
+                        .invalidateHttpSession(true));
 
         return http.build();
     }

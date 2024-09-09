@@ -29,7 +29,7 @@ public class UserController {
     }
 
     // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
-    @PostMapping("/joinPage")
+    @PostMapping("/join")
     public String join(@Valid @RequestBody UserDTO userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/join";
@@ -41,38 +41,24 @@ public class UserController {
     // id, nickname 중복 체크
     // 비밀번호는 유효성 검사만
 
-    // ajax로 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음?
-//    @RequestMapping(value="/ajaxCheckId", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String ajaxCheckId(@RequestBody String userId, Model model) {
-//        model.addAttribute("idCheckResult", userService.checkUserId(userId));
-//        System.out.println(userService.checkUserId(userId));
-//        return "/join :: #idCheck";  // ajax 받는 부분 지정에 따라 변경
-//    }
-//
-//    // ajax로 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
-//    @RequestMapping(value="/ajaxCheckNickname", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String ajaxCheckNickname(@RequestBody String nickname, Model model) {
-//        model.addAttribute("idCheckResult", userService.checkNickname(nickname));
-//        System.out.println(userService.checkNickname(nickname));
-//        return "/join :: #nicknameCheck";  // ajax 받는 부분 지정에 따라 변경
-//    }
-
+    //ajax로 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음?
     @RequestMapping(value="/ajaxCheckId", method = RequestMethod.POST)
     @ResponseBody
-    public int ajaxCheckId(@RequestBody String userId) {
-        log.info("userId : {}", userId);
-        return userService.checkUserId(userId);
+    public String ajaxCheckId(@RequestBody String userId, Model model) {
+        model.addAttribute("idCheckResult", userService.checkUserId(userId));
+        log.info("id: {} model{}", userId, model);
+        System.out.println(userService.checkUserId(userId));
+        return "/joinPage";  // ajax 받는 부분 지정에 따라 변경
     }
 
+    // ajax로 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
     @RequestMapping(value="/ajaxCheckNickname", method = RequestMethod.POST)
     @ResponseBody
-    public int ajaxCheckNickname(@RequestBody String nickname) {
-        log.info("userId : {}", nickname);
-        return userService.checkNickname(nickname);
+    public String ajaxCheckNickname(@RequestBody String nickname, Model model) {
+        model.addAttribute("idCheckResult", userService.checkNickname(nickname));
+        System.out.println(userService.checkNickname(nickname));
+        return "/joinPage";  // ajax 받는 부분 지정에 따라 변경
     }
-
 
 
 //    @PostMapping("/login")

@@ -3,6 +3,7 @@ package com.example.mechuli.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,5 +17,14 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/joinPage").setViewName("contents/join");
         registry.addViewController("/myPage").setViewName("contents/my/myPage");
         registry.addViewController("/detailPage").setViewName("contents/detail/detailStore");
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:8081") // Your allowed origin
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
