@@ -2,126 +2,47 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/pages/basicPage}">
 
-<th:block layout:fragment="script"> </th:block>
+<th:block layout:fragment="script">
+  <script type="text/javascript" th:src="@{/js/mainPage.js}"></script>
+</th:block>
 <main layout:fragment="main" class="page grid grid-rows-3  m-0 text-yellow-700">
-  <div class="sticky">
-    <div class="flex flex-col justify-center items-center">
-      <div>
-        <h1 class="text-2xl"><mark>#한식</mark> 기반</h1>
-        <div class="flex">
-          <button class="text-4xl text-[#fef445] start-0">◀</button>
-          <div class="p-8 space-x-4">
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-          <button class="text-4xl text-[#fef445] end-0">▶</button>
-        </div>
+  <div class="sticky w-full">
+
+    <div class="flex flex-col justify-center items-center w-full">
+      <div class="grid grid-cols-3 gap-4 p-8" id="restaurant-container">
+        <!-- Thymeleaf each 구문을 사용하여 레스토랑 데이터를 반복 -->
+<!--        <div th:each="restaurant : ${restaurantList}" class="bg-[#e6e6e6] h-32 w-32 rounded-3xl flex flex-col items-center space-y-2 ">-->
+<!--          <img th:src="@{${restaurant.img_url}" alt="Restaurant Image" class="h-20 w-20 object-cover"/>-->
+<!--          <h3 th:text="${restaurant.name}" class="text-center"></h3>-->
+<!--        </div>-->
       </div>
+    </div>
 
-      <div>
-        <h1 class="text-2xl"><mark>한식</mark> 기반</h1>
-        <div class="flex">
-          <button class="text-4xl text-[#fef445] start-0">◀</button>
-          <div class="p-8 space-x-4">
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-          <button class="text-4xl text-[#fef445] end-0">▶</button>
-        </div>
+    <div class="flex flex-col justify-center items-center w-full">
+      <div id="category-container">
+
       </div>
-
-      <div>
-        <h1 class="text-2xl"><mark>#한식</mark> 기반</h1>
-        <div class="flex">
-          <button class="text-4xl text-[#fef445] start-0">◀</button>
-          <div class="p-8 space-x-4">
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-          <button class="text-4xl text-[#fef445] end-0">▶</button>
-        </div>
-      </div>
-
-      <div>
-        <h1 class="text-2xl"><mark>#양식</mark> 기반</h1>
-        <div class="grid grid-cols-3 gap-4 p-8">
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-
-          <div>
-            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">
-              <img src="" alt="">
-            </button>
-          </div>
-        </div>
-      </div>
-
+<!--      <div th:each="entry : ${restaurantsByCategory}">-->
+<!--        <h1 class="text-2xl"><mark th:text="${entry.key}"></mark> 기반</h1>-->
+<!--&lt;!&ndash;        <h3 th:text="${restaurant.name}"></h3>&ndash;&gt;-->
+<!--        <div class="flex">-->
+<!--          <div class="p-8 space-x-4">-->
+<!--            <div th:each="restaurant : ${entry.value}" class="bg-[#e6e6e6] h-32 w-32 rounded-3xl flex flex-col items-center space-y-2">-->
+<!--              <img th:src="@{${restaurant.img_url}}" alt="Restaurant Image" class="h-20 w-20 object-cover"/>-->
+<!--              <h3 th:text="${restaurant.name}" class="text-center"></h3>-->
+<!--            </div>-->
+<!--            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">-->
+<!--              <img src="" alt="">-->
+<!--            </button>-->
+<!--            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">-->
+<!--              <img src="" alt="">-->
+<!--            </button>-->
+<!--            <button class="bg-[#e6e6e6] h-32 w-32 rounded-3xl">-->
+<!--              <img src="" alt="">-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
 
   </div>

@@ -1,0 +1,17 @@
+<!--<div th:fragment="detailAddReview">-->
+<!--    <div class="w-24 h-24 bg-yellow-400 rounded-full">-->
+<!--        <button id="addReviewButton" class="">-->
+<!--            <img class="w-24 h-24" th:src="@{/img/add.png}">-->
+<!--        </button>-->
+<!--    </div>-->
+<!--</div>-->
+<div th:fragment="detailAddReview">
+    <div class="w-24 h-24 bg-yellow-400 rounded-full relative flex items-center justify-center">
+        <button id="addReviewButton" class="relative flex items-center justify-center w-full h-full">
+            <!-- 가로 십자가 -->
+            <div class="absolute w-1/2 h-3 bg-yellow-900"></div>
+            <!-- 세로 십자가 -->
+            <div class="absolute h-1/2 w-3 bg-yellow-900"></div>
+        </button>
+    </div>
+</div>

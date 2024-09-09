@@ -27,6 +27,27 @@ public class RestaurantService {
                 .collect(Collectors.toList());
     }
 
+    public Map<String, List<RestaurantDTO>> findRestaurantsGroupedByCategory() {
+        List<Restaurant> allRestaurants = restaurantRepository.findAll();
+
+        // 레스토랑을 카테고리별로 그룹화
+        Map<String, List<RestaurantDTO>> groupedByCategory = allRestaurants.stream()
+                .collect(Collectors.groupingBy(
+                        restaurant -> restaurant.getRestaurantCategory() != null ?
+                                restaurant.getRestaurantCategory().getCategoryName() : "없음",
+                        Collectors.mapping(RestaurantDTO::new, Collectors.toList())
+                ));
+
+        // 각 카테고리별로 최대 3개의 레스토랑만 선택
+        groupedByCategory.forEach((key, list) -> {
+            if (list.size() > 3) {
+                groupedByCategory.put(key, list.subList(0, 3));
+            }
+        });
+
+        return groupedByCategory;
+    }
+
     public List<RestaurantDTO> findRandomRestaurantsByCategories(int numCategories) {
         // 모든 카테고리 조회
         List<RestaurantCategory> allCategories = restaurantCategoryRepository.findAll();
