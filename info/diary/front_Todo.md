@@ -122,14 +122,16 @@ myPage 위주 작업
 
 #### 한거
 1. main.dev에 백,프론트 병합
-2. webconfig,UserController 수정.{controller GetMapping 메서드들 WebConfig에 등록함}
+2. WebConfig,UserController 수정.{controller GetMapping 메서드들 WebConfig에 등록함}
 3. tailwind 색,자간 등 등록
-
+4. 중복체크
 #### 나중에 할 거
-
+1. 로그인 에러처리.
+2. 
 ---
 #### 비고
-
+1. 검색기능에 식당 이름 넣을지 아님 뺄지.
+2. 
 ----
 
 

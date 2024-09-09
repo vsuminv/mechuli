@@ -1,6 +1,5 @@
 package com.example.mechuli.domain;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 

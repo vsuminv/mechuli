@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all").permitAll()
 //                        .requestMatchers("/admin").hasRole("ADMIN")
 //                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
+
 //                        .anyRequest().authenticated())
                         .anyRequest().permitAll())
                 .formLogin(formLogin -> formLogin

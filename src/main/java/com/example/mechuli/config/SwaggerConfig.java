@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 import lombok.RequiredArgsConstructor;
-
+//http://localhost:8081/swagger-ui/index.html
 @Configuration
 @RequiredArgsConstructor
 public class SwaggerConfig {
