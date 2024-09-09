@@ -69,13 +69,13 @@ buttons.forEach(button => {
 
         // 이전 활성화된 버튼을 기본 상태로 되돌림
         if (activeButton) {
-            activeButton.classList.remove('bg-[#fef445]');
-            activeButton.classList.add('bg-[#e6e6e6]');
+            activeButton.classList.remove('bg-yellow-500');
+            activeButton.classList.add('bg-yellow-200');
         }
 
         // 현재 클릭된 버튼을 노란색으로 설정
-        this.classList.remove('bg-[#e6e6e6]');
-        this.classList.add('bg-[#fef445]');
+        this.classList.remove('bg-yellow-200]');
+        this.classList.add('bg-yellow-500');
 
         // 현재 버튼을 활성화된 버튼으로 저장
         activeButton = this;

@@ -20,19 +20,23 @@ public class RestaurantController {
     @Autowired
     private final RestaurantService restaurantService;
 
+
+
+
     // 메인페이지 전체조회
     @GetMapping("/all")
-//    public String restaurantAll(Model model) {
-//        List<RestaurantDTO> restaurantList = restaurantService.findAll();
-//        model.addAttribute("restaurantList", restaurantList);
-//        return "restaurnatList";
-//    }
-
-    public List<RestaurantDTO> restaurantAll(Model model) {
+    public String restaurantAll(Model model) {
         List<RestaurantDTO> restaurantList = restaurantService.findAll();
         model.addAttribute("restaurantList", restaurantList);
-        return restaurantList;
+//        return "restaurnatList";
+        return "contents/detail/mainPage";
     }
+
+//    public List<RestaurantDTO> restaurantAll(Model model) {
+//        List<RestaurantDTO> restaurantList = restaurantService.findAll();
+//        model.addAttribute("restaurantList", restaurantList);
+//        return restaurantList;
+//    }
     @GetMapping("/category")
     // 뷰페이지
 //    public String restaurantCategory(Model model) {
