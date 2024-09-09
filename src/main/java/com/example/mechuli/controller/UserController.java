@@ -29,7 +29,7 @@ public class UserController {
     }
 
     // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
-    @PostMapping("/join")
+    @PostMapping("/joinPage")
     public String join(@Valid @RequestBody UserDTO userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/join";
@@ -41,7 +41,7 @@ public class UserController {
     // id, nickname 중복 체크
     // 비밀번호는 유효성 검사만
 
-//    // ajax로 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음?
+    // ajax로 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음?
 //    @RequestMapping(value="/ajaxCheckId", method = RequestMethod.POST)
 //    @ResponseBody
 //    public String ajaxCheckId(@RequestBody String userId, Model model) {
