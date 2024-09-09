@@ -25,4 +25,7 @@ public class RestaurantCategory {
     @OneToMany( mappedBy = "restaurantCategory")
     private List<Restaurant> restaurants;
 
+    @ManyToMany(mappedBy = "restaurantCategory")
+    private List<UserDAO> userDAO;
+
 }

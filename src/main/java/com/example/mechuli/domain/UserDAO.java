@@ -1,6 +1,7 @@
 package com.example.mechuli.domain;
 
 import jakarta.persistence.*;
+import jdk.jfr.Category;
 import lombok.AllArgsConstructor;
 
 import lombok.Builder;
@@ -50,6 +51,19 @@ public class UserDAO implements UserDetails {
     @LastModifiedDate
     @Column(name = "update_date", nullable = false)
     private Date updateDate;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_restaurant_category_mapping",
+            joinColumns = @JoinColumn(name = "user_index"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+
+    private List<RestaurantCategory> restaurantCategory;
+
+
+
+
 
 //    @Builder
 //    public UserDAO(String userId, String userPw, String nickname, String address) {
