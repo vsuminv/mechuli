@@ -1,6 +1,7 @@
 <div th:fragment="joinForm">
 <form id="joinForm" class="text-yellow-700 w-full" th:action="@{/joinPage}" method="post" th:object="${user}" onsubmit="return checkAll();">
              <div class="mt-4">
+<!--                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
         <label th:for="userId" class="sr-only"></label><span class="ml-2">아이디</span>
         <div class="relative">
             <input id="userId" name="userId" type="text"
