@@ -1,10 +1,13 @@
 package com.example.mechuli.dto;
 
+import com.example.mechuli.domain.RestaurantCategory;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -23,6 +26,9 @@ public class UserDTO {
     @NotBlank
 //    @Pattern(regexp = "/^[가-힣]+.{2,10}$/", message = "닉네임은 3자이상 10자 이하로 입력해주세요.")
     private String nickname;
+
+    private List<Long> categoryIds;
+
 
 
 //    UserDTO(UserDAO userDAO) {

@@ -47,14 +47,20 @@ public class SecurityConfig {
     @Bean //
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+
                 .authorizeHttpRequests((auth) -> auth
-                                .requestMatchers("/", "/login", "/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all").permitAll()
+                                .requestMatchers("/","/login", "/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/all").permitAll()
+                                .requestMatchers("/auth/**").authenticated()
+//
 //                        .requestMatchers("/admin").hasRole("ADMIN")
 //                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
+
                                 .anyRequest().authenticated())
+
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .defaultSuccessUrl("/")
+//                        .successHandler(new CustomAuthenticationSuccessHandler())
                         .failureUrl("/"))   // 에러 시 처리 방법 논의 후 수정 예정
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")

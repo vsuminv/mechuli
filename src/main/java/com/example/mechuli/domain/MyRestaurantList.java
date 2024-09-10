@@ -19,8 +19,6 @@ public class MyRestaurantList {
     @Column(name="myList_index")
     private Long myListIndex; // index
 
-//    @OneToMany( mappedBy = "myRestaurantList")
-//    private Restaurant restaurant;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id") // 외래키

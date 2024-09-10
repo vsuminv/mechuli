@@ -1,8 +1,13 @@
 
 package com.example.mechuli.service;
 
+import com.example.mechuli.domain.Restaurant;
+import com.example.mechuli.domain.RestaurantCategory;
 import com.example.mechuli.domain.UserDAO;
+import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
+import com.example.mechuli.repository.RestaurantCategoryRepository;
+import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,21 +16,39 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
+    private final RestaurantCategoryRepository restaurantCategoryRepository;
     @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private final RestaurantRepository restaurantRepository;
 
     public void save(UserDTO userDTO) {
+        List<RestaurantCategory> restaurantCategories = new ArrayList<>();
+        for (Long categoryId : userDTO.getCategoryIds()) {
+            RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Invalid category ID"));
+            restaurantCategories.add(category);
+        }
+
 
         UserDAO userDAO = UserDAO.builder()
                 .userId(userDTO.getUserId())
                 .userPw(bCryptPasswordEncoder.encode(userDTO.getUserPw()))
                 .nickname(userDTO.getNickname())
+                .restaurantCategory(restaurantCategories)
                 .build();
 
         userRepository.save(userDAO);
@@ -63,6 +86,20 @@ public class UserService implements UserDetailsService {
                 .nickname(user.getNickname())
                 .userImg(user.getUserImg())
                 .build();
+    }
+
+
+    // 특정 유저가 선택한 카테고리 목록 조회
+//    public List<RestaurantCategory> getUserCategories(String userId) {
+//        UserDAO user = userRepository.findByUserId(userId)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//        return new ArrayList<>(user.getRestaurantCategory());
+//    }
+    public List<RestaurantCategory> getUserSelectedCategories(Long userId) {
+        // findById로 사용자를 조회하고, 선택한 카테고리를 반환
+        UserDAO user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        return user.getRestaurantCategory();
     }
 
 
