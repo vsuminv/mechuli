@@ -35,6 +35,7 @@ public class UserService implements UserDetailsService {
     }
 
     // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음
+    @Transactional
     public int checkUserId(String userId) {
         int checkResult = 0;
 

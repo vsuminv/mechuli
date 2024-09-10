@@ -1,19 +1,16 @@
 <div th:fragment="joinForm">
-<p th:if="${joinErrorMsg}" class="error" th:text="${joinErrorMsg}"></p>
-        <form id="joinForm" class="text-yellow-700 w-full" th:action="@{/joinPage/join}" method="POST" th:object="${user}" onsubmit="return checkAll();">
-<!--            <input type="hidden" name="_csrf" value="true">-->
-            <div class="mt-4">
-                <label th:for="userId" class="sr-only"></label><span class="ml-2">아이디</span>
-<!--                <button onclick="userIdCheck()" id="userIdCheck" >  중복 check </button>-->
-                <div class="relative">
-                    <input id="userId" name="userId" type="text"
-                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                           placeholder="4자 이상 입력하세요">
-                    <input class="btn btn-outline-primary btn-sm idCheck mx-1" type="button" id="userid_check" onclick="userIdCheck()" value="중복 체크"/>
-                    <input class="btn btn-outline-success btn-sm reType" type="button" id="resetUserId" onclick="reUsername()" disabled value="다시입력"/>
-                    <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
-                </div>
-            </div>
+<form id="joinForm" class="text-yellow-700 w-full" th:action="@{/joinPage}" method="post" th:object="${user}" onsubmit="return checkAll();">
+             <div class="mt-4">
+        <label th:for="userId" class="sr-only"></label><span class="ml-2">아이디</span>
+        <div class="relative">
+            <input id="userId" name="userId" type="text"
+                   class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
+                   placeholder="4자 이상 입력하세요" th:value="${userId}">
+            <button type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="userid_check" onclick="userIdCheck()">중복 체크</button>
+            <input class="btn btn-outline-success btn-sm reType" type="button" id="resetUserId" onclick="reUsername()" disabled value="다시입력"/>
+            <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
+        </div>
+    </div>
             <div class="mt-4">
                 <label for="userPw" class="sr-only"></label><span class="ml-2">비밀번호</span>
                 <div class="relative">
@@ -34,7 +31,7 @@
             </div>
             <div class="mt-4">
                 <label th:for="nickname" class="sr-only">nick</label><span class="ml-2">닉네임</span>
-<!--                <button onclick="nicnameCheck()" id="nicnameCheck">  중복 check </button>-->
+                <!--                <button onclick="nicnameCheck()" id="nicnameCheck">  중복 check </button>-->
                 <div class="relative">
                     <input id="nickname" name="nickname" type="text"
                            class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
@@ -44,15 +41,15 @@
                     <div class="validation-icon absolute right-3 top-1/2 transform -tanslate-y-1/2"></div>
                 </div>
             </div>
-            <div class="mt-4">
-                <label for="address" class="sr-only">주소</label><span class="ml-2">주소</span>
-                <div class="relative">
-                    <input id="address" name="address" type="text" autocomplete="address" required
-                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                           placeholder="주소를 입력하세요">
-                    <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
-                </div>
-            </div>
+<!--            <div class="mt-4">-->
+<!--                <label for="address" class="sr-only">주소</label><span class="ml-2">주소</span>-->
+<!--                <div class="relative">-->
+<!--                    <input id="address" name="address" type="text" autocomplete="address" required-->
+<!--                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"-->
+<!--                           placeholder="주소를 입력하세요">-->
+<!--                    <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="w-fll flex mt-6"><div class="m-auto"> 1 / 2 </div> </div>
             <div class="w-full flex">
                 <button id="next_btn" type="submit"

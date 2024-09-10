@@ -13,58 +13,39 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private final UserDetailsService userDetailsService;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Bean
+    public BCryptPasswordEncoder encodePWD(){
+        return new BCryptPasswordEncoder();
+    }
 
-
-
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/img/**").permitAll()
-//                        .anyRequest().permitAll()
-//                );
-//        return http.build();
-//    }
-//}
-
-
-    @Bean //
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-//                .csrf((csrf) -> csrf
-//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/joinPage", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all").permitAll()
-//                        .requestMatchers("/admin").hasRole("ADMIN")
-//                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
-
-//                        .anyRequest().authenticated())
-                        .anyRequest().permitAll())
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/")
-                        .failureUrl("/"))   // 에러 시 처리 방법 논의 후 수정 예정
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/",  "/js/**", "/css/**", "/image/**", "/thymeleaf/**","/login", "/joinPage","/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all").permitAll()
+                        .anyRequest().permitAll()
+                )
+                .formLogin(login -> login
+                        .loginPage("/loginPage")
+                        .defaultSuccessUrl("/home")
+                        .usernameParameter("userId")
+                        .failureUrl("/login/error")
+                        .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+                        .permitAll()
+                )
                 .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true));
-
         return http.build();
     }
 

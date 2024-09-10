@@ -1,6 +1,7 @@
 
 package com.example.mechuli.controller;
 
+import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,25 +40,39 @@ public class UserController {
 
     // id, nickname 중복 체크
     // 비밀번호는 유효성 검사만
-
-    //ajax로 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음?
-    @RequestMapping(value="/ajaxCheckId", method = RequestMethod.POST)
+    @RequestMapping(value = "/ajaxCheckId", method = RequestMethod.POST)
     @ResponseBody
-    public String ajaxCheckId(@RequestBody String userId, Model model) {
-        model.addAttribute("idCheckResult", userService.checkUserId(userId));
-        log.info("id: {} model{}", userId, model);
-        System.out.println(userService.checkUserId(userId));
-        return "/joinPage";  // ajax 받는 부분 지정에 따라 변경
+    public int ajaxCheckId(@RequestBody String userId) {
+        log.info("userId : {}", userId);
+        return userService.checkUserId(userId);
     }
+
+    @RequestMapping(value = "/ajaxCheckNickname", method = RequestMethod.POST)
+    @ResponseBody
+    public int ajaxCheckNickname(@RequestBody String nickname) {
+        log.info("nickname : {}", nickname);
+        return userService.checkNickname(nickname);
+    }
+
+
+    //    ajax로 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음?
+//    @RequestMapping(value = "/ajaxCheckId", method = RequestMethod.POST)
+//    @ResponseBody
+//    public String ajaxCheckId(@RequestBody String userId, Model model) {
+//        model.addAttribute("idCheckResult", userService.checkUserId(userId));
+//        log.info("id: {} model{}", userId, model);
+//        System.out.println(userService.checkUserId(userId));
+//        return "/join";  // ajax 받는 부분 지정에 따라 변경
+//    }
 
     // ajax로 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
-    @RequestMapping(value="/ajaxCheckNickname", method = RequestMethod.POST)
-    @ResponseBody
-    public String ajaxCheckNickname(@RequestBody String nickname, Model model) {
-        model.addAttribute("idCheckResult", userService.checkNickname(nickname));
-        System.out.println(userService.checkNickname(nickname));
-        return "/joinPage";  // ajax 받는 부분 지정에 따라 변경
-    }
+//    @RequestMapping(value = "/ajaxCheckNickname", method = RequestMethod.POST)
+//    @ResponseBody
+//    public String ajaxCheckNickname(@RequestBody String nickname, Model model) {
+//        model.addAttribute("idCheckResult", userService.checkNickname(nickname));
+//        System.out.println(userService.checkNickname(nickname));
+//        return "/join";  // ajax 받는 부분 지정에 따라 변경
+//    }
 
 
 //    @PostMapping("/login")

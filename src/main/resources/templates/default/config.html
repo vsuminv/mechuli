@@ -1,4 +1,5 @@
-<head th:fragment="config">
+<div th:fragment="config">
+ <head>
   <title> MECULI </title>
    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -8,11 +9,7 @@
  <script th:src="@{https://cdn.tailwindcss.com}"></script>
  <script defer type="text/javascript" th:href="@{/tailwind.config.js}"></script>
  <script defer type="text/javascript" th:src="@{/js/common.js}"></script>
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
- <meta name="csrf-token" content="${_csrf.token}"/>
- <meta name="_csrf" th:content="${_csrf.token}"/>
-<!--<meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
-<!--<meta id="_csrf" name="_csrf" th:content="${_csrf.token}">-->
-<!-- <meta id="_csrf" name="_csrf" content="${_csrf.token}"/>-->
-<!--<meta id="_csrf_header" name="_csrf_header" content="${_csrf.headerName}"/>-->
-</head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+ </head>
+</div>
