@@ -4,8 +4,11 @@ package com.example.mechuli.service;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,9 +16,13 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 @Slf4j
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserService implements UserDetailsService {
     @Autowired
     private final UserRepository userRepository;
@@ -63,12 +70,34 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         return UserDAO.builder()
+                .userIndex(user.getUserIndex())
                 .userId(user.getUserId())
                 .userPw(user.getUserPw())
                 .nickname(user.getNickname())
                 .userImg(user.getUserImg())
                 .build();
     }
+
+    public boolean login(UserDTO userDto) {
+        UserDAO user = userRepository.findByUserId(userDto.getUserId())
+                .orElseThrow(() -> new UsernameNotFoundException("아이디를 찾을 수 없습니다."));
+
+        // 비밀번호 일치 여부 확인
+        if (!bCryptPasswordEncoder.matches(userDto.getUserPw(), user.getUserPw())) {
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return true; // 로그인 성공 시
+    }
+
+//    @Transactional(readOnly = true)
+//    public void checkUserPwDuplication(UserDTO userDTO){
+//        UserDTO userPwDuplicate = userRepository.findByUserPw(userDTO.getUserPw());
+//        UserDTO userPwCheckDuplicate = userRepository.findByPasswordCheck(userDTO.getPasswordCheck());
+//        if (userPasswordDuplicate != userPasswordCheckDuplicate){
+//            throw new IllegalStateException("비밀번호가 일치하지 않음");
+//        }
+//    }
 
 
 //    @Transactional(readOnly = true)
@@ -79,14 +108,7 @@ public class UserService implements UserDetailsService {
 //        }
 //    }
 //
-//    @Transactional(readOnly = true)
-//    public void checkUserPwDuplication(UserDTO userDTO){
-//        UserDTO userPwDuplicate = userRepository.findByUserPw(userDTO.getUserPw());
-//        UserDTO userPwCheckDuplicate = userRepository.findByPasswordCheck(userDTO.getPasswordCheck());
-//        if (userPasswordDuplicate != userPasswordCheckDuplicate){
-//            throw new IllegalStateException("비밀번호가 일치하지 않음");
-//        }
-//    }
+
 
 //    //1: 로그인 성공 2: 아이디없음 3: 비밀번호틀림
 //    public int login(UserPARAM param) {

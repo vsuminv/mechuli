@@ -51,3 +51,8 @@ springdoc:
         enabled: true
     cache:
       disabled: true
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG

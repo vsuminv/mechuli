@@ -3,6 +3,7 @@ package com.example.mechuli.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,8 +13,10 @@ import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -33,11 +36,22 @@ public class SecurityConfig {
 
 
 //    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//
+//        return new BCryptPasswordEncoder();
+//    }
+//    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer() {
 //        return (web) -> web
 //                .ignoring()
 //                .requestMatchers("/**");
 //    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
 
     @Bean
     public CsrfTokenRepository csrfTokenRepository() {
@@ -51,22 +65,29 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf((csrf) -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-
+//                .csrf((csrf) -> csrf
+//                        .csrfTokenRepository(csrfTokenRepository())
+//                )
+//                .csrf(csrf -> csrf
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // CSRF 설정
+//                )
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/joinPage", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all", "/joinTest").permitAll()
+                        .requestMatchers("/", "/login", "/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname",
+                                "/api/category", "/api/all", "/joinTest", "/static/**").permitAll()
 //                        .requestMatchers("/img/**", "/css/**", "/images/**", "/js/**", "/node_modules/**").permitAll()
 //                        .requestMatchers("/admin").hasRole("ADMIN")
 //                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
 
-//                        .anyRequest().authenticated())
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
+//                        .anyRequest().permitAll())
 
                 .formLogin(formLogin -> formLogin
+                        .usernameParameter("userId")
+                        .passwordParameter("userPw")
                         .loginPage("/login")
                         .defaultSuccessUrl("/")
-                        .failureUrl("/"))   // 에러 시 처리 방법 논의 후 수정 예정
+                        .failureUrl("/joinTest"))   // 에러 시 처리 방법 논의 후 수정 예정
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true));
