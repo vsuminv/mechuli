@@ -90,7 +90,7 @@ public class UserDAO implements UserDetails {
 
     @Override
     public String getUsername() {
-        return nickname;
+        return userId;
     }
 
     @Override

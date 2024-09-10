@@ -3,6 +3,8 @@ package com.example.mechuli.controller;
 
 import com.example.mechuli.domain.RestaurantCategory;
 import com.example.mechuli.domain.UserDAO;
+import com.example.mechuli.dto.RestaurantCategoryDTO;
+import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.service.RestaurantCategoryService;
 import com.example.mechuli.service.RestaurantService;
@@ -18,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 //@Controller
 @RestController
@@ -87,11 +90,11 @@ public class UserController {
     }
 
     // 회원가입 후 로그인 한 유저의 랜덤카테고리 조회
-    @GetMapping("/auth/{authedUser}randomCategory")
-    public List<RestaurantCategory> findCategory(@AuthenticationPrincipal UserDAO authedUser){
-        List<RestaurantCategory> restaurantCategoryDTOList = restaurantCategoryService.findByUserIndex(authedUser);
-        System.out.println(restaurantCategoryDTOList);
-        return restaurantCategoryDTOList;
+    @GetMapping("/randomCategory")
+    public List<RestaurantDTO> findCategory(@AuthenticationPrincipal UserDAO authedUser) {
+        List<RestaurantDTO> randomCategories = userService.getRandomCategoriesForUser(authedUser.getUserId());
+
+        return randomCategories;
     }
 
 

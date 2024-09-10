@@ -1,4 +1,3 @@
-
 package com.example.mechuli.service;
 
 import com.example.mechuli.domain.Restaurant;
@@ -10,6 +9,7 @@ import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,11 +19,12 @@ import lombok.RequiredArgsConstructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService  {
     @Autowired
     private final UserRepository userRepository;
 
@@ -34,6 +35,7 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private final RestaurantRepository restaurantRepository;
+    private final Random random = new Random();
 
     public void save(UserDTO userDTO) {
         List<RestaurantCategory> restaurantCategories = new ArrayList<>();
@@ -79,28 +81,39 @@ public class UserService implements UserDetailsService {
 
         UserDAO user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-
         return UserDAO.builder()
+                .userIndex(user.getUserIndex())
                 .userId(user.getUserId())
                 .userPw(user.getUserPw())
                 .nickname(user.getNickname())
                 .userImg(user.getUserImg())
+                .restaurantCategory(user.getRestaurantCategory())
                 .build();
     }
+    public List<RestaurantDTO> getRandomCategoriesForUser(String userId) {
+        UserDAO user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<RestaurantCategory> categories = user.getRestaurantCategory();
+
+        Collections.shuffle(categories, random);
+        List<RestaurantCategory> randomCategories = categories.stream()
+                .limit(3)
+                .collect(Collectors.toList());
 
 
-    // 특정 유저가 선택한 카테고리 목록 조회
-//    public List<RestaurantCategory> getUserCategories(String userId) {
-//        UserDAO user = userRepository.findByUserId(userId)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//        return new ArrayList<>(user.getRestaurantCategory());
-//    }
-    public List<RestaurantCategory> getUserSelectedCategories(Long userId) {
-        // findById로 사용자를 조회하고, 선택한 카테고리를 반환
-        UserDAO user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-        return user.getRestaurantCategory();
+        List<Restaurant> restaurants = randomCategories.stream()
+                .flatMap(category -> restaurantRepository.findByRestaurantCategory(category).stream())
+                .distinct()
+                .collect(Collectors.toList());
+
+        return restaurants.stream()
+                .map(RestaurantDTO::new)
+                .collect(Collectors.toList());
     }
+
+
+
 
 
 //    @Transactional(readOnly = true)
@@ -141,4 +154,3 @@ public class UserService implements UserDetailsService {
 //        return Const.SUCCESS;
 //    }
 }
-
