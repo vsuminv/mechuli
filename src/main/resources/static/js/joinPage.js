@@ -1,33 +1,69 @@
-function getCsrfToken() {
-    let name = 'XSRF-TOKEN=';
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    console.log(decodedCookie);
-    console.log("decodedCookie");
-    for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === '') {
-            c = c.substring(1);
+//function getCsrfToken() {
+//    let name = 'XSRF-TOKEN=';
+//    let decodedCookie = decodeURIComponent(document.cookie);
+//    let ca = decodedCookie.split(';');
+//    console.log(decodedCookie);
+//    console.log("decodedCookie");
+//    for(let i = 0; i < ca.length; i++) {
+//        let c = ca[i];
+//        while (c.charAt(0) === '') {
+//            c = c.substring(1);
+//        }
+//        if (c.indexOf(name) === 0) {
+//            return c.substring(name.length, c.length);
+//        }
+//    }
+//    return "84809cbb-8fa8-4f10-a6af-fe56b1df9fde";
+//}
+$(document).ready(function() {
+    var csrfToken = $('meta[name="_csrf"]').attr('content');
+    var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+    $.ajaxSetup({
+        headers: {
+            [csrfHeader]: csrfToken
         }
-        if (c.indexOf(name) === 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "84809cbb-8fa8-4f10-a6af-fe56b1df9fde";
-}
+    });
+
+    $('#userid_check').click(function() {
+     var userIdValue = $('#userId').val();
+    console.log(userIdValue);
+    console.log(csrfToken);
+
+        $.ajax({
+                url: '/ajaxCheckId',
+                type: 'POST',
+                // headers: {
+                //     'X-CSRF-TOKEN': csrfToken
+                // },
+                data: {
+                    userId: userIdValue
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            })
+    });
+});
 
 
 function userIdCheck() {
     // let csrfToken = $('meta[name="csrf-token"]').attr('content');
-    // let userIdValue = $('userId').attr('value');
-    let userIdValue = 'hihihi';
+        var csrfToken = $('meta[name="_csrf"]').attr('content');
+        var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+     var userIdValue = $('#userId').val();
+    console.log(userIdValue);
+    console.log(csrfToken);
 
     $.ajaxSetup({
-
-        headers: {
-            'X-CSRF-TOKEN': '84809cbb-8fa8-4f10-a6af-fe56b1df9fde'
-        }
-    })
+            headers: {
+                [csrfHeader]: csrfToken
+            }
+        });
 
     $.ajax({
         url: '/ajaxCheckId',
@@ -36,13 +72,13 @@ function userIdCheck() {
         //     'X-CSRF-TOKEN': csrfToken
         // },
         data: {
-            userIdValue
+            userId: userIdValue
         },
         success: function(response) {
             console.log(response);
         },
         error: function(xhr, status, error) {
-            console.log(xhr.responseText);
+            console.log(error);
         }
     })
 }

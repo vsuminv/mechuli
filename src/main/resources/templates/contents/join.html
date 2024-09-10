@@ -7,8 +7,10 @@
 
 <main layout:fragment="main" class="flex">
     <div id="joinFormContainer" class="text-sm m-auto w-3/5 h-2/3">
-        <div th:replace="~{contents/join/joinForm :: joinForm}"></div>
-<!--        <div th:replace="~{contents/join/joinForm2 :: joinForm2}"></div>-->
+        <p th:if="${joinErrorMsg}" class="error" th:text="${joinErrorMsg}"></p>
+        <div th:replace="~{/contents/join/joinForm :: joinForm}"></div>
+        <!--        <div th:replace="~{contents/join/joinForm2 :: joinForm2}"></div>-->
     </div>
 </main>
+
 </html>

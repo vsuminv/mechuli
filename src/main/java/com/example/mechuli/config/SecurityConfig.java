@@ -8,12 +8,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+
+import java.nio.file.PathMatcher;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -26,37 +32,37 @@ public class SecurityConfig {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web
+//                .ignoring()
+//                .requestMatchers("/**");
+//    }
 
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers("/img/**").permitAll()
-//                        .anyRequest().permitAll()
-//                );
-//        return http.build();
-//    }
-//}
+    @Bean
+    public CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-CSRF-TOKEN"); // CSRF 헤더 이름 설정
+        return repository;
+    }
 
 
     @Bean //
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-//                .csrf((csrf) -> csrf
-//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .csrf((csrf) -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
 
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/joinPage", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all").permitAll()
+                        .requestMatchers("/", "/login", "/joinPage", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all", "/joinTest").permitAll()
+//                        .requestMatchers("/img/**", "/css/**", "/images/**", "/js/**", "/node_modules/**").permitAll()
 //                        .requestMatchers("/admin").hasRole("ADMIN")
 //                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
 
 //                        .anyRequest().authenticated())
                         .anyRequest().permitAll())
+
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .defaultSuccessUrl("/")
@@ -77,4 +83,10 @@ public class SecurityConfig {
 
         return new ProviderManager(authProvider);
     }
+
+
+
+//    정적 리소스의 위치: Spring Boot의 기본 설정에서는 src/main/resources/static 폴더에 위치한 정적 리소스가 /로 시작하는 URL 경로에 매핑됩니다.
+//    따라서 위의 설정에서 "/css/**"는 src/main/resources/static/css 폴더의 리소스를 참조합니다.
+//, "/css/**", "/js/**", "/image/**", "/img/**", "/node_modules/**"
 }

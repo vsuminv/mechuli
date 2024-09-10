@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Send Input Value with AJAX</title>
+
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<input type="text" id="userId" value="exampleValue">
+<button id="sendValueButton">Send Value</button>
+
+<script>
+    $(document).ready(function() {
+            // 메타 태그에서 CSRF 토큰과 헤더 이름을 가져옵니다.
+            var csrfToken = $('meta[name="_csrf"]').attr('content');
+            var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+        console.log('CSRF Header:', csrfHeader);
+        console.log('CSRF Token:', csrfToken);
+
+
+    $.ajaxSetup({
+        headers: {
+            [csrfHeader]: csrfToken
+        }
+    });
+
+    $('#sendValueButton').click(function() {
+        var inputValue = $('#userId').val();
+
+        $.ajax({
+            url: '/ajaxCheckId',
+            type: 'POST',
+            data: {
+                userId: inputValue
+            },
+            success: function(response) {
+                console.log('Success:', response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+
+</script>
+</body>
+</html>
