@@ -1,19 +1,18 @@
 package com.example.mechuli.config;
 
 
+import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -32,33 +31,46 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
+//                .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/",  "/js/**", "/css/**", "/image/**", "/thymeleaf/**","/login", "/joinPage","/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/api/category", "/api/all").permitAll()
+                        .requestMatchers("/",  "/js/**", "/css/**", "/image/**", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                        .requestMatchers("/","/login","/join","/wellcomePage").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(login -> login
                         .loginPage("/loginPage")
-                        .defaultSuccessUrl("/home")
+                        .loginProcessingUrl("/login") // action
+                        .defaultSuccessUrl("/home", true)
+//                        .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .usernameParameter("userId")
-                        .failureUrl("/login/error")
-                        .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+                        .passwordParameter("userPw")
+                        .failureUrl("/error/error500")
+//                        .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+//                        .failureHandler(())
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true));
         return http.build();
     }
 
-
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userService) throws Exception {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
-        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
-
-        return new ProviderManager(authProvider);
+    public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService) {
+        DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
+        daoProvider.setUserDetailsService(userService);
+        daoProvider.setPasswordEncoder(encodePWD());
+        return daoProvider;
     }
+
+//    @Bean
+//    public AuthenticationManager authenticationManager(BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailsService) throws Exception {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(userDetailsService);
+//        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
+//
+//        return new ProviderManager(authProvider);
+//    }
 }

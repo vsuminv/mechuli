@@ -1,22 +1,22 @@
 
 package com.example.mechuli.controller;
 
-import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping( method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"})
 public class UserController {
+
     @Autowired
     private final UserService userService;
 
@@ -27,17 +27,25 @@ public class UserController {
         System.out.println(csrfToken);
         return csrfToken;
     }
-
+//    @PostMapping("/login")
+//    public String login() {
+//        return "redirect:/";
+//    }
     // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
+//    @PostMapping("/join")
+//    public String join(@Valid @RequestBody UserDTO userDto, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            return "/join";
+//        }
+//        userService.save(userDto);
+//        return "redirect:/login";
+////    }
     @PostMapping("/join")
-    public String join(@Valid @RequestBody UserDTO userDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "/join";
-        }
-        userService.save(userDto);
-        return "/home";
-    }
+    public ResponseEntity<String> userJoin(UserDTO dto) {
 
+        userService.save(dto);
+        return ResponseEntity.ok("good");
+    }
     // id, nickname 중복 체크
     // 비밀번호는 유효성 검사만
     @RequestMapping(value = "/ajaxCheckId", method = RequestMethod.POST)

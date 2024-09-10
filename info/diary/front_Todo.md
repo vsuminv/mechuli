@@ -143,14 +143,24 @@ myPage 위주 작업
 #### 한거
 1. 개발용 DB에서 배포용 DB로 갈아끼우기
 2. 데이터 파싱{myPage,joinPage,loginPage} 테스트
-3. 
+3. 로그인 후처리 화면 전환
 #### 나중에 할 거
 1. mainPage,detailPage 리펙토링
 2. 현재 static 하위 전체에 접근권한을 준 상태 보안상 안좋음. 나중에 접근권한 유,무 폴더 하나씩 나누기.
-
+3. 로그인 클라용 예외처리 failureUrl
+4. 로그인 후처리 화면 전환 디테일 = 디자이너와 논의 후 결정
+5. 로그인,회원가입은 th:sec으로 js click none 박으면 될듯.
+6. 홍엽에게 home.html에 mainPage 작업한거 리펙토링 요청하기
 ---
 #### 비고
-  
+1. joinform,loginform input으로 마크업하기. 
+2. loginpage 에서 joinPage로 가는거 ajax 비동기 방식으로 변경
+3. loginPage에서  url 반환하는거 alert로 띄울수 있게 Param값으로 보내주세요.
+4. @RequestMapping( method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"}) 컨트롤러에 추가했음.
+
+- [Form Login 필터](https://docs.spring.io/spring-security/reference/servlet/authentication/passwords/form.html)
+
+
 
 ----
 

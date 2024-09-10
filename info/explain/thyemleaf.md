@@ -39,3 +39,6 @@
 - `<input type="button" th:onclick="|location.href='@{이동할 url}'|"> `
 
 
+
+
+

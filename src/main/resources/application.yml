@@ -10,7 +10,7 @@ spring:
       static-locations: classpath:/static/
   thymeleaf:
     cache: false # 개발 시에는 캐시를 끄는 것이 좋습니다.
-    prefix: classpath:/templates/
+#    prefix: classpath:/templates/
     suffix: .html
 
   config:
@@ -26,11 +26,21 @@ spring:
         format_sql: true
         default_batch_fetch_size: 1000
 
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:test
+#    username: sa
+#    password:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test
-    username: sa
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mechuli-db.cyzrnn6eoqnk.ap-northeast-2.rds.amazonaws.com:3306/mechuli?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: master
+    password: mechuliproject
+
+  logging:
+    level:
+      org.hibernate.SQL: debug
+
 
   sql:
     init:

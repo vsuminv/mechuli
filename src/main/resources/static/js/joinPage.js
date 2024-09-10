@@ -48,12 +48,13 @@ function nickNameCheck() {
         data: nickname,
         contentType: "text/plain",
         success: function (result) {
+            console.log(result);
             if (result === 0) {
                 if (confirm("해당 닉네임은 사용 가능합니다. \n 사용하시겠습니까?")) {
-                    nicknameOverlapCheck = 0;
+                    nicknameOverlapCheck = 1;
                     $("#nickname").attr("readonly", true);
-                    $("#nicknameOverlay").attr("disabled", true);
-                    $("#nicknameOverlay").css("display", "none");
+                    $("#nickname_check").attr("disabled", true);
+                    $("#nickname_check").css("display", "none");
                     $("#resetNickname").attr("disabled", false);
                     $("#resetNickname").css("display", "inline-block");
                 }
@@ -71,11 +72,55 @@ function nickNameCheck() {
 }
 
 function checkAll() {
-    if (userIdOverlapCheck === 1 && nicknameOverlapCheck === 0) {
+    if (userIdOverlapCheck === 1 && nicknameOverlapCheck === 1) {
         console.log("통과");
         return true;
     } else {
         alert("아이디, 닉네임 중복체크 미완료");
         return false;
     }
+}
+
+function join(){
+    // if (!checkAll()) {
+    //     return false;
+    // }
+    let userId = $('#userId').val();
+    let userPw = $('#userPw').val();
+    let userPw2 = $('#userPw2').val();
+    let nickname = $('#nickname').val();
+
+
+    // if (pw !== pw2) {
+    //     alert("비밀번호가 일치하지 않습니다.");
+    //     $('#pw2').focus();
+    //     return false;
+    // }
+
+    const userData = {
+        userId :  $('#userId').val(),
+        userPw : $('#userPw').val(),
+        userPw2 : $('#userPw2').val(),
+        nickname : $('#nickname').val(),
+    };
+    $.ajax({
+        url: "/join",
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(userData),
+        success: function(response) {
+            if (response === "success") {
+                alert("join 됨.");
+                window.location.href = "/login"; // 로그인 페이지로 이동
+                console.log(userData);
+            } else {
+                alert("join fail");
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("failfailfailfailfail");
+            console.log(userData);
+            console.error("Error: " + status + " " + error);
+        }
+    });
 }

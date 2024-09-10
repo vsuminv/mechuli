@@ -17,8 +17,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@Entity
 @Builder
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,8 +28,8 @@ public class UserDAO implements UserDetails {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    @Column(name="user_index")
-    private long userIndex;
+    @Column(name="user_index", updatable = false)
+    private Long userIndex;
 
     @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
@@ -37,11 +37,15 @@ public class UserDAO implements UserDetails {
     @Column(name = "user_pw", nullable = false)
     private String userPw;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "nickname")
     private String nickname;
 
     @Column(name = "user_img")
     private String userImg;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @CreatedDate
     @Column(name = "create_date", nullable = false)
@@ -52,24 +56,26 @@ public class UserDAO implements UserDetails {
     private Date updateDate;
 
 //    @Builder
-//    public UserDAO(String userId, String userPw, String nickname, String address) {
+//    public UserDAO(String userId, String userPw, String nickname, String userImg, String role) {
 //        this.userId = userId;
 //        this.userPw = userPw;
 //        this.nickname = nickname;
-//        this.address = address;
+//        this.userImg = userImg;
+//        this.role = role;
 //    }
 
-    // 권한 관련 작업을 하기 위한 role return
+    // 권한 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("user"));
     }
 
+    //유니크 아이디를 닉넴으로 반환
     @Override
     public String getUsername() {
         return nickname;
     }
-
+    //
     @Override
     public String getPassword() {
         return userPw;
