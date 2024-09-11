@@ -30,7 +30,4 @@ public class Menu {
     @JoinColumn(name = "restaurant_id") // 외래키
     private Restaurant restaurant;
 
-
-
-
 }

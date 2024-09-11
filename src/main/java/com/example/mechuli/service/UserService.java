@@ -26,20 +26,13 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
-
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService  {
 
-    @Autowired
     private final UserRepository userRepository;
-
-    @Autowired
     private final RestaurantCategoryRepository restaurantCategoryRepository;
-    @Autowired
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
     private final RestaurantRepository restaurantRepository;
     private final Random random = new Random();
 
@@ -65,7 +58,6 @@ public class UserService implements UserDetailsService  {
     // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음
     public int checkUserId(String userId) {
         int checkResult = 0;
-
 
         boolean boolResult = userRepository.existsByUserId(userId);
         if(boolResult) checkResult = 1;
@@ -123,56 +115,16 @@ public class UserService implements UserDetailsService  {
 
 
 
-    public boolean login(UserDTO userDto) {
-        UserDAO user = userRepository.findByUserId(userDto.getUserId())
-                .orElseThrow(() -> new UsernameNotFoundException("아이디를 찾을 수 없습니다."));
-
-        // 비밀번호 일치 여부 확인
-        if (!bCryptPasswordEncoder.matches(userDto.getUserPw(), user.getUserPw())) {
-            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
-        }
-
-        return true; // 로그인 성공 시
-    }
-
-//    @Transactional(readOnly = true)
-//    public void checkUserPwDuplication(UserDTO userDTO){
-//        UserDTO userPwDuplicate = userRepository.findByUserPw(userDTO.getUserPw());
-//        UserDTO userPwCheckDuplicate = userRepository.findByPasswordCheck(userDTO.getPasswordCheck());
-//        if (userPasswordDuplicate != userPasswordCheckDuplicate){
-//            throw new IllegalStateException("비밀번호가 일치하지 않음");
+//    public boolean login(UserDTO userDto) {
+//        UserDAO user = userRepository.findByUserId(userDto.getUserId())
+//                .orElseThrow(() -> new UsernameNotFoundException("아이디를 찾을 수 없습니다."));
+//
+//        // 비밀번호 일치 여부 확인
+//        if (!bCryptPasswordEncoder.matches(userDto.getUserPw(), user.getUserPw())) {
+//            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
 //        }
+//
+//        return true; // 로그인 성공 시
 //    }
 
-
-//    @Transactional(readOnly = true)
-//    public void checkUserIdDuplication(UserDTO userDTO){
-//        boolean userIdDuplicate = userRepository.existsByUserId(userDTO.getUserId());
-//        if (userIdDuplicate){
-//            throw new IllegalStateException("이미 존재하는 아이디입니다.");
-//        }
-//    }
-//
-
-
-//    //1: 로그인 성공 2: 아이디없음 3: 비밀번호틀림
-//    public int login(UserPARAM param) {
-//        if(param.getUser_id().equals("")) { return Const.NO_ID; }
-//
-//        UserDMI dbUser = mapper.selUser(param);
-//
-//        if(dbUser==null) { return Const.NO_ID; }
-//
-//        String cryptPw = SecurityUtils.getEncrypt(param.getUser_pw(), dbUser.getSalt());
-//
-//        if(!cryptPw.equals(dbUser.getUser_pw())) { return Const.NO_PW; }
-//
-//        param.setI_user(dbUser.getI_user());
-//        param.setUser_pw(null);
-//        param.setNm(dbUser.getNm());
-//        param.setProfile_img(dbUser.getProfile_img());
-//        param.setAdmin(dbUser.getAdmin());
-//
-//        return Const.SUCCESS;
-//    }
 }

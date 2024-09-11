@@ -25,6 +25,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping( method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"})
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -89,45 +90,6 @@ public class UserController {
 
         return randomCategories;
     }
-
-
-//    @PostMapping("/login")
-//    public String login(@Valid BindingResult bindingResult, @RequestBody UserDTO userDto) {
-//        if (bindingResult.hasErrors()) {
-//            return "login_form";
-//        }
-//
-////        userService.findByUserId(userDto);
-//
-//        return "/index";
-//    }
-
-
-//    @PostMapping("/login")
-//    public ResponseEntity loadUserByUsername (@RequestBody UserDTO userDTO, String email){
-//
-//        UserDAO userDao =
-//
-//
-//
-//        User user = detailService.loadUserByUsername(
-//                userDTO.getEmail());
-//
-//
-//        if (!bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-//            ResponseDTO responseDTO = ResponseDTO.builder().error("비밀번호가 일치하지 않습니다.").build();
-//            return ResponseEntity.ok().body(responseDTO);
-//
-//        } else{
-//            userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-//            userDTO.setEmail(userDTO.getEmail());
-//            ResponseDTO responseDTO = ResponseDTO.builder().result(1).build();
-//            return ResponseEntity.ok().body(responseDTO);
-//        }
-//
-//
-//
-//    }
 
 
 }

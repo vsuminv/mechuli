@@ -1,6 +1,7 @@
 package com.example.mechuli.config;
 
 
+import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -31,8 +32,8 @@ public class SecurityConfig {
 
     @Autowired
     private final UserDetailsService userDetailsService;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+//    @Autowired
+//    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
 //    @Bean
@@ -47,11 +48,11 @@ public class SecurityConfig {
 //                .requestMatchers("/**");
 //    }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring()
+//                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+//    }
 
     @Bean
     public CsrfTokenRepository csrfTokenRepository() {
@@ -72,6 +73,7 @@ public class SecurityConfig {
 //                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // CSRF 설정
 //                )
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/login", "/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname",
                                 "/api/category", "/api/all", "/joinTest", "/static/**").permitAll()
@@ -96,16 +98,27 @@ public class SecurityConfig {
     }
 
 
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userService) throws Exception {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(userService);
+//        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
+//
+//        return new ProviderManager(authProvider);
+//    }
+
+
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userService) throws Exception {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
-        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
-
-        return new ProviderManager(authProvider);
+    public BCryptPasswordEncoder encodePWD(){
+        return new BCryptPasswordEncoder();
     }
-
-
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService) {
+        DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
+        daoProvider.setUserDetailsService(userService);
+        daoProvider.setPasswordEncoder(encodePWD());
+        return daoProvider;
+    }
 
 //    정적 리소스의 위치: Spring Boot의 기본 설정에서는 src/main/resources/static 폴더에 위치한 정적 리소스가 /로 시작하는 URL 경로에 매핑됩니다.
 //    따라서 위의 설정에서 "/css/**"는 src/main/resources/static/css 폴더의 리소스를 참조합니다.

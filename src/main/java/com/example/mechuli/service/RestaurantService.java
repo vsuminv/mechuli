@@ -1,13 +1,12 @@
 package com.example.mechuli.service;
 
+import com.example.mechuli.domain.Menu;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.RestaurantCategory;
-import com.example.mechuli.domain.User;
-import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.RestaurantDTO;
+import com.example.mechuli.repository.MenuRepository;
 import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
-import com.example.mechuli.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +20,9 @@ public class RestaurantService {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private MenuRepository menuRepository;
 
 
     public List<RestaurantDTO> findAll() {
@@ -61,7 +63,7 @@ public class RestaurantService {
                 .build();
     }
 
-    // 로그인한 유저의 랜럼카테고리 조회
+    // 로그인한 유저의 랜덤카테고리 조회
 //    // 카테고리 목록에서 무작위로 식당 선택
 //    public List<RestaurantDTO> getUserCategories(List<Long> categoryIds, int numRestaurants) {
 //        if (categoryIds.isEmpty()) {
@@ -92,6 +94,15 @@ public class RestaurantService {
 //                .build();
 //    }
 
+    public Optional<RestaurantDTO> findRestaurantByRestaurantId(Long restaurantId) {
 
+        Optional<RestaurantDTO> restDto = restaurantRepository.findByRestaurantId(restaurantId);
+        return restDto;
+    }
+
+    public List<Menu>  findMenusByRestaurantId(Long restaurantId) {
+        List<Menu> menuList = menuRepository.findByRestaurantId(restaurantId);
+        return menuList;
+    }
 
 }

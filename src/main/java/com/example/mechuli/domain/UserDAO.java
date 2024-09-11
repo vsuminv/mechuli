@@ -24,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "M_USER")
+@Table(name = "m_user")
 public class UserDAO implements UserDetails {
 
     @Id
@@ -68,19 +68,6 @@ public class UserDAO implements UserDetails {
     @OneToMany(mappedBy = "userId")
     private List<Subscription> subscriptions;
 
-
-
-
-
-
-
-//    @Builder
-//    public UserDAO(String userId, String userPw, String nickname, String address) {
-//        this.userId = userId;
-//        this.userPw = userPw;
-//        this.nickname = nickname;
-//        this.address = address;
-//    }
 
     // 권한 관련 작업을 하기 위한 role return
     @Override
