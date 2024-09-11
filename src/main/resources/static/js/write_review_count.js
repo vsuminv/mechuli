@@ -1,3 +1,5 @@
+document.getElementById('review').addEventListener('input', updateCharacterCount);
+
 function updateCharacterCount() {
    var review = document.getElementById('review');
    var charCount = review.value.length;

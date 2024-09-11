@@ -59,6 +59,9 @@ const modal = document.getElementById('modal');
 const addReviewButton = document.querySelector('#addReviewButton');
 const cancelButton = modal.querySelector('button:first-of-type');
 
+// 추천 버튼 요소를 선택합니다.
+const recommendedButton = document.querySelector('#recommended');
+
 // 초기 상태에서 첫 번째 버튼을 노란색으로 유지
 let activeButton = document.querySelector('button[data-show-table="menuTable"]');
 
@@ -69,13 +72,13 @@ buttons.forEach(button => {
 
         // 이전 활성화된 버튼을 기본 상태로 되돌림
         if (activeButton) {
-            activeButton.classList.remove('bg-[#fef445]');
-            activeButton.classList.add('bg-[#e6e6e6]');
+            activeButton.classList.remove('bg-[#ffdd33]');
+            activeButton.classList.add('bg-[#e5e5e5]');
         }
 
         // 현재 클릭된 버튼을 노란색으로 설정
-        this.classList.remove('bg-[#e6e6e6]');
-        this.classList.add('bg-[#fef445]');
+        this.classList.remove('bg-[#e5e5e5]');
+        this.classList.add('bg-[#ffdd33]');
 
         // 현재 버튼을 활성화된 버튼으로 저장
         activeButton = this;
@@ -99,6 +102,12 @@ function showTable(tableId) {
         selectedTable.classList.remove('hidden'); // 'hidden' 클래스 제거
     }
 }
+
+// 버튼 클릭 시 색상을 변경합니다.
+recommendedButton.addEventListener('click', function () {
+    this.style.color = this.style.color === 'gold' ? '#e6e6e6' : 'gold';
+});
+
 // 모달 열기 이벤트
 addReviewButton.addEventListener('click', function () {
     modal.classList.remove('hidden');  // 모달의 'hidden' 클래스 제거
@@ -107,3 +116,12 @@ addReviewButton.addEventListener('click', function () {
 cancelButton.addEventListener('click', function () {
     modal.classList.add('hidden');  // 모달의 'hidden' 클래스 추가
 });
+// 모달 제출 이벤트
+function submitForm() {
+    // 폼을 가져와서 제출
+//    var form = document.getElementById('yourFormId'); // yourFormId를 실제 폼의 ID로 대체
+//    form.submit();
+
+    // 모달 닫기
+    document.getElementById('modal').classList.add('hidden');
+}
