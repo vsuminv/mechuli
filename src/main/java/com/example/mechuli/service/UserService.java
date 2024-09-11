@@ -11,7 +11,6 @@ import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,10 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -75,6 +71,7 @@ public class UserService implements UserDetailsService  {
 
         userRepository.save(userDAO);
     }
+
 
     // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음
     public int checkUserId(String userId) {
@@ -132,7 +129,30 @@ public class UserService implements UserDetailsService  {
                 .collect(Collectors.toList());
     }
 
+    public UserDAO updateUserInfo(UserDAO authUser, UserDTO userDTO, BCryptPasswordEncoder bCryptPasswordEncoder) {
 
+        UserDAO userToUpdate = userRepository.findById(authUser.getUserIndex())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        userToUpdate.setUserPw(bCryptPasswordEncoder.encode(userDTO.getUserPw())); // 새로운 비밀번호 암호화 후 설정
+        userToUpdate.setUserImg(userDTO.getUserImg()); // 새로운 이미지 URL 설정
+        userToUpdate.setNickname(userDTO.getNickname()); // 닉네임 업데이트
+
+
+        List<RestaurantCategory> restaurantCategories = new ArrayList<>();
+        for (Long categoryId : userDTO.getCategoryIds()) {
+            RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Invalid category ID"));
+            restaurantCategories.add(category);
+        }
+        userToUpdate.setRestaurantCategory(restaurantCategories);
+
+        // 변경된 사용자 정보 저장
+
+
+        return userRepository.save(userToUpdate);
+    }
 
 
 
