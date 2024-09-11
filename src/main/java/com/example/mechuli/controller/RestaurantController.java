@@ -51,9 +51,11 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurantDetail")
-    public void getRestaurantDetail() {
+    public String getRestaurantDetail(String restaurantId, Model model) {
         // 식당 대표이미지, 이름, 주소, index
         // ajax 식당 메뉴
+        model.addAttribute("restaurantId", restaurantId);
+        return "/detailPage";
     }
 
 

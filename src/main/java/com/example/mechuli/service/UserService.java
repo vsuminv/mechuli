@@ -45,14 +45,12 @@ public class UserService implements UserDetailsService  {
         }
 
 
-        UserDAO userDAO = UserDAO.builder()
+        userRepository.save(UserDAO.builder()
                 .userId(userDTO.getUserId())
                 .userPw(bCryptPasswordEncoder.encode(userDTO.getUserPw()))
                 .nickname(userDTO.getNickname())
                 .restaurantCategory(restaurantCategories)
-                .build();
-
-        userRepository.save(userDAO);
+                .build());
     }
 
     // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음

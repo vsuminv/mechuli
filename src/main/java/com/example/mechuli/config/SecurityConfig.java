@@ -35,23 +35,16 @@ public class SecurityConfig {
 //    @Autowired
 //    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+//    @Bean
+//    public BCryptPasswordEncoder encodePWD(){
+//        return new BCryptPasswordEncoder();
+//    }
+
 
 //    @Bean
 //    public PasswordEncoder passwordEncoder() {
 //
 //        return new BCryptPasswordEncoder();
-//    }
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web
-//                .ignoring()
-//                .requestMatchers("/**");
-//    }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring()
-//                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 //    }
 
     @Bean
@@ -98,27 +91,22 @@ public class SecurityConfig {
     }
 
 
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userService) throws Exception {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userService);
+        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
+
+        return new ProviderManager(authProvider);
+    }
+
 //    @Bean
-//    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userService) throws Exception {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//        authProvider.setUserDetailsService(userService);
-//        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
-//
-//        return new ProviderManager(authProvider);
+//    public DaoAuthenticationProvider daoAuthenticationProvider(UserDetailsService userService) {
+//        DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
+//        daoProvider.setUserDetailsService(userService);
+//        daoProvider.setPasswordEncoder(encodePWD());
+//        return daoProvider;
 //    }
-
-
-    @Bean
-    public BCryptPasswordEncoder encodePWD(){
-        return new BCryptPasswordEncoder();
-    }
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService) {
-        DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
-        daoProvider.setUserDetailsService(userService);
-        daoProvider.setPasswordEncoder(encodePWD());
-        return daoProvider;
-    }
 
 //    정적 리소스의 위치: Spring Boot의 기본 설정에서는 src/main/resources/static 폴더에 위치한 정적 리소스가 /로 시작하는 URL 경로에 매핑됩니다.
 //    따라서 위의 설정에서 "/css/**"는 src/main/resources/static/css 폴더의 리소스를 참조합니다.

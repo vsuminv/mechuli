@@ -101,7 +101,7 @@ public class RestaurantService {
     }
 
     public List<Menu>  findMenusByRestaurantId(Long restaurantId) {
-        List<Menu> menuList = menuRepository.findByRestaurantId(restaurantId);
+        List<Menu> menuList = menuRepository.findByRestaurant_RestaurantId(restaurantId);
         return menuList;
     }
 

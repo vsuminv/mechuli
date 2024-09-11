@@ -27,13 +27,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping( method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"})
 public class UserController {
-    @Autowired
+
     private final UserService userService;
 
-    @Autowired
     private final RestaurantService restaurantService;
 
-    @Autowired
     private final RestaurantCategoryService restaurantCategoryService;
 
     // csrf-token 값 받아오려고 넣은 메소드, 개발 끝날 시 제거나 주석처리
