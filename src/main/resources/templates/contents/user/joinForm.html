@@ -2,7 +2,7 @@
 
 <!--<form id="joinForm" class="text-yellow-700 w-full" th:action="@{/join}" method="post" th:object="${userData}" onsubmit="return checkAll();">-->
 <form id="joinForm" class="text-yellow-700 w-full" th:action="@{/join}" method="post" th:object="${userData}"
-      onsubmit="return join();">
+      onsubmit="return checkAll();">
              <div class="mt-4">
         <label th:for="userId" class="sr-only"></label><span class="ml-2">아이디</span>
         <div class="relative">

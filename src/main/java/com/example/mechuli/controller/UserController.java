@@ -20,36 +20,18 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-    // csrf-token 값 받아오려고 넣은 메소드, 개발 끝날 시 제거나 주석처리
     @GetMapping("/csrf-token")
     public CsrfToken getCsrfToken(HttpServletRequest request) {
         CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
         System.out.println(csrfToken);
         return csrfToken;
     }
-
-//    @PostMapping("/login")
-//    public String login() {
-//        return "redirect:/";
-//    }
-    // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
-//    @PostMapping("/join")
-//    public String join(@Valid @RequestBody UserDTO userDto, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "/join";
-//        }
-//        userService.save(userDto);
-//        return "redirect:/login";
-////    }
-
     @PostMapping("/join")
     public ResponseEntity<String> userJoin(UserDTO dto) {
-
         userService.save(dto);
         return ResponseEntity.ok("good");
     }
-    // id, nickname 중복 체크
-    // 비밀번호는 유효성 검사만
+
     @RequestMapping(value = "/ajaxCheckId", method = RequestMethod.POST)
     @ResponseBody
     public int ajaxCheckId(@RequestBody String userId) {
@@ -63,66 +45,5 @@ public class UserController {
         log.info("nickname : {}", nickname);
         return userService.checkNickname(nickname);
     }
-
-
-    //    ajax로 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음?
-//    @RequestMapping(value = "/ajaxCheckId", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String ajaxCheckId(@RequestBody String userId, Model model) {
-//        model.addAttribute("idCheckResult", userService.checkUserId(userId));
-//        log.info("id: {} model{}", userId, model);
-//        System.out.println(userService.checkUserId(userId));
-//        return "/join";  // ajax 받는 부분 지정에 따라 변경
-//    }
-
-    // ajax로 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
-//    @RequestMapping(value = "/ajaxCheckNickname", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String ajaxCheckNickname(@RequestBody String nickname, Model model) {
-//        model.addAttribute("idCheckResult", userService.checkNickname(nickname));
-//        System.out.println(userService.checkNickname(nickname));
-//        return "/join";  // ajax 받는 부분 지정에 따라 변경
-//    }
-
-
-//    @PostMapping("/login")
-//    public String login(@Valid BindingResult bindingResult, @RequestBody UserDTO userDto) {
-//        if (bindingResult.hasErrors()) {
-//            return "login_form";
-//        }
-//
-////        userService.findByUserId(userDto);
-//
-//        return "/index";
-//    }
-
-
-//    @PostMapping("/login")
-//    public ResponseEntity loadUserByUsername (@RequestBody UserDTO userDTO, String email){
-//
-//        UserDAO userDao =
-//
-//
-//
-//        User user = detailService.loadUserByUsername(
-//                userDTO.getEmail());
-//
-//
-//        if (!bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-//            ResponseDTO responseDTO = ResponseDTO.builder().error("비밀번호가 일치하지 않습니다.").build();
-//            return ResponseEntity.ok().body(responseDTO);
-//
-//        } else{
-//            userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-//            userDTO.setEmail(userDTO.getEmail());
-//            ResponseDTO responseDTO = ResponseDTO.builder().result(1).build();
-//            return ResponseEntity.ok().body(responseDTO);
-//        }
-//
-//
-//
-//    }
-
-
 }
 
