@@ -27,6 +27,7 @@ public class UserController {
         System.out.println(csrfToken);
         return csrfToken;
     }
+
 //    @PostMapping("/login")
 //    public String login() {
 //        return "redirect:/";
@@ -40,6 +41,7 @@ public class UserController {
 //        userService.save(userDto);
 //        return "redirect:/login";
 ////    }
+
     @PostMapping("/join")
     public ResponseEntity<String> userJoin(UserDTO dto) {
 

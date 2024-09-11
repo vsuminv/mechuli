@@ -151,6 +151,7 @@ myPage 위주 작업
 4. 로그인 후처리 화면 전환 디테일 = 디자이너와 논의 후 결정
 5. 로그인,회원가입은 th:sec으로 js click none 박으면 될듯.
 6. 홍엽에게 home.html에 mainPage 작업한거 리펙토링 요청하기
+
 ---
 #### 비고
 1. joinform,loginform input으로 마크업하기. 
