@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById('restaurant-container');
     const categoryTitle = document.createElement('h1');
     categoryTitle.classList.add('text-2xl', 'text-center', 'my-4');
+    categoryTitle.style.display = 'none';
     container.parentNode.insertBefore(categoryTitle, container);
 
     // 전체 버튼 클릭 시 /api/all 데이터를 가져와서 표시하는 이벤트 리스너 추가
@@ -12,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch('/api/all')
             .then(response => response.json())
             .then(data => {
-                categoryTitle.textContent = "전체 레스토랑 목록"; // 제목 업데이트
+                categoryTitle.style.display = 'none';
                 displayAllRestaurants(data);
             })
             .catch(error => console.error('Error fetching restaurant data:', error));
@@ -60,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch('/api/category')
             .then(response => response.json())
             .then(data => {
+            categoryTitle.style.display = 'block';
                 categoryTitle.textContent = "#" + selectedCategory + " 추천"; // 제목 업데이트
                 filterAndDisplayRestaurants(selectedCategory, data);
             })
