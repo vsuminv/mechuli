@@ -18,6 +18,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,13 +53,25 @@ public class UserController {
 
     // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
     @PostMapping("/join")
-    public String join(@Valid @RequestBody UserDTO userDto, BindingResult bindingResult) {
+    public String join(@RequestPart("file") MultipartFile file, @Valid @RequestPart UserDTO userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/join";
         }
         // 카테고리 값 가져오기
         if (userDto.getCategoryIds() == null || userDto.getCategoryIds().size() < 3 || userDto.getCategoryIds().size() > 5) {
             bindingResult.rejectValue("restaurantCategories", "error.userDto", "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
+            return "/join";
+        }
+
+        try {
+            // 이미지를 S3에 업로드하고 URL을 반환하는 로직을 호출
+            String imageUrl = userService.uploadImageToS3(file);
+            userDto.setUserImg(imageUrl);
+
+            // 사용자 정보 저장
+            userService.save(userDto);
+        } catch (Exception e) {
+            bindingResult.rejectValue("file", "error.userDto", "이미지 업로드 중 오류가 발생했습니다.");
             return "/join";
         }
 

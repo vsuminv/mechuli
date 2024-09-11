@@ -20,7 +20,7 @@ public class Review_img {
     @Column(name="review_img_id")
     private Long reviewImgId; // index
 
-    @Column(name="image_url1", length = 2083,nullable = false)
+    @Column(name="image_url1", length = 2083, nullable = false)
     private String img1;
 
     @Column(name="image_url2", length = 2083)

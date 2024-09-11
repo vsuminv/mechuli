@@ -25,9 +25,6 @@ public class Review {
     @Column(name="content", nullable = false)
     private String content;
 
-    @Column(name="rating")
-    private Double rating;
-
     @CreatedDate
     @Column(name="createDate")
     private LocalDateTime createDate;

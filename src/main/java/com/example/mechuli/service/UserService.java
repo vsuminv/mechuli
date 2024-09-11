@@ -1,5 +1,7 @@
 package com.example.mechuli.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.RestaurantCategory;
 import com.example.mechuli.domain.UserDAO;
@@ -15,7 +17,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +41,21 @@ public class UserService implements UserDetailsService  {
     private final RestaurantRepository restaurantRepository;
     private final Random random = new Random();
 
+    @Autowired
+    private AmazonS3 amazonS3;
+
+    private final String BUCKET_NAME = "mechuliproject";
+
+    public String uploadImageToS3(MultipartFile file) throws IOException {
+        String fileName = "images/" + file.getOriginalFilename();
+
+        // S3에 이미지 업로드
+        amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, fileName, file.getInputStream(), null));
+
+        // S3의 이미지 URL 생성
+        return amazonS3.getUrl(BUCKET_NAME, fileName).toString();
+    }
+
     public void save(UserDTO userDTO) {
         List<RestaurantCategory> restaurantCategories = new ArrayList<>();
         for (Long categoryId : userDTO.getCategoryIds()) {
@@ -49,6 +68,7 @@ public class UserService implements UserDetailsService  {
         UserDAO userDAO = UserDAO.builder()
                 .userId(userDTO.getUserId())
                 .userPw(bCryptPasswordEncoder.encode(userDTO.getUserPw()))
+                .userImg(userDTO.getUserImg())
                 .nickname(userDTO.getNickname())
                 .restaurantCategory(restaurantCategories)
                 .build();
