@@ -17,6 +17,14 @@ document.addEventListener("DOMContentLoaded", function () {
             allButton.addEventListener('click', function () {
                 const event = new CustomEvent('allSelected');
                 document.dispatchEvent(event);
+
+                // 선택된 버튼의 색상 변경
+                if (currentSelectedCategory) {
+                    currentSelectedCategory.style.backgroundColor = '#e5e5e5';
+                }
+
+                allButton.style.backgroundColor = '#ffdd33';
+                currentSelectedCategory = allButton;
             });
 
             if (typeof data === 'object' && !Array.isArray(data)) {
