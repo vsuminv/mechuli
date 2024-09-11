@@ -4,6 +4,8 @@ package com.example.mechuli.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Builder
 @Getter
@@ -37,6 +39,11 @@ public class Restaurant {
     @JoinColumn(name = "category_id") // 외래키
     private RestaurantCategory restaurantCategory;
 
+    @OneToMany( mappedBy = "restaurant")
+    private List<Review> review;
+
+    @OneToMany( mappedBy = "restaurantList")
+    private List<MyRestaurantList> myRestaurantList;
 
 
 
