@@ -24,6 +24,8 @@
 - vFilterSecurityInterceptor
   - 접근 결정 관리자. AccessDecisionManager로 권한 부여 처리를 위임함으로써 접근 제어 결정을 쉽게 해준다. 이 과정에서 이미 사용자 인증이 되어있으므로 유효한 사용자인지도 알 수 있음. 인가 관련 설정 가능.
 
+# UserBuilder
+
 
 # UserDetails
 - getAuthorities()	
@@ -150,5 +152,11 @@ role이 여러 개가 아니라 user 하나만 있다면 authenticated()를 사�
 
 # JWT
 
+
+
+
+
+# REF
 [Spring Security - 인증과 인가 : 정보 저장](https://chaeyami.tistory.com/251)
 [SecurityContextHolder 이용하여 로그인 정보 가져오기](https://januaryman.tistory.com/165)
+[스프링 3.0 시큐리티 기본 세팅](https://nahwasa.com/entry/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-30%EC%9D%B4%EC%83%81-Spring-Security-%EA%B8%B0%EB%B3%B8-%EC%84%B8%ED%8C%85-%EC%8A%A4%ED%94%84%EB%A7%81-%EC%8B%9C%ED%81%90%EB%A6%AC%ED%8B%B0)

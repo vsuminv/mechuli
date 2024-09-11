@@ -8,8 +8,6 @@ import java.util.List;
 @Entity
 @Builder
 @Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class RestaurantCategory {
@@ -21,7 +19,7 @@ public class RestaurantCategory {
     @Column(name="category_name")
     private String categoryName;
 
-    @OneToMany( mappedBy = "restaurantCategory")
+    @OneToMany(mappedBy = "restaurantCategory")
     private List<Restaurant> restaurants;
 
 }

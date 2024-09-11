@@ -6,10 +6,9 @@ import lombok.*;
 @Entity
 @Builder
 @Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "menu")
 public class Menu {
 
     @Id

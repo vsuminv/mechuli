@@ -7,8 +7,6 @@ import lombok.*;
 @Entity
 @Builder
 @Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Restaurant {
@@ -25,7 +23,6 @@ public class Restaurant {
 
     @Column(name="open_time")
     private String openTime;
-
 
     @Column(name="close_time")
     private String closeTime;
