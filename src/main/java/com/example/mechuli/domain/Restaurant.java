@@ -33,13 +33,4 @@ public class Restaurant {
     @ManyToOne
     @JoinColumn(name = "category_id") // 외래키
     private RestaurantCategory restaurantCategory;
-
-
-
-
-
-
-
-
-
 }

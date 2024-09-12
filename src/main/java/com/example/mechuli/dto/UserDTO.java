@@ -1,5 +1,10 @@
 package com.example.mechuli.dto;
 
+import com.example.mechuli.domain.Role;
+import com.example.mechuli.domain.UserDAO;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -10,13 +15,19 @@ import lombok.*;
 @AllArgsConstructor
 public class UserDTO {
 
-    @NotBlank
     private String userId;
 
-    @NotBlank
     private String userPw;
 
-    @NotBlank
     private String nickname;
 
+    private Role role;
+
+    public UserDAO toEntity() {
+        return UserDAO.builder()
+                .userId(userId)
+                .userPw(userPw)
+                .role(Role.USER)
+                .build();
+    }
 }

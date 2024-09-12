@@ -1,22 +1,24 @@
 <div th:fragment="loginForm">
 <div class="text-sm m-auto w-3/5 h-2/3">
-        <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
-        <form id="loginForm" class="text-yellow-700"  th:action="@{/login}" method="POST">
-            <input type="hidden" name="remember" value="true">
+<!--        <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>-->
+        <form id="loginForm" class="text-yellow-700" th:action="@{/login}" method="post">
+<!--            <div th:if="${param.error}" class="alert alert-danger"> 사용자ID 또는 비밀번호를 확인해 주세요.</div>-->
+                        <input type="hidden" name="remember" value="true">
+<!--              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                 <div class="">
-                    <label th:for="userId" class=" sr-only"></label><span class="ml-2">아이디</span>
-                    <input name="userId" id="userId" type="text" autocomplete="username" required
+                    <label for="username" class="ml-2">아이디</label>
+                    <input name="userId" id="username" type="text" autocomplete="username" required
                            class="text-sm mt-2 shadow-md rounded-lg mx-auto w-full h-12 pl-3 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                           placeholder="아이디를 입력하세요" th:value="${userId}">
+                           placeholder="아이디를 입력하세요">
                 </div>
                 <div class="mt-4">
-                    <label th:for="userPw" class="sr-only"></label><span class="ml-2">비밀번호</span>
-                    <input name="userPw" id="userPw" type="password" autocomplete="current-password" required
+                    <label for="password" class="ml-2">비밀번호</label>
+                    <input name="userPw" id="password" type="password" autocomplete="current-password" required
                            class="text-sm mt-2 shadow-md rounded-lg mx-auto w-full h-12 pl-3 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                           placeholder="비밀번호를 입력하세요" th:value="${userPw}">
+                           placeholder="비밀번호를 입력하세요">
                 </div>
                 <div class="mt-4 w-full ">
-                    <a href='/joinPage'
+                    <a th:href="@{/register}"
                        class="mt-2 float-right mr-4 text-sm font-medium text-yellow-600 hover:text-yellow-700"
                        id="joinForm">to be mechuli
                     </a>
@@ -27,11 +29,6 @@
                         로그인
                     </span>
                 </button>
-            </div>
-
-             <div th:if="${param.error}">
-            <div class="alert alert-danger">
-                사용자ID 또는 비밀번호를 확인해 주세요.
             </div>
         </form>
     </div>

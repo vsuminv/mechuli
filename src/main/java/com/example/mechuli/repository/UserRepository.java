@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<UserDAO, Long> {
     boolean existsByNickname(String nickname);
 
     Optional<UserDAO> findByUserId(String userId);
+    Optional<UserDAO> findByNickname(String nickname);
+    Optional<UserDAO> findByRefreshToken(String refreshToke);
 }

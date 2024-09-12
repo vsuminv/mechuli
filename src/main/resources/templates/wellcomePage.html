@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      sec:authorize="hasRole('USER')"
+<!--      sec:authorize="hasRole('USER')"-->
+        sec:isAuthenticated="true"
       layout:decorate="~{pages/basicPage}">
 
 <main layout:fragment="main" class="main">

@@ -13,7 +13,8 @@
         </div>
         <div class="grid-col-3 m-auto">
             <div class="">
-                my
+                <span th:text="${#authentication.name}">Username</span>
+                <a onclick="location.href='/logout'">로그아웃</a>
             </div>
         </div>
     </div>

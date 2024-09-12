@@ -18,4 +18,5 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/myPage").setViewName("pages/myPage");
         registry.addViewController("/detailPage").setViewName("contents/detail/detailStore");
     }
+
 }

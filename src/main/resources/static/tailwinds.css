@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {}
 @font-face {
     font-family: 'MaplestoryOTFBold';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
@@ -41,8 +42,6 @@ body {
 header {
     grid-row: 1!important;
     z-index: 99 !important;
-    width: 100% !important;
-    min-height: 10vh;
 }
 main{
     display: flex;

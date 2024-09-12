@@ -7,7 +7,10 @@ import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(name = "/user/", method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"})
+@RequestMapping(method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"})
 public class UserController {
 
     private final UserService userService;
@@ -32,22 +35,50 @@ public class UserController {
         log.info("nickname : {}", nickname);
         return userService.checkNickname(nickname);
     }
-    @PostMapping("/join")
-    public ResponseEntity<String> userJoin(UserDTO dto) {
-        try {
-            UserDAO savedUser = userService.save(dto);
-            return ResponseEntity.ok("회원가입 성공: " + savedUser.getUserId());
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+    @PostMapping("/join")  //회원가입
+    public String join(UserDTO dto) {
+        userService.join(dto);
+        return "redirect:/login";
     }
-    @GetMapping("/home")
-    public String home(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails != null) {
-            model.addAttribute("username", userDetails.getUsername());
-        }
-        return "home";
-    }
+
+//    @PostMapping("/join")
+//    public ResponseEntity<String> userJoin(UserDTO dto) {
+//        try {
+//            UserDAO savedUser = userService.join(dto);
+//            return ResponseEntity.ok("회원가입 성공: " + savedUser.getUserId());
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+
+//    @PostMapping("/login/{id}")
+//    public String login(@PathVariable(value = "id") String id) {
+//        UserDetails user = userService.loadUserByUsername(id);
+//        Authentication auth = new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
+//        SecurityContext context = SecurityContextHolder.createEmptyContext();
+//        context.setAuthentication(auth);
+//        SecurityContextHolder.setContext(context);
+//        return "redirect:/home";
+//    }
+
+//    @PostMapping("/login")
+//    public String home(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+//
+//        if (userDetails != null) {
+//            model.addAttribute("username", userDetails.getUsername());
+//        }
+//        return "home";
+//    }
+
+//    @GetMapping("/home")
+//    public String home(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+//
+//        if (userDetails != null) {
+//            model.addAttribute("username", userDetails.getUsername());
+//        }
+//        return "home";
+//    }
 }
 
 

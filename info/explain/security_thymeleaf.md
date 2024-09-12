@@ -48,7 +48,38 @@
 `http.headers(AbstractHttpConfigurer::disable)`
 `http.csrf(AbstractHttpConfigurer::disable)`
 
+# Security 관련 BEAN
+
+-  WebSecurityCustomizer : resouces를 접근할수 있도록 해주는 빈
+```java
+@Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
+```
+- BCryptPasswordEncoder  ; password 암호화
+```java
+@Bean
+public BCryptPasswordEncoder encodePWD(){
+  return new BCryptPasswordEncoder();
+}
+```
+- PasswordEncoder가 제공하는 구현 클래스
+  - StandardPasswordEncoder : SHA-256을 이용해 암호를 해시한다. (강도가 약한 해싱 알고리즘이기 때문에 지금은 많이 사용되지 않는다.)
+  - Pbkdf2PasswordEncoder : PBKDF2를 이용한다.
+  - BCryptPasswordEncoder : bcrypt 강력 해싱 함수로 암호를 인코딩한다
+  - NoOpPasswordEncoder : 암호를 인코딩하지 않고 일반 텍스트로 유지(테스트 용도로만 사용한다.)
+  - SCryptPasswordEncoder : scrypt 해싱 함수로 암호를 인코딩한다.
+
+
+현재 사용되는 알고리즘에서 취약성이 발견되어 다른 인코딩 알고리즘으로 변경하고자 할 때 대응하기 좋은 방법은 DelegatingPasswordEncoder을 사용하는 것
+
+
+
 # FormLogin filter
+로그인 페이지에서 로그인을 할때 url호출없이 service를 이용할수 있는 로직
+
 
 ![img_1.png](img_1.png)
 ![img_2.png](img_2.png)
