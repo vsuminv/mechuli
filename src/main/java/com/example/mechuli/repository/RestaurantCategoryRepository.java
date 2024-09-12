@@ -10,8 +10,7 @@ import java.util.List;
 public interface RestaurantCategoryRepository extends JpaRepository<RestaurantCategory, Long> {
 //    RestaurantCategory findByCategoryName(String categoryName);
 
-    //    List<RestaurantCategory> findAll();
-    List<RestaurantCategory> findRestaurantCateogyByUserDAOUserIndex(Long userIndex);
+    List<RestaurantCategory> findAll();
 
-
+    List<RestaurantCategory> findRestaurantCatgoByUserDAOUserIndex(Long userIndex);
 }
