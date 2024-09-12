@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      sec:authorize="hasRole('USER')"
       layout:decorate="~{pages/basicPage}">
 
 <main layout:fragment="main" class="main">

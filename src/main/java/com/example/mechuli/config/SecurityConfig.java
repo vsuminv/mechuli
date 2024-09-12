@@ -32,11 +32,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**", "/css/**", "/image/**","/img/**.png", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                        .requestMatchers("/js/**","/auth/**", "/css/**", "/image/**","/img/**","/static/**", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
                         .requestMatchers("/login","/join","/wellcomePage").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
-                        .anyRequest().permitAll()
+//                                .anyRequest().anonymous()
+//                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/loginPage")
@@ -50,7 +52,6 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/login")
-
                         .invalidateHttpSession(true));
         return http.build();
     }
