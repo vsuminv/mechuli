@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -37,6 +38,8 @@ public class UserController {
 
     @Autowired
     private final RestaurantCategoryService restaurantCategoryService;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // csrf-token 값 받아오려고 넣은 메소드, 개발 끝날 시 제거나 주석처리
     @GetMapping("/csrf-token")
@@ -71,10 +74,9 @@ public class UserController {
             return "/join";
         }
 
-
-        userService.save(userDto);
         return "/home";
     }
+
 
     // id, nickname 중복 체크
     // 비밀번호는 유효성 검사만
@@ -104,6 +106,13 @@ public class UserController {
         List<RestaurantDTO> randomCategories = userService.getRandomCategoriesForUser(authedUser.getUserId());
 
         return randomCategories;
+    }
+
+    @PutMapping("/userInfoUpdate")
+    public void updateUserinfo( @AuthenticationPrincipal UserDAO authUser, @RequestPart("file") MultipartFile file, BCryptPasswordEncoder bCryptPasswordEncoder, @RequestPart @Valid UserDTO userDTO){
+
+        userService.updateUserInfo(authUser,file,bCryptPasswordEncoder, userDTO);
+
     }
 
 
