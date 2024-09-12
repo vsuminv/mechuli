@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -108,12 +108,12 @@ public class UserController {
         return randomCategories;
     }
 
-//    @PutMapping("/userInfoUpdate")
-//    public String updateUserPw( @AuthenticationPrincipal UserDAO authUser, @RequestPart("file") MultipartFile file, @RequestPart UserDTO userDTO){
-//
-//            return userService.updatePassword(authUser, userDTO, bCryptPasswordEncoder);
-//
-//    }
+    @PutMapping("/userInfoUpdate")
+    public void updateUserinfo( @AuthenticationPrincipal UserDAO authUser, @RequestPart("file") MultipartFile file, BCryptPasswordEncoder bCryptPasswordEncoder, @RequestPart @Valid UserDTO userDTO){
+
+        userService.updateUserInfo(authUser,file,bCryptPasswordEncoder, userDTO);
+
+    }
 
 
     ///////////////////////////////////////////////////

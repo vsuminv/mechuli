@@ -68,8 +68,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname",
-                                "/api/category", "/api/all", "/joinTest", "/static/**").permitAll()
+//
+                        .requestMatchers( "/","/api/**","/static/**").permitAll()
 //                        .requestMatchers("/img/**", "/css/**", "/images/**", "/js/**", "/node_modules/**").permitAll()
 //                        .requestMatchers("/admin").hasRole("ADMIN")
 //                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")

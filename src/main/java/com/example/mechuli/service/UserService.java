@@ -129,15 +129,14 @@ public class UserService implements UserDetailsService  {
                 .collect(Collectors.toList());
     }
 
-    public UserDAO updateUserInfo(UserDAO authUser, UserDTO userDTO, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public void updateUserInfo(UserDAO authUser, MultipartFile file, BCryptPasswordEncoder bCryptPasswordEncoder, UserDTO userDTO) {
 
         UserDAO userToUpdate = userRepository.findById(authUser.getUserIndex())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
 
-        userToUpdate.setUserPw(bCryptPasswordEncoder.encode(userDTO.getUserPw())); // 새로운 비밀번호 암호화 후 설정
+        userToUpdate.setUserPw(bCryptPasswordEncoder.encode(userDTO.getUserPw()));
         userToUpdate.setUserImg(userDTO.getUserImg()); // 새로운 이미지 URL 설정
-        userToUpdate.setNickname(userDTO.getNickname()); // 닉네임 업데이트
 
 
         List<RestaurantCategory> restaurantCategories = new ArrayList<>();
@@ -151,7 +150,8 @@ public class UserService implements UserDetailsService  {
         // 변경된 사용자 정보 저장
 
 
-        return userRepository.save(userToUpdate);
+
+        userRepository.save(userToUpdate);
     }
 
 
