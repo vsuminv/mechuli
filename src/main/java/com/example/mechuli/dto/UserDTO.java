@@ -35,15 +35,17 @@ public class UserDTO {
 
     private Long categoryIndex;
 
+    private String userImg;
+
 
     public UserDTO(UserDAO userDAO){
         this.userIndex = userDAO.getUserIndex();
         this.userId = userDAO.getUserId();
         this.userPw = userDAO.getUserPw();
         this.nickname = userDAO.getNickname();
+        this.userImg = userDAO.getUserImg();
         this.categoryIds = userDAO.getRestaurantCategory().stream()
                 .map(category -> category.getCategoryId()) // RestaurantCategory 객체에서 ID를 추출
                 .collect(Collectors.toList());
     }
-
 }

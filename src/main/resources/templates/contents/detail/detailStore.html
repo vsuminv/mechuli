@@ -1,0 +1,45 @@
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/pages/basicPage}">
+
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/detail.js}"></script>
+    <script type="text/javascript" th:src="@{/js/write_review_count.js}"></script>
+    <!--  <script type="text/javascript" th:src="@{/js/write_review_rating.js}"></script>-->
+</th:block>
+<main layout:fragment="main" class="page grid grid-rows-3  m-0 text-yellow-700">
+    <!-- 가게 상세 페이지에서 가게 배경이미지 및 다른 가게로 이동 구현 -->
+    <div class="flex flex-col w-full h-full">
+        <div th:insert="~{contents/detail/detailBackground :: detailBackground}"></div>
+
+        <!-- 가게 로고, 가게 이름, 평점, 간단 설명, 주소, 주소 복사 버튼-->
+        <div id="detailStoreMetaContainer" th:insert="~{contents/detail/detailStoreMeta :: detailStoreMeta}"></div>
+
+        <div th:replace="~{contents/detail/detailButton :: detailButton}"></div>
+
+        <div class="w-4/5 mx-auto h-full shadow-md">
+            <!--<table id="menuTable" class="border-separate border-spacing-y-4">
+              <tr class="">
+                <td class="rounded-3xl w-40 h-40 bg-[#e6e6e6]"><img src="" alt=""></td>
+                <td>
+                  <h1 class="text-2xl">함박스테이크</h1>
+                  <h1 class="text-2xl">12500</h1>
+                </td>
+              </tr>
+            </table>-->
+            <div th:replace="~{contents/detail/detailMenu :: detailMenu}"></div>
+            <br>
+            <div th:replace="~{contents/detail/detailStoreInfo :: detailStoreInfo}"></div>
+            <br>
+            <div th:replace="~{contents/detail/detailReview :: detailReview}"></div>
+
+        </div>
+
+        <!-- 모달 구현 -->
+        <div th:insert="~{contents/detail/detailModal :: detailModal}"></div>
+
+        <div th:insert="~{contents/detail/detailAddReview :: detailAddReview}" class="sticky bottom-0 right-4 p-4 w-full h-full flex justify-end"></div>
+    </div>
+</main>
+
+</html>

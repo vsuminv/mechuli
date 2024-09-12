@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: 'MaplestoryOTFBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    font-family: 'MaplestoryOTFBold', serif;
+    word-break: break-all;
+}
+body {
+    margin: 0;
+    padding: 0;
+    /*height: 100vh;*/
+    background: #fffcf1;
+    max-height: 100vh;
+    min-height: 100vh;
+    width: 100vw;
+    display:flex;
+    overflow: hidden;
+}
+.left {
+    width: 30%;
+}
+.right{
+    width: 30vw;
+    text-align: center;
+}
+.page{
+    display: grid;
+    grid-template-rows:10vh 82vh 8vh;
+    min-width: 700px !important;
+    max-width: 700px !important;
+    margin: 0 auto; !important;
+    background: #fffafa; !important;
+}
+header {
+    grid-row: 1!important;
+    z-index: 99 !important;
+    width: 100% !important;
+    min-height: 10vh;
+}
+main{
+    display: flex;
+    min-height: 80vh;
+    grid-row: 2!important;
+    overflow-y: scroll; !important;
+    scroll-behavior: smooth;
+    scrollbar-gutter: auto;
+    scrollbar-width: none;
+}
+footer {
+    grid-row: 3; !important;
+    z-index: 99 !important;
+}
+
+
+
+.input-group {
+    position: relative;
+}
+
+.validation-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.valid .validation-icon::after {
+    content: '✓';
+    color: green;
+}
+
+.invalid .validation-icon::after {
+    content: '✗';
+    color: red;
+}
+
+/*#content {*/
+/*    display: block !important;*/
+/*    width: 100%;*/
+/*    overflow-y: auto;*/
+/*}*/
+
+/*header .search{*/
+/*    position: sticky;*/
+/*    min-width: 670px !important;*/
+/*    max-width: 670px !important;*/
+/*    margin:3px  !important;*/
+/*}

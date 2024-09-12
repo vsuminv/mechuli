@@ -68,7 +68,6 @@ public class UserDAO implements UserDetails {
     @OneToMany(mappedBy = "userId")
     private List<Subscription> subscriptions;
 
-
     // 권한 관련 작업을 하기 위한 role return
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -95,4 +94,3 @@ public class UserDAO implements UserDetails {
 //- Address
 //- 생성일
 //- 수정일
-

@@ -32,8 +32,8 @@ public class SecurityConfig {
 
     @Autowired
     private final UserDetailsService userDetailsService;
-//    @Autowired
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 //    @Bean
 //    public BCryptPasswordEncoder encodePWD(){
@@ -68,8 +68,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/join", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname",
-                                "/api/category", "/api/all", "/joinTest", "/static/**").permitAll()
+//
+                        .requestMatchers( "/", "/*","/api/**","/static/**").permitAll()
 //                        .requestMatchers("/img/**", "/css/**", "/images/**", "/js/**", "/node_modules/**").permitAll()
 //                        .requestMatchers("/admin").hasRole("ADMIN")
 //                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
@@ -108,7 +108,4 @@ public class SecurityConfig {
 //        return daoProvider;
 //    }
 
-//    정적 리소스의 위치: Spring Boot의 기본 설정에서는 src/main/resources/static 폴더에 위치한 정적 리소스가 /로 시작하는 URL 경로에 매핑됩니다.
-//    따라서 위의 설정에서 "/css/**"는 src/main/resources/static/css 폴더의 리소스를 참조합니다.
-//, "/css/**", "/js/**", "/image/**", "/img/**", "/node_modules/**"
 }

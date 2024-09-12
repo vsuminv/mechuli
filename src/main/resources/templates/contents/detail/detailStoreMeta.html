@@ -1,0 +1,42 @@
+<div th:fragment="detailStoreMeta">
+    <div th:each="restaurantDetail : ${restaurantDetailResult}" class="flex mx-auto w-5/6">
+        <div class="relative -top-16 left-0 rounded-3xl w-32 h-32 bg-[#ffdd33] mr-4">
+            <img th:src="${restaurantDetail.img_url}" alt="">
+        </div>
+
+        <div class="flex space-x-4"> <!-- 사각형 크기 및 여백을 고려하여 padding-left 추가 -->
+            <div>
+                <!--                <div class="rounded-3xl w-32 h-32 bg-[#fef445]">-->
+                <!--                    <img src="#" alt="">-->
+                <!--                </div>-->
+                <div class="flex items-center">
+                    <h1 class="text-4xl" th:text="${restaurantDetail.name}">${멍멍맛집}</h1>
+                    &nbsp;&nbsp;
+                    <!--                    <sup class="top-1">${5.0}</sup>-->
+                </div>
+                <p class="">{$집사와 강아지가 오붓하게 저녁먹는 집}</p>
+                <p class="" th:text="${restaurantDetail.address}">${서울특별시 은평구 코사길 15 코사빌딩 5층} <button><i>복사</i></button></p>
+            </div>
+            <div>
+                <button id="recommended" class="text-4xl text-[#e6e6e6]">★</button>
+            </div>
+        </div>
+        <!--        <div class="flex space-x-4"> &lt;!&ndash; 사각형 크기 및 여백을 고려하여 padding-left 추가 &ndash;&gt;-->
+        <!--            <div class="flex flex-col items-center justify-center">-->
+        <!--                <div class="w-32 h-32">-->
+        <!--                    <img class="shadow-md" th:src="@{/img/mechuri_logo.png}" alt="">-->
+        <!--                </div>-->
+        <!--                <div class="flex items-center">-->
+        <!--                    <h1 class="">${멍멍맛집}</h1>-->
+        <!--                    &nbsp;&nbsp;-->
+        <!--                    <sup class="top-1">${5.0}</sup>-->
+        <!--                </div>-->
+        <!--                <p class="">{$집사와 강아지가 오붓하게 저녁먹는 집}</p>-->
+        <!--                <p class="">${서울특별시 은평구 코사길 15 코사빌딩 5층} <button><i>복사</i></button></p>-->
+        <!--            </div>-->
+        <!--            <div>-->
+        <!--                <button id="recommended" class="text-4xl text-[#e6e6e6]">★</button>-->
+        <!--            </div>-->
+        <!--        </div>-->
+    </div>
+</div>

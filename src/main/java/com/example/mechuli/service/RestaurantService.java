@@ -5,6 +5,7 @@ import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.RestaurantCategory;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.repository.MenuRepository;
+import com.example.mechuli.repository.MyRestaurantListRepository;
 import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class RestaurantService {
     @Autowired
     private MenuRepository menuRepository;
 
+    @Autowired
+    private MyRestaurantListRepository myRestaurantListRepository;
+
 
     public List<RestaurantDTO> findAll() {
         // Restaurant 리스트를 RestaurantDTO 리스트로 변환
@@ -31,6 +35,28 @@ public class RestaurantService {
                 .stream()
                 .map(RestaurantDTO::new)
                 .collect(Collectors.toList());
+    }
+
+
+    public Map<String, List<RestaurantDTO>> findRestaurantsGroupedByCategory() {
+        List<Restaurant> allRestaurants = restaurantRepository.findAll();
+
+        // 레스토랑을 카테고리별로 그룹화
+        Map<String, List<RestaurantDTO>> groupedByCategory = allRestaurants.stream()
+                .collect(Collectors.groupingBy(
+                        restaurant -> restaurant.getRestaurantCategory() != null ?
+                                restaurant.getRestaurantCategory().getCategoryName() : "없음",
+                        Collectors.mapping(RestaurantDTO::new, Collectors.toList())
+                ));
+
+        // 각 카테고리별로 최대 3개의 레스토랑만 선택
+        groupedByCategory.forEach((key, list) -> {
+            if (list.size() > 3) {
+                groupedByCategory.put(key, list.subList(0, 3));
+            }
+        });
+
+        return groupedByCategory;
     }
 
     public List<RestaurantDTO> findRandomRestaurantsByCategories(List<Long> categoryIds, int numCategories) {
@@ -94,6 +120,7 @@ public class RestaurantService {
 //                .build();
 //    }
 
+
     public Optional<RestaurantDTO> findRestaurantByRestaurantId(Long restaurantId) {
 
         Optional<RestaurantDTO> restDto = restaurantRepository.findByRestaurantId(restaurantId);
@@ -105,4 +132,9 @@ public class RestaurantService {
         return menuList;
     }
 
+
+    public boolean existsByRestaurantIdAndUserIndex(Long restId, Long userIndex) {
+        boolean result = myRestaurantListRepository.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(restId, userIndex);
+        return result;
+    }
 }
