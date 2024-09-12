@@ -31,6 +31,10 @@ public class UserController {
         System.out.println(csrfToken);
         return csrfToken;
     }
+
+
+    // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
+
     @PostMapping("/join")
     public ResponseEntity<String> userJoin(UserDTO dto) {
         userService.save(dto);

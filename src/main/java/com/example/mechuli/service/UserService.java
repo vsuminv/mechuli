@@ -9,17 +9,20 @@ import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +47,30 @@ public class UserService implements UserDetailsService {
                 .nickname(dto.getNickname())
                 .build());
     }
+
+
+//    public void save(UserDTO userDTO) {
+//        List<RestaurantCategory> restaurantCategories = new ArrayList<>();
+//        for (Long categoryId : userDTO.getCategoryIds()) {
+//            RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)
+//                    .orElseThrow(() -> new RuntimeException("Invalid category ID"));
+//            restaurantCategories.add(category);
+//        }
+//
+//
+//        UserDAO userDAO = UserDAO.builder()
+//                .userId(userDTO.getUserId())
+//                .userPw(bCryptPasswordEncoder.encode(userDTO.getUserPw()))
+//                .userImg(userDTO.getUserImg())
+//                .nickname(userDTO.getNickname())
+//                .restaurantCategory(restaurantCategories)
+//                .build();
+//
+//        userRepository.save(userDAO);
+//    }
+
+
+
     // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음
     public int checkUserId(String userId) {
         int checkResult = 0;
@@ -83,15 +110,51 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+//    public void updateUserInfo(UserDAO authUser, MultipartFile file, BCryptPasswordEncoder bCryptPasswordEncoder, UserDTO userDTO) {
+//
+//
+//    // userId로 사용자 정보 가져옴
+//    //1: 로그인 성공 2: 아이디없음 3: 비밀번호틀림
+////    @Transactional
+////    @Override
+////    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+////        UserDAO user = userRepository.findByUserId(userId)
+////                .orElseThrow(() -> new UsernameNotFoundException(" UserDAO 뒤져서 " + userId + "랑 일치 하는게 없음."));
+////        log.info("클라에서 로그인 시도한 값 : {}", user);
+//
+//        UserDAO userToUpdate = userRepository.findById(authUser.getUserIndex())
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//
+//        userToUpdate.setUserPw(bCryptPasswordEncoder.encode(userDTO.getUserPw()));
+//        userToUpdate.setUserImg(userDTO.getUserImg()); // 새로운 이미지 URL 설정
+//
+//
+//        List<RestaurantCategory> restaurantCategories = new ArrayList<>();
+//        for (Long categoryId : userDTO.getCategoryIds()) {
+//            RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)
+//                    .orElseThrow(() -> new RuntimeException("Invalid category ID"));
+//            restaurantCategories.add(category);
+//        }
+//        userToUpdate.setRestaurantCategory(restaurantCategories);
+//
+//        // 변경된 사용자 정보 저장
+//
+//
+//
+//        userRepository.save(userToUpdate);
+//    }
 
-    // userId로 사용자 정보 가져옴
-    //1: 로그인 성공 2: 아이디없음 3: 비밀번호틀림
-//    @Transactional
-//    @Override
-//    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-//        UserDAO user = userRepository.findByUserId(userId)
-//                .orElseThrow(() -> new UsernameNotFoundException(" UserDAO 뒤져서 " + userId + "랑 일치 하는게 없음."));
-//        log.info("클라에서 로그인 시도한 값 : {}", user);
+
+
+//    @Transactional(readOnly = true)
+//    public void checkUserIdDuplication(UserDTO userDTO){
+//        boolean userIdDuplicate = userRepository.existsByUserId(userDTO.getUserId());
+//        if (userIdDuplicate){
+//            throw new IllegalStateException("이미 존재하는 아이디입니다.");
+//        }
+//    }
+
 //
 //        return UserDAO.builder()
 //                .userId(user.getUserId())
