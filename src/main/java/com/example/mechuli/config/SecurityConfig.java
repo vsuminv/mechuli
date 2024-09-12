@@ -1,7 +1,6 @@
 package com.example.mechuli.config;
 
 
-import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,8 +37,6 @@ public class UserController {
 
     @Autowired
     private final RestaurantCategoryService restaurantCategoryService;
-
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // csrf-token 값 받아오려고 넣은 메소드, 개발 끝날 시 제거나 주석처리
     @GetMapping("/csrf-token")
@@ -74,9 +71,9 @@ public class UserController {
             return "/join";
         }
 
+
         return "/home";
     }
-
 
     // id, nickname 중복 체크
     // 비밀번호는 유효성 검사만
@@ -108,85 +105,6 @@ public class UserController {
         return randomCategories;
     }
 
-    @PutMapping("/userInfoUpdate")
-    public void updateUserinfo( @AuthenticationPrincipal UserDAO authUser, @RequestPart("file") MultipartFile file, BCryptPasswordEncoder bCryptPasswordEncoder, @RequestPart @Valid UserDTO userDTO){
-
-        userService.updateUserInfo(authUser,file,bCryptPasswordEncoder, userDTO);
-
-    }
-
-
-    ///////////////////////////////////////////////////
-
-//    // 로그인 페이지 이동
-//    @GetMapping("/login")
-//    public String login() {
-//        return "login_form";
-
-//    }
-//
-//    // ajax로 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
-//    @RequestMapping(value="/ajaxCheckNickname", method = RequestMethod.POST)
-//    @ResponseBody
-//    public String ajaxCheckNickname(@RequestBody String nickname, Model model) {
-//        model.addAttribute("idCheckResult", userService.checkNickname(nickname));
-//        System.out.println(userService.checkNickname(nickname));
-//        return "/join :: #nicknameCheck";  // ajax 받는 부분 지정에 따라 변경
-//    }
-
-//    @RequestMapping(value="/ajaxCheckId", method = RequestMethod.POST)
-//    @ResponseBody
-//    public int ajaxCheckId(@RequestBody String userId) {
-//        log.info("userId : {}", userId);
-//        return userService.checkUserId(userId);
-//    }
-//
-//    @RequestMapping(value="/ajaxCheckNickname", method = RequestMethod.POST)
-//    @ResponseBody
-//    public int ajaxCheckNickname(@RequestBody String nickname) {
-//        log.info("userId : {}", nickname);
-//        return userService.checkNickname(nickname);
-//    }
-
-
-
-//    @PostMapping("/login")
-//    public String login(@Valid BindingResult bindingResult, @RequestBody UserDTO userDto) {
-//        if (bindingResult.hasErrors()) {
-//            return "login_form";
-//        }
-//
-////        userService.findByUserId(userDto);
-//
-//        return "/index";
-//    }
-
-
-//    @PostMapping("/login")
-//    public ResponseEntity loadUserByUsername (@RequestBody UserDTO userDTO, String email){
-//
-//        UserDAO userDao =
-//
-//
-//
-//        User user = detailService.loadUserByUsername(
-//                userDTO.getEmail());
-//
-//
-//        if (!bCryptPasswordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-//            ResponseDTO responseDTO = ResponseDTO.builder().error("비밀번호가 일치하지 않습니다.").build();
-//            return ResponseEntity.ok().body(responseDTO);
-//
-//        } else{
-//            userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-//            userDTO.setEmail(userDTO.getEmail());
-//            ResponseDTO responseDTO = ResponseDTO.builder().result(1).build();
-//            return ResponseEntity.ok().body(responseDTO);
-//        }
-//
-//
-//
-//    }
 
 
 }
