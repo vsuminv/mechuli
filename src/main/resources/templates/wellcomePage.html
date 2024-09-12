@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{pages/basicPage}">
+
+<main layout:fragment="main" class="main">
+    <div sec:authorize="hasRole('USER')">
+    <div sec:authorize="userId"> bring on </div>
+    </div>
+      <div sec:authorize="!hasRole('USER')">
+        <div th:if="${param.logout}">
+            로그아웃
+        </div>
+    </div>
+
+</main>
+
+</html>
