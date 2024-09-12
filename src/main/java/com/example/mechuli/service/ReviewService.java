@@ -4,12 +4,12 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.Review;
-import com.example.mechuli.domain.Review_img;
+//import com.example.mechuli.domain.Review_img;
 import com.example.mechuli.dto.ReviewDTO;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.ReviewRepository;
 import com.example.mechuli.repository.ReviewImgRepository;
-import groovy.transform.Final;
+//import groovy.transform.Final;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +18,29 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
 
-    @Autowired
     private final ReviewRepository reviewRepository;
-    @Autowired
-    private final ReviewImgRepository reviewImgRepository;
-    @Autowired
+//    private final ReviewImgRepository reviewImgRepository;
     private final RestaurantRepository restaurantRepository;
+    private final ReviewImgService reviewImgService;
+
     @Autowired
     private AmazonS3 amazonS3;
 
     private final String BUCKET_NAME = "mechuliproject";
+
+    @Transactional(readOnly = true)
+    public ReviewDTO getReview(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+
+        return convertToDTO(review);
+    }
 
     @Transactional
     public ReviewDTO createReview(ReviewDTO reviewDTO, List<MultipartFile> imageFiles) throws IOException {
@@ -43,23 +51,31 @@ public class ReviewService {
         // 리뷰 저장
         Review review = Review.builder()
                 .content(reviewDTO.getContent())
-                .restaurant(restaurant) // 레스토랑 엔티티 설정
+                .restaurant(restaurant)
                 .build();
         Review savedReview = reviewRepository.save(review);
 
         // 이미지 파일 S3에 업로드 후 URL 저장
         if (imageFiles != null && !imageFiles.isEmpty()) {
-            for (MultipartFile file : imageFiles) {
-                String imageUrl = uploadImageToS3(file); // S3에 업로드 후 URL 반환
-                Review_img reviewImg = Review_img.builder()
-                        .img1(imageUrl) // 첫 번째 이미지를 img1에 저장
-                        .review(savedReview)
-                        .build();
-                reviewImgRepository.save(reviewImg);
-            }
+            reviewImgService.saveReviewImages(imageFiles, savedReview);
         }
-        return reviewDTO;
+
+        return convertToDTO(savedReview);
     }
+
+    // Review -> ReviewDTO 변환 메서드
+    private ReviewDTO convertToDTO(Review review) {
+        return ReviewDTO.builder()
+                .reviewId(review.getReviewId())
+                .content(review.getContent())
+                .restaurantId(review.getRestaurant().getRestaurantId())
+                .imgUrls(review.getReview_img().stream()
+                        .flatMap(img -> List.of(img.getImg1(), img.getImg2(), img.getImg3()).stream())
+                        .filter(url -> url != null)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
     public String uploadImageToS3(MultipartFile file) throws IOException {
         String fileName = "images/" + file.getOriginalFilename();
 
