@@ -1,25 +1,25 @@
 package com.example.mechuli.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+@Transactional
 @Builder
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
@@ -55,14 +55,21 @@ public class UserDAO implements UserDetails {
     @Column(name = "update_date", nullable = false)
     private Date updateDate;
 
-//    @Builder
-//    public UserDAO(String userId, String userPw, String nickname, String userImg, String role) {
-//        this.userId = userId;
-//        this.userPw = userPw;
-//        this.nickname = nickname;
-//        this.userImg = userImg;
-//        this.role = role;
-//    }
+    @ManyToMany
+    @JoinTable(
+            name = "user_restaurant_category_mapping",
+            joinColumns = @JoinColumn(name = "user_index"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+
+    private List<RestaurantCategory> restaurantCategory;
+
+    @OneToMany( mappedBy = "userDAO")
+    private List<MyRestaurantList> myRestaurantLists;
+
+    @OneToMany(mappedBy = "userId")
+    private List<Subscription> subscriptions;
+
 
     // 권한 반환
     @Override

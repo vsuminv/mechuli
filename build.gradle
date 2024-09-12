@@ -53,6 +53,9 @@ dependencies {
 //	implementation 'mysql:mysql-connector-java:8.0.32'
 //	runtimeOnly 'com.h2database:h2'
 //	implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation "com.amazonaws:aws-java-sdk-s3:1.12.395"
 }
 
 tasks.named('test') {

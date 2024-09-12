@@ -1,8 +1,11 @@
 package com.example.mechuli.domain;
 
-
+import com.example.mechuli.domain.MyRestaurantList;
+import com.example.mechuli.domain.RestaurantCategory;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Builder
@@ -36,6 +39,16 @@ public class Restaurant {
     @ManyToOne
     @JoinColumn(name = "category_id") // 외래키
     private RestaurantCategory restaurantCategory;
+
+    @OneToMany( mappedBy = "restaurant")
+    private List<Review> review;
+
+    @OneToMany( mappedBy = "restaurantList")
+    private List<MyRestaurantList> myRestaurantList;
+
+    @OneToMany( mappedBy = "restaurant")
+    private List<Menu> menus;
+
 
 
 

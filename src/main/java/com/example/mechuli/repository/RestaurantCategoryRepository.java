@@ -11,4 +11,5 @@ public interface RestaurantCategoryRepository extends JpaRepository<RestaurantCa
 //    RestaurantCategory findByCategoryName(String categoryName);
 
     List<RestaurantCategory> findAll();
+    List<RestaurantCategory> findRestaurantCatgoByUserDAOUserIndex(Long userIndex);
 }
