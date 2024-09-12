@@ -6,7 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -26,18 +26,33 @@ public class Review {
     private String content;
 
     @CreatedDate
-    @Column(name="createDate")
-    private LocalDateTime createDate;
+    @Column(name="createDate", updatable = false)
+    private Date createDate;
 
     @LastModifiedDate
     @Column(name="updateDate",nullable = false)
-    private LocalDateTime updateDate;
+    private Date updateDate;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id") // 외래키
     private Restaurant restaurant;
 
-    @OneToMany( mappedBy = "review")
-    private List<Review_img> review_img;
+    @ManyToOne
+    @JoinColumn(name = "user_index") // 외래키
+    private UserDAO userIndex;
+
+    @OneToMany(mappedBy = "review")
+    private List<ReviewImg> reviewImg;
+
+    @PrePersist
+    protected void onCreate() {
+        createDate = new Date();
+        updateDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateDate = new Date();
+    }
 
 }

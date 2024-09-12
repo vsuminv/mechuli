@@ -47,12 +47,12 @@ public class SecurityConfig {
 //        return new BCryptPasswordEncoder();
 //    }
 
-    @Bean
-    public CsrfTokenRepository csrfTokenRepository() {
-        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-        repository.setHeaderName("X-CSRF-TOKEN"); // CSRF 헤더 이름 설정
-        return repository;
-    }
+//    @Bean
+//    public CsrfTokenRepository csrfTokenRepository() {
+//        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+//        repository.setHeaderName("X-CSRF-TOKEN"); // CSRF 헤더 이름 설정
+//        return repository;
+//    }
 
 
     @Bean //
@@ -68,21 +68,21 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests((auth) -> auth
-//
+
                         .requestMatchers( "/","/api/**","/static/**").permitAll()
 //                        .requestMatchers("/img/**", "/css/**", "/images/**", "/js/**", "/node_modules/**").permitAll()
 //                        .requestMatchers("/admin").hasRole("ADMIN")
 //                        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
 
-                        .anyRequest().authenticated())
-//                        .anyRequest().permitAll())
+//                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
 
                 .formLogin(formLogin -> formLogin
-                        .usernameParameter("userId")
-                        .passwordParameter("userPw")
+//                        .usernameParameter("userId")
+//                        .passwordParameter("userPw")
                         .loginPage("/login")
                         .defaultSuccessUrl("/")
-                        .failureUrl("/joinTest"))   // 에러 시 처리 방법 논의 후 수정 예정
+                        .failureUrl("/"))   // 에러 시 처리 방법 논의 후 수정 예정
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true));

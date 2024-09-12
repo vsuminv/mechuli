@@ -68,7 +68,8 @@ public class UserDAO implements UserDetails {
     @OneToMany(mappedBy = "userId")
     private List<Subscription> subscriptions;
 
-
+    @OneToMany(mappedBy = "userIndex")
+    private List<Review> reviews;
 
 
 

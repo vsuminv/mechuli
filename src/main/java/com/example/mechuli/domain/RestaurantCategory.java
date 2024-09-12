@@ -9,7 +9,7 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-@ToString
+//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class RestaurantCategory {
