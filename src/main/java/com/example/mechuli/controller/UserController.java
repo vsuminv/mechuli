@@ -46,6 +46,11 @@ public class UserController {
         return csrfToken;
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
     @PostMapping("/join")
     public String join(@RequestPart("file") MultipartFile file, @Valid @RequestPart UserDTO userDto, BindingResult bindingResult) {
