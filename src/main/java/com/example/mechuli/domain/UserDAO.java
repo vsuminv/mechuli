@@ -23,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "M_USER")
+@Table(name = "m_user")
 public class UserDAO implements UserDetails {
 
     @Id

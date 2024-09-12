@@ -31,10 +31,10 @@ public class SecurityConfig {
 //                .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**", "/css/**", "/image/**","/img/**.png", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                        .requestMatchers("/js/**","/auth/**", "/css/**", "/image/**","/tailwind.css","/img/**.png", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
                         .requestMatchers("/login","/join","/wellcomePage").permitAll()
-                        .anyRequest().permitAll()
-//                        .anyRequest().authenticated()
+//                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/loginPage")
