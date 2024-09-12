@@ -26,11 +26,6 @@ spring:
         format_sql: true
         default_batch_fetch_size: 1000
 
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:test
-#    username: sa
-#    password:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://mechuli-db.cyzrnn6eoqnk.ap-northeast-2.rds.amazonaws.com:3306/mechuli?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
@@ -45,11 +40,6 @@ spring:
   sql:
     init:
       mode: always
-  #  datasource:
-  #    driver-class-name: com.mysql.cj.jdbc.Driver
-  #    url: jdbc:mysql://localhost:3306/pushop?&serverTimezone=Asia/Seoul
-  #    username: test
-  #    password: sa
 
 springdoc:
   swagger-ui:
