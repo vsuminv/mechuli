@@ -50,12 +50,15 @@ public class UserService implements UserDetailsService {
                     .orElseThrow(() -> new RuntimeException("Invalid category ID"));
             restaurantCategories.add(category);
         }
-        userRepository.save(UserDAO.builder()
+        UserDAO user = UserDAO.builder()
                 .userId(dto.getUserId())
-//                        .restaurantCategory(dto.getCategoryIds())
                 .userPw(bCryptPasswordEncoder.encode(dto.getUserPw()))
                 .nickname(dto.getNickname())
-                .build());
+                .restaurantCategory(restaurantCategories)  // 카테고리 설정
+                .build();
+
+        // 사용자 저장
+        userRepository.save(user);
     }
 
 

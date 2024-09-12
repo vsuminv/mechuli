@@ -6,6 +6,7 @@ import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +38,19 @@ public class UserController {
     // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
 
     @PostMapping("/join")
-    public ResponseEntity<String> userJoin(UserDTO dto,  BindingResult bindingResult) {
+    public ResponseEntity<String> userJoin(@Valid UserDTO dto, BindingResult bindingResult) {
         // 카테고리 값 가져오기
         if (dto.getCategoryIds() == null || dto.getCategoryIds().size() < 3 || dto.getCategoryIds().size() > 5) {
             bindingResult.rejectValue("restaurantCategories", "error.userDto", "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
-//            return "/join";
+            return ResponseEntity.badRequest().body("카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
         }
 
-        userService.save(dto);
-        return ResponseEntity.ok("good");
+        try {
+            userService.save(dto);
+            return ResponseEntity.ok("회원가입이 완료되었습니다.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("회원가입 중 오류가 발생했습니다: " + e.getMessage());
+        }
     }
 
     @RequestMapping(value = "/ajaxCheckId", method = RequestMethod.POST)
