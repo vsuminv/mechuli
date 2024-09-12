@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,7 +37,13 @@ public class UserController {
     // 회원가입 전송 시 새 유저 생성하고 메인페이지로 redirect
 
     @PostMapping("/join")
-    public ResponseEntity<String> userJoin(UserDTO dto) {
+    public ResponseEntity<String> userJoin(UserDTO dto,  BindingResult bindingResult) {
+        // 카테고리 값 가져오기
+        if (dto.getCategoryIds() == null || dto.getCategoryIds().size() < 3 || dto.getCategoryIds().size() > 5) {
+            bindingResult.rejectValue("restaurantCategories", "error.userDto", "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
+//            return "/join";
+        }
+
         userService.save(dto);
         return ResponseEntity.ok("good");
     }

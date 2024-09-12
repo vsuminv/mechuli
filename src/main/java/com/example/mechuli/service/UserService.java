@@ -7,6 +7,7 @@ import com.example.mechuli.domain.Role;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
+import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 
@@ -40,9 +41,18 @@ public class UserService implements UserDetailsService {
 
     private final Random random = new Random();
 
+    private final RestaurantCategoryRepository restaurantCategoryRepository;
+
     public void save(UserDTO dto) {
+        List<RestaurantCategory> restaurantCategories = new ArrayList<>();
+        for (Long categoryId : dto.getCategoryIds()) {
+            RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Invalid category ID"));
+            restaurantCategories.add(category);
+        }
         userRepository.save(UserDAO.builder()
                 .userId(dto.getUserId())
+//                        .restaurantCategory(dto.getCategoryIds())
                 .userPw(bCryptPasswordEncoder.encode(dto.getUserPw()))
                 .nickname(dto.getNickname())
                 .build());
