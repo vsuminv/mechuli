@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
         int checkResult = 0;
         boolean boolResult = userRepository.existsByUserId(userId);
         if (boolResult) checkResult = 1;
-        log.info("sadasdads {}", userId);
+        log.info("아이디 중복체크 들옴 {}", userId);
         return checkResult;
     }
 
@@ -62,6 +62,7 @@ public class UserService implements UserDetailsService {
         int checkResult = 0;
         boolean boolResult = userRepository.existsByNickname(nickname);
         if (boolResult) checkResult = 1;
+        log.info("닉넴 중복체크 들옴 {}", nickname);
         return checkResult;
     }
     // 인증 테스트

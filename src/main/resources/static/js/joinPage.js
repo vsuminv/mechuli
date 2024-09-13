@@ -1,126 +1,97 @@
-function userIdCheck() {
-    const userId = $(`#userId`).val();
-    if (userId === "") {
-        alert("아이디를 정확히 입력해주세요.");
-        console.log("들어온값" + userId);
-        $("#userId").focus();
-        return false;
-    }
-    $.ajax({
-        url: "/ajaxCheckId",
-        type: "POST",
-        data: userId,
-        contentType: "text/plain",
-        success: function (result) {
-            console.log(result);
-            if (result === 0) {
-                if (confirm("해당 아이디는 사용 가능합니다. \n 사용하시겠습니까?")) {
-                    userIdOverlapCheck = 1;
-                    $("#userId").attr("readonly", true);
-                    $("#userid_check").attr("disabled", true);
-                    $("#userid_check").css("display", "none");
-                    $("#resetUserId").attr("disabled", false);
-                    $("#resetUserId").css("display", "inline-block");
-                }
-            } else if (result === 1) {
-                alert("이미 사용중인 아이디입니다.");
-                $("#userId").focus();
-            } else {
-                alert("result 값 못찾음");
-            }
-        },
-        error: function (request, status, error) {
-            alert("요청값" + request + "상태:" + request.status + "\n" + "에러" + error);
-        }
-    });
-}
-
-function nickNameCheck() {
-    const nickname = $(`#nickname`).val();
-    if (nickname === "") {
-        alert("닉네임을 정확히 입력해주세요.");
-        $("#nickname").focus();
-        return false;
-    }
-    $.ajax({
-        type: "POST",
-        url: "/ajaxCheckNickname",
-        data: nickname,
-        contentType: "text/plain",
-        success: function (result) {
-            console.log(result);
-            if (result === 0) {
-                if (confirm("해당 닉네임은 사용 가능합니다. \n 사용하시겠습니까?")) {
-                    nicknameOverlapCheck = 1;
-                    $("#nickname").attr("readonly", true);
-                    $("#nickname_check").attr("disabled", true);
-                    $("#nickname_check").css("display", "none");
-                    $("#resetNickname").attr("disabled", false);
-                    $("#resetNickname").css("display", "inline-block");
-                }
-            } else if (result === 1) {
-                alert("이미 사용중인 닉넴입니다.");
-                $("#nickname").focus();
-            } else {
-                alert("result 값 못찾음");
-            }
-        },
-        error: function (request, status, error) {
-            alert("요청값" + request + "상태:" + request.status + "\n" + "에러" + error);
-        }
-    });
-}
-
-function checkAll() {
-    if (userIdOverlapCheck === 1 && nicknameOverlapCheck === 1) {
-        console.log("통과");
-        return true;
-    } else {
-        alert("아이디, 닉네임 중복체크 미완료");
-        return false;
-    }
-}
-
-function join(){
-    // if (!checkAll()) {
-    //     return false;
-    // }
-    let userId = $('#userId').val();
-    let userPw = $('#userPw').val();
-    let userPw2 = $('#userPw2').val();
-    let nickname = $('#nickname').val();
-
-
-    // if (pw !== pw2) {
-    //     alert("비밀번호가 일치하지 않습니다.");
-    //     $('#pw2').focus();
-    //     return false;
-    // }
-
-    const userData = {
-        userId :  $('#userId').val(),
-        userPw : $('#userPw').val(),
-        userPw2 : $('#userPw2').val(),
-        nickname : $('#nickname').val(),
-    };
-    $.ajax({
-        url: "/join",
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(userData),
-        success: function(response) {
-            if (response === "success") {
-                alert("join 됨.");
-                window.location.href = "/login"; // 로그인 페이지로 이동
-                console.log(userData);
-            } else {
-                alert("join fail");
-            }
-        },
-        error: function(xhr, status, error) {
-            alert("failfailfailfailfail");
-            console.log(userData);
-            console.error("Error: " + status + " " + error);
-        }
-    });
-}
+//
+//
+//
+//
+// function showErrorMessage(inputId, errorMessage) {
+//     const input = $(`#${inputId}`);
+//     if (input.val() === "") {
+//         alert(errorMessage);
+//         input.focus();
+//         return false;
+//     }
+//     return true;
+// }
+//
+//
+// // AJAX Functions
+// function ajaxRequest(url, data, successCallback) {
+//     $.ajax({
+//         url: url,
+//         type: "POST",
+//         data: data,
+//         contentType: "application/x-www-form-urlencoded",
+//         success: successCallback,
+//         error: function (request, status, error) {
+//             alert(`요청: ${request}\n상태: ${request.status}\n에러: ${error}`);
+//         }
+//     });
+// }
+//
+// function allCheck(inputId, checkButtonId, resetButtonId, CheckVar) {
+//     return function(result) {
+//         if (result === 0) {
+//             if (confirm("사용 가능합니다. 사용하시겠습니까?")) {
+//                 window[CheckVar] = 1;
+//                 $(`#${inputId}`).attr("readonly", true);
+//                 $(`#${checkButtonId}`).attr("disabled", true).hide();
+//                 $(`#${resetButtonId}`).attr("disabled", false).show();
+//             }
+//         } else if (result === 1) {
+//             alert(ERROR_MESSAGES[`${inputId.toUpperCase()}_IN_USE`]);
+//             $(`#${inputId}`).focus();
+//         } else {
+//             alert(ERROR_MESSAGES.UNKNOWN_RESULT);
+//         }
+//     };
+// }
+//
+// // Check Functions
+//
+//
+// // Join Function
+// function join() {
+//     if (!checkAll()) {
+//         return false;
+//     }
+//
+//     const userPw = $('#userPw').val();
+//     const userPw2 = $('#userPw2').val();
+//
+//     if (userPw !== userPw2) {
+//         alert(ERROR_MESSAGES.PASSWORD_MISMATCH);
+//         $('#userPw2').focus();
+//         return false;
+//     }
+//
+//     const formData = new FormData($('#joinForm')[0]);
+//
+//     $.ajax({
+//         url: API_ENDPOINTS.GET_CSRF_TOKEN,
+//         type: "GET",
+//         success: function(csrfToken) {
+//             $.ajax({
+//                 url: API_ENDPOINTS.JOIN,
+//                 type: "POST",
+//                 data: formData,
+//                 processData: false,
+//                 contentType: false,
+//                 headers: {
+//                     'X-CSRF-TOKEN': csrfToken.token
+//                 },
+//                 success: function(response) {
+//                     alert("회원가입이 완료되었습니다.");
+//                     window.location.href = "/login";
+//                 },
+//                 error: function(xhr, status, error) {
+//                     console.error("Error: " + status + " " + error);
+//                     alert("회원가입 처리 중 오류가 발생했습니다: " + xhr.responseText);
+//                 }
+//             });
+//         },
+//         error: function(xhr, status, error) {
+//             console.error("CSRF 토큰을 가져오는 데 실패했습니다.");
+//             alert("회원가입을 처리할 수 없습니다. 나중에 다시 시도해주세요.");
+//         }
+//     });
+//     return false; // 폼 기본 제출 방지
+// }

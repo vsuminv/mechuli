@@ -149,3 +149,6 @@ Thymeleaf는 Spring MVC와 통합되어 폼 처리를 쉽게 할 수 있음:
 ## 결론
 
 Thymeleaf는 강력하고 유연한 템플릿 엔진임. 자연스러운 템플릿을 만들 수 있고, 다양한 표현식과 유틸리티를 제공해 동적인 웹 페이지를 쉽게 만들 수 있음. Spring 프레임워크와의 통합도 뛰어나 Java 웹 개발에 매우 유용함.
+
+
+[타임리프 공홈](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html#the-thref-attribute)
