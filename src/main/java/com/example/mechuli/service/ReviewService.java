@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,33 +55,46 @@ public class ReviewService {
     }
 
     // 리뷰 생성
-    public void createReview(UserDAO authUser, ReviewDTO reviewDTO, MultipartFile file) {
+    public void createReview(UserDAO authUser, ReviewDTO reviewDTO, List<MultipartFile> files) {
         // 이미지의 유무 판단
-        if (file == null || file.isEmpty()) {
+        if (files == null || files.isEmpty()) {
             System.out.println("No image provided");
             reviewDTO.setReviewImg(Collections.emptyList());
+
             // 리뷰 엔티티 생성
             Review review = Review.builder()
                     .content(reviewDTO.getContent())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
                     .build();
-        }else {
 
-            // 이미지 파일 처리 로직
-            if (file != null && !file.isEmpty()) {
-                // 이미지 업로드 로직 추가
+            reviewRepository.save(review);
+        }else {// 이미지 파일이 있을 때
 
+            // 이미지url 저장할 배열
+            List<String> imageUrls = new ArrayList<>();
+
+            // 이미지 파일 처리
+            if (files != null && !files.isEmpty()) {
+                for (MultipartFile file : files) {
+                    try {
+                        String imageUrl = uploadImageToS3(file);
+                        imageUrls.add(imageUrl);
+                    } catch (IOException e) {
+                        throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e);
+                    }
+                }
             }
 
             Review review = Review.builder()
                     .content(reviewDTO.getContent())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
+                    .reviewImg(imageUrls)
                     .build();
+        reviewRepository.save(review);
         }
         // 리뷰 저장
-        reviewRepository.save(review);
     }
 //    public void saveReview(ReviewDTO dto){
 //        reviewRepository.save(Review.builder()
