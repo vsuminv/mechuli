@@ -1,0 +1,15 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pages/basicPage}">
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/boardPage.js}"></script>
+</th:block>
+<main layout:fragment="main">
+
+
+    <div id="boardContainer" class="text-sm m-auto w-3/5 h-2/3">
+        <div th:replace="~{/../contents/board/boardNav :: boardNav}"></div>
+        <div th:replace="~{/../contents/board/boardStore :: boardStore}"></div>
+        <div th:replace="~{/../contents/board/boardReview :: boardReview}"></div>
+    </div>
+
+</main>
+</html>

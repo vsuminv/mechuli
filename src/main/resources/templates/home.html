@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{pages/basicPage}">
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/mainCategory.js}"></script>
+    <script type="text/javascript" th:src="@{/js/mainPage.js}"></script>
 
+</th:block>
 <main layout:fragment="main" class="main">
-
+    로그인 후 메인
 </main>
 
 </html>

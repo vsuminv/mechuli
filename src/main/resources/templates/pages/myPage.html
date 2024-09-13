@@ -1,0 +1,16 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pages/basicPage}">
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/joinPage.js}"></script>
+</th:block>
+<main layout:fragment="main">
+
+    <div class="w-full h-full text-yellow-700">
+        <div th:replace="~{/../component/nav :: nav}"></div>
+        
+        <div id="content" class="w-4/5 mx-auto h-full">
+<!--            <div id="myTaste" th:replace="~{contents/my/myTaste :: myTaste}"></div>-->
+            <div id="myStoreList" th:replace="~{contents/my/myStoreList :: myStoreList}"> </div>
+<!--            <div id="myParty" th:replace="~{contents/my/myParty :: myParty}"></div>-->
+        </div>
+    </div>
+</main>

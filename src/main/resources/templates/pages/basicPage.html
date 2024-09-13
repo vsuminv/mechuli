@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="ko" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <th:block th:replace="~{default/config :: config}"></th:block>
-
-
-
     <body>
         <div class="left">
             <th:block th:insert="~{default/left :: left}"></th:block>
@@ -20,8 +15,5 @@
         </div>
     </body>
 
-
-
-
 <th:block layout:fragment="script"></th:block>
-</html>
+    <script th:inline="javascript"></script>

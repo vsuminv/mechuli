@@ -1,3 +1,60 @@
+let get ={
+    getInit : function () {
+        const buttons = document.querySelectorAll('button[data-show-table]');
+        document.addEventListener("DOMContentLoaded", this.urlCheck);
+
+    }
+}
+
+let post ={
+    postInit: function () {
+
+        $("#my_account").on("click", function () {
+            this.myAccount();
+        });
+        $("#my_restaurant").on("click", function () {
+            this.myRestaurant();
+        });
+        $("#my_friend").on("click", function () {
+            this.myFriend();
+        });
+    },
+
+
+    myAccount: function () {
+
+    },
+    myRestaurant: function () {
+
+    },
+    myFriend: function () {
+
+    },
+    urlCheck: function (){
+        let url = window.location.pathname;
+        let id = "buttons"+url.replace("/","").split("/")[0];
+        let currentNavBtn = document.getElementById(id);
+        currentNavBtn.classList.add("special_nav_btn");
+    }
+};
+
+get.getInit();
+post.postInit();
+
+
+
+const buttons = document.querySelectorAll('button[data-show-table]');
+const tables = document.querySelectorAll('main table');
+// const modal = document.getElementById('modal');
+const addReviewButton = document.querySelector('#addReviewButton');
+const cancelButton = modal.querySelector('button:first-of-type');
+
+// 초기 상태에서 첫 번째 버튼을 노란색으로 유지
+let activeButton = document.querySelector('button[data-show-table="menuTable"]');
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const myAccountBtn = document.getElementById('myAccountBtn');
     const myStoreListBtn = document.getElementById('myStoreListBtn');
