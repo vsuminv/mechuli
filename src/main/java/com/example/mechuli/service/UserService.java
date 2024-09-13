@@ -61,24 +61,19 @@ public class UserService implements UserDetailsService {
         if (boolResult) checkResult = 1;
         return checkResult;
     }
+
     // 인증 테스트
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         Optional<UserDAO> currentUser = this.userRepository.findByUserId(userId);
-        if (userId.isEmpty()) {
-            throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
+        if (currentUser.isEmpty()) {
+            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
         UserDAO user = currentUser.get();
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if ("admin".equals(userId)) {
-            authorities.add(new SimpleGrantedAuthority(Role.ADMIN.name()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(Role.USER.name()));
-        }
-        log.info(user.toString());
-        return new User(user.getUsername(), user.getPassword(), authorities);
-//        return new UserDAO(user.getUserId(), user.getUserPw(), authorities)
+        // UserDAO가 이미 UserDetails를 구현하므로 User 객체로 변환할 필요 없음
+        return user;
     }
+
 
     public List<RestaurantDTO> getRandomCategoriesForUser(String userId) {
         UserDAO user = userRepository.findByUserId(userId)
@@ -86,7 +81,7 @@ public class UserService implements UserDetailsService {
 
         List<RestaurantCategory> categories = user.getRestaurantCategory();
 
-        Collections.shuffle(categories, random);
+        Collections.shuffle(categories);
         List<RestaurantCategory> randomCategories = categories.stream()
                 .limit(3)
                 .collect(Collectors.toList());

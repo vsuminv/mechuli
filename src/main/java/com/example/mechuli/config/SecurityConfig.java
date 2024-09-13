@@ -31,12 +31,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-//                .headers(AbstractHttpConfigurer::disable)
+                .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                        .requestMatchers("/joinPage","/wellcomePage").permitAll()
-//                                .requestMatchers(hasRole(USER))
+                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                                .requestMatchers("/joinPage","/wellcomePage").permitAll()
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 )
