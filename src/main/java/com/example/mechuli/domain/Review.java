@@ -35,10 +35,14 @@ public class Review {
     private LocalDateTime updateDate;
 
     @ManyToOne
-    @JoinColumn(name = "restaurant_id") // 외래키
+    @JoinColumn(name = "restaurant_id",referencedColumnName = "restaurant_id") // 외래키
     private Restaurant restaurant;
 
-    @OneToMany( mappedBy = "review")
-    private List<Review_img> review_img;
+    @ManyToOne
+    @JoinColumn(name = "user_index",referencedColumnName = "user_index") // 외래키
+    private UserDAO userIndex;
+
+    @Column(name = "review_img")
+    private List<String> reviewImg;
 
 }
