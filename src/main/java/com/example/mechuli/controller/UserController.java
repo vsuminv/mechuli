@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +34,7 @@ public class UserController {
         mav.addObject("categories", categories);
         mav.addObject("userData", new UserDTO());
         return mav;
-    }
+
     @PostMapping("/joinPage/ajaxCheck")
     public ResponseEntity<Integer> checkIdNic(@RequestParam("type") String type, @RequestParam("value") String value) {
         int result = userService.userCheck(type, value);

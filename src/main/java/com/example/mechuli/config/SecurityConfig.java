@@ -38,11 +38,12 @@ public class SecurityConfig {
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))) // 리뷰용으로 박아놨는데 쓸모없을듯
 
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token").permitAll()
-                        .requestMatchers("/joinPage/**").permitAll()
-                        .requestMatchers("/myPage/**").hasAnyRole("USER","ADMIN","zz")
+                .headers(AbstractHttpConfigurer::disable)
 
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/js/**","/auth/**","/home" ,"/css/**", "/img/**","/image/**","tailwinds.css", "/thymeleaf/**","/csrf-token").permitAll()
+                        .requestMatchers("/login","/join","/wellcomePage").permitAll()
+//                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

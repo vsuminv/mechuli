@@ -7,7 +7,7 @@ let mainCategory = {
 
     fetchCategories: function () {
         $.ajax({
-            url: 'localhost:8081/api/category',
+            url: '/api/category',
             method: 'GET',
             dataType: 'json',
             success: (data) => {
