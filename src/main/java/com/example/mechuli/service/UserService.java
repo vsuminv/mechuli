@@ -80,7 +80,6 @@ public class UserService implements UserDetailsService {
 //        return new UserDAO(user.getUserId(), user.getUserPw(), authorities)
     }
 
-
     public List<RestaurantDTO> getRandomCategoriesForUser(String userId) {
         UserDAO user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
