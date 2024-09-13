@@ -11,9 +11,13 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserDAO, Long> {
 
 //    public UserDAO findByUserIndex(Integer userIndex);
+
+
     boolean existsByUserId(String userId);
 
     boolean existsByNickname(String nickname);
 
     Optional<UserDAO> findByUserId(String userId);
+
+
 }

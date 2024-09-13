@@ -70,7 +70,6 @@ public class UserDAO implements UserDetails {
     @OneToMany(mappedBy = "userId")
     private List<Subscription> subscriptions;
 
-
     // 권한 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

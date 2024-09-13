@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasRole;
+
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
@@ -32,15 +34,16 @@ public class SecurityConfig {
 //                .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**", "/css/**", "/img/**","/image/**","/tailwind.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                        .requestMatchers("/login","/join","/wellcomePage").permitAll()
+                        .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                        .requestMatchers("/joinPage","/wellcomePage").permitAll()
+//                                .requestMatchers(hasRole(USER))
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/loginPage")
                         .loginProcessingUrl("/login") // action
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/", true)
 //                        .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .usernameParameter("userId")
                         .passwordParameter("userPw")

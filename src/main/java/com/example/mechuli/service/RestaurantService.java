@@ -1,7 +1,9 @@
 package com.example.mechuli.service;
 
+import com.example.mechuli.domain.Menu;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.dto.RestaurantDTO;
+import com.example.mechuli.repository.MenuRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class RestaurantService {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private MenuRepository menuRepository;
 
     public List<RestaurantDTO> findAll() {
         // Restaurant 리스트를 RestaurantDTO 리스트로 변환
@@ -43,4 +48,20 @@ public class RestaurantService {
 
         return groupedByCategory;
     }
+
+
+
+
+
+    // ==============================================================================
+    public List<Menu>  findMenusByRestaurantId(Long restaurantId) {
+        List<Menu> menuList = menuRepository.findByRestaurant_RestaurantId(restaurantId);
+        return menuList;
+    }
+    public Optional<RestaurantDTO> findRestaurantByRestaurantId(Long restaurantId) {
+
+        Optional<RestaurantDTO> restDto = restaurantRepository.findByRestaurantId(restaurantId);
+        return restDto;
+    }
+
 }
