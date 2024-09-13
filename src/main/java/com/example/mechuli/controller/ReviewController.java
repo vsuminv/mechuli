@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -25,14 +26,18 @@ public class ReviewController {
     // 리뷰 생성
     @PostMapping
     public ResponseEntity<List<Review>> createReview(@RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
-                                                     @RequestPart(value = "file", required = false) MultipartFile file,
+                                                     @RequestPart(value = "file", required = false) List<MultipartFile> files,
                                                      @AuthenticationPrincipal UserDAO authUser) {
         if(authUser == null){
             System.out.println("User is not authenticated.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        reviewService.createReview(authUser, reviewDTO, file);
-        return ResponseEntity.ofNullable();
+        if(files != null && !files.isEmpty()) {
+            reviewService.createReview(authUser, reviewDTO, Collections.emptyList());
+        }else {
+            reviewService.createReview(authUser, reviewDTO, files);
+        }
+        return ResponseEntity.ok().build();
     }
 //
 //    // 특정 리뷰 조회
