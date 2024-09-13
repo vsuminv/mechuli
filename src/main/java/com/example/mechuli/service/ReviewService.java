@@ -2,8 +2,9 @@ package com.example.mechuli.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.example.mechuli.repository.RestaurantRepository;
-import com.example.mechuli.repository.UserRepository;
+import com.example.mechuli.domain.Review;
+import com.example.mechuli.dto.ReviewDTO;
+import com.example.mechuli.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,17 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
 
-
     @Autowired
-    private  RestaurantRepository restaurantRepository;
-    @Autowired
-    private  UserRepository userRepository;
+    private  ReviewRepository reviewRepository;
     @Autowired
     private AmazonS3 amazonS3;
 
@@ -52,4 +51,28 @@ public class ReviewService {
                 })
                 .collect(Collectors.toList());
     }
+    // 리뷰 생성
+    public void saveReview(ReviewDTO dto){
+        reviewRepository.save(Review.builder()
+                        .reviewId(dto.getReviewId())
+                        .content(dto.getContent())
+                        .restaurant()
+                        .userIndex(dto.getUserIndex())
+                        .reviewImg(dto.getReviewImg())
+                .build());
+    }
+    // 전체 리뷰 조회
+    public List<ReviewDTO> findall(){
+        return reviewRepository.findAll().stream()
+                .map(ReviewDTO::new)
+                .collect(Collectors.toList());
+    }
+    // 유저 리뷰 조회
+//    public List<Review> findByUserIndex(Long userIndex){
+//        return reviewRepository.findByUserIndex(userIndex);
+//    }
+    // 매장 리뷰 조회
+//    public List<Review> findByRestaurantId(Long restaurantId){
+//        return reviewRepository.findByRestaurantId(restaurantId);
+//    }
 }
