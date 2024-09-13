@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     public void addViewControllers(ViewControllerRegistry registry) {
 //        registry.addViewController("/mainPage").setViewName("/contents/detail/mainPage");
-        registry.addViewController("/").setViewName("wellcomePage");
+//        registry.addViewController("/").setViewsName("wellcomePage");
         registry.addViewController("/home").setViewName("home");
         registry.addViewController("/joinPage").setViewName("pages/joinPage");
         registry.addViewController("/loginPage").setViewName("pages/loginPage");

@@ -23,36 +23,42 @@ let mainPage = {
         });
 
         // 초기 데이터 가져오기
-        this.fetchInitRestaurants();
+//        this.fetchInitRestaurants();
+          this.fetchRandomRestaurants();
     },
 
-    fetchInitRestaurants: function() {
+    fetchRandomRestaurants: function() {
         $.ajax({
-            url: '/api/all',
+            url: '/randomCategory',
             method: 'GET',
-            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded',
             success: (data) => {
-                this.extractAndLogCategories(data); // 카테고리 목록 추출 및 로그 출력 함수 호출
-                this.selectRandomCategories(); // 무작위로 3개의 카테고리 선택
-                this.displayRandomCategoryRestaurants(data); // 선택된 카테고리의 레스토랑을 3개씩 표시
+                console.log('Received Data:', data);
+                this.displayCategoryRestaurants(data);
             },
             error: (xhr, status, error) => {
                 console.error('Error fetching random restaurant data:', error);
+                console.log('Response Text:', xhr.responseText); // 서버 응답 내용 확인
             }
         });
+    },
+
+//    fetchInitRestaurants: function() {
 //        $.ajax({
-//            url: '/randomCategory',
-//            method: 'POST',
+//            url: '/api/all',
+//            method: 'GET',
 //            dataType: 'json',
-//            contentType: 'application/x-www-form-urlencoded',
 //            success: (data) => {
-//                this.displayCategoryRestaurants(data);
+//                this.extractAndLogCategories(data); // 카테고리 목록 추출 및 로그 출력 함수 호출
+//                this.selectRandomCategories(); // 무작위로 3개의 카테고리 선택
+//                this.displayRandomCategoryRestaurants(data); // 선택된 카테고리의 레스토랑을 3개씩 표시
 //            },
 //            error: (xhr, status, error) => {
 //                console.error('Error fetching random restaurant data:', error);
 //            }
 //        });
-    },
+//
+//    },
 
     fetchAllRestaurants: function () {
         $.ajax({
@@ -71,7 +77,24 @@ let mainPage = {
     },
 
     displayCategoryRestaurants: function (data) {
-        console.log(data);
+        // 카테고리별 레스토랑을 그룹화하기 위한 객체
+        const categoryMap = {};
+
+        // 데이터가 배열 형태라고 가정하고 처리
+        data.forEach((restaurant) => {
+            console.log(`Restaurant ID: ${restaurant.restaurant_id}, Name: ${restaurant.name}, Category: ${restaurant.category_name}`);
+            const category = restaurant.category_name;
+
+            // 카테고리가 이미 존재하지 않는 경우 초기화
+            if (!categoryMap[category]) {
+                categoryMap[category] = [];
+            }
+
+            // 해당 카테고리에 레스토랑 추가
+            categoryMap[category].push(restaurant);
+        });
+
+
     },
 
     extractAndLogCategories: function (data) {
@@ -172,7 +195,7 @@ let mainPage = {
 
     fetchCategoryRestaurants: function (selectedCategory) {
         $.ajax({
-            url: 'localhost:8081/api/category',
+            url: '/api/category',
             method: 'GET',
             dataType: 'json',
             success: (data) => {

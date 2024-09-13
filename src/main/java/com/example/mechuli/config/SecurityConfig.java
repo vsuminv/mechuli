@@ -29,10 +29,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-//                .headers(AbstractHttpConfigurer::disable)
+                .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**", "/css/**", "/img/**","/image/**","/tailwind.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                        .requestMatchers("/js/**","/auth/**","/home" ,"/css/**", "/img/**","/image/**","tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
                         .requestMatchers("/login","/join","/wellcomePage").permitAll()
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
