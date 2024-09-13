@@ -20,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-
+햣
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,7 +61,6 @@ public class UserService implements UserDetailsService {
         if (boolResult) checkResult = 1;
         return checkResult;
     }
-
     // 인증 테스트
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
@@ -111,6 +110,11 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+
+    public boolean existsById(UserDAO authedUser) {
+
+        return userRepository.existsById(authedUser.getUserIndex());
+    }
 
 
 }
