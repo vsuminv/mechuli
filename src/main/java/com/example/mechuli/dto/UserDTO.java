@@ -1,5 +1,6 @@
 package com.example.mechuli.dto;
 
+import com.example.mechuli.domain.RestaurantCategory;
 import com.example.mechuli.domain.UserDAO;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
