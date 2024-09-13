@@ -51,7 +51,7 @@ public class RestaurantController {
 
 //        Map<String, List<RestaurantDTO>> restaurantsByCategory = restaurantService.findRestaurantsGroupedByCategory();
 //        model.addAttribute("restaurantsByCategory", restaurantsByCategory);
-//        return "contents/detail/mainPage";
+//        return "contents/detail/mainPage.html";
 //    }
 //    public List<RestaurantDTO> restaurantCategory() {
 //        List<RestaurantDTO> restaurantsByCategory = restaurantService.findRandomRestaurantsByCategories(3);
@@ -60,7 +60,7 @@ public class RestaurantController {
 
     //================================================================
 
-    @GetMapping("/detailPage")
+    @GetMapping("/boardPage")
     public Model getRestaurantDetail(@AuthenticationPrincipal UserDAO authedUser, @RequestParam(value = "restaurantId") String restaurantId, Model model) {
 
         if (authedUser != null && userService.existsById(authedUser)) {

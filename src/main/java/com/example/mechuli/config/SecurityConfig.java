@@ -33,14 +33,14 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwind.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                        .requestMatchers("/login","/join","/wellcomePage").permitAll()
+                        .requestMatchers("/joinPage","/wellcomePage").permitAll()
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/loginPage")
                         .loginProcessingUrl("/login") // action
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/", true)
 //                        .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .usernameParameter("userId")
                         .passwordParameter("userPw")
