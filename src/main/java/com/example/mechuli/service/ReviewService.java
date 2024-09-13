@@ -52,21 +52,32 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
     // 리뷰 생성
+//    public void saveReview(ReviewDTO dto){
+//        reviewRepository.save(Review.builder()
+//                        .reviewId(dto.getReviewId())
+//                        .content(dto.getContent())
+//                        .restaurant(dto.getRestaurant())
+//                        .userIndex(dto.getUserIndex())
+//                        .reviewImg(dto.getReviewImg())
+//                .build());
+//    }
     public void saveReview(ReviewDTO dto){
-        reviewRepository.save(Review.builder()
-                        .reviewId(dto.getReviewId())
-                        .content(dto.getContent())
-                        .restaurant()
-                        .userIndex(dto.getUserIndex())
-                        .reviewImg(dto.getReviewImg())
+//        reviewRepository.save(ReviewDTO.builder()
+//                .reviewId(dto.getReviewId())
+//                .content(dto.getContent())
+//                .restaurant(dto.getRestaurant())
+//                .userIndex(dto.getUserIndex())
+//                .reviewImg(dto.getReviewImg())
+//        );
+        reviewRepository.save(ReviewDTO.builder()
+                .reviewId(dto.getReviewId())
+                .content(dto.getContent())
+                .restaurant(dto.getRestaurant())
+                .userIndex(dto.getUserIndex())
+                .reviewImg(dto.getReviewImg())
                 .build());
     }
-    // 전체 리뷰 조회
-    public List<ReviewDTO> findall(){
-        return reviewRepository.findAll().stream()
-                .map(ReviewDTO::new)
-                .collect(Collectors.toList());
-    }
+
     // 유저 리뷰 조회
 //    public List<Review> findByUserIndex(Long userIndex){
 //        return reviewRepository.findByUserIndex(userIndex);

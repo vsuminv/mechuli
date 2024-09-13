@@ -42,6 +42,14 @@ public class Review {
     @JoinColumn(name = "user_index",referencedColumnName = "user_index") // 외래키
     private UserDAO userIndex;
 
+    @CreatedDate
+    @Column(name="createDate")
+    private LocalDateTime createDate;
+
+    @LastModifiedDate
+    @Column(name="updateDate",nullable = false)
+    private LocalDateTime updateDate;
+
     @Column(name = "review_img")
     private List<String> reviewImg;
 
