@@ -61,7 +61,6 @@ public class UserService implements UserDetailsService {
         if (boolResult) checkResult = 1;
         return checkResult;
     }
-
     // 인증 테스트
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
@@ -89,7 +88,6 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-
     public List<RestaurantDTO> getRandomCategoriesForUser(String userId) {
         UserDAO user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -109,6 +107,13 @@ public class UserService implements UserDetailsService {
         return restaurants.stream()
                 .map(RestaurantDTO::new)
                 .collect(Collectors.toList());
+    }
+
+
+    //=========================================================
+    public boolean existsById(UserDAO authedUser) {
+
+        return userRepository.existsById(authedUser.getUserIndex());
     }
 
 
