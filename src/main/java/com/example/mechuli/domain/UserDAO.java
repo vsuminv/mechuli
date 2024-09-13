@@ -87,7 +87,7 @@ public class UserDAO implements UserDetails {
     //유니크 아이디를 닉넴으로 반환
     @Override
     public String getUsername() {
-//        return userId;
+        //        return userId;
         return nickname;
     }
     //

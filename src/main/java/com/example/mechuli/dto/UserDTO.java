@@ -32,6 +32,7 @@ public class UserDTO {
 
 
 
+
     public UserDTO(UserDAO userDAO){
         this.userIndex = userDAO.getUserIndex();
         this.userId = userDAO.getUserId();

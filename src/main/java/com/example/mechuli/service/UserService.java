@@ -1,14 +1,12 @@
 
 package com.example.mechuli.service;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.RestaurantCategory;
 import com.example.mechuli.domain.Role;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
-import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.example.mechuli.domain.Role.USER;
 
 @Transactional
 @Slf4j

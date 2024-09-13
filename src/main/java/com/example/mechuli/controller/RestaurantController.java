@@ -1,18 +1,15 @@
 package com.example.mechuli.controller;
 
 
-import com.example.mechuli.domain.Menu;
-import com.example.mechuli.domain.Restaurant;
-import com.example.mechuli.domain.UserDAO;
-import com.example.mechuli.dto.MenuDTO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.service.RestaurantService;
-import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +48,7 @@ public class RestaurantController {
 
 //        Map<String, List<RestaurantDTO>> restaurantsByCategory = restaurantService.findRestaurantsGroupedByCategory();
 //        model.addAttribute("restaurantsByCategory", restaurantsByCategory);
-//        return "contents/detail/mainPage.html";
+//        return "contents/detail/mainPage";
 //    }
 //    public List<RestaurantDTO> restaurantCategory() {
 //        List<RestaurantDTO> restaurantsByCategory = restaurantService.findRandomRestaurantsByCategories(3);
