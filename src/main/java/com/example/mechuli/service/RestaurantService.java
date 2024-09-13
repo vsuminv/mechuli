@@ -4,6 +4,7 @@ import com.example.mechuli.domain.Menu;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.repository.MenuRepository;
+import com.example.mechuli.repository.MyRestaurantListRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ public class RestaurantService {
 
     @Autowired
     private MenuRepository menuRepository;
+
+    @Autowired
+    private MyRestaurantListRepository myRestaurantListRepository;
 
     public List<RestaurantDTO> findAll() {
         // Restaurant 리스트를 RestaurantDTO 리스트로 변환
@@ -55,13 +59,32 @@ public class RestaurantService {
 
     // ==============================================================================
     public List<Menu>  findMenusByRestaurantId(Long restaurantId) {
-        List<Menu> menuList = menuRepository.findByRestaurant_RestaurantId(restaurantId);
-        return menuList;
-    }
-    public Optional<RestaurantDTO> findRestaurantByRestaurantId(Long restaurantId) {
 
-        Optional<RestaurantDTO> restDto = restaurantRepository.findByRestaurantId(restaurantId);
+        return menuRepository.findByRestaurant_RestaurantId(restaurantId);
+    }
+    public RestaurantDTO findRestaurantByRestaurantId(Long restaurantId) {
+
+//        Optional<RestaurantDTO> restDto = restaurantRepository.findByRestaurantId(restaurantId);
+        Restaurant rest = restaurantRepository.findByRestaurantId(restaurantId)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        RestaurantDTO restDto = RestaurantDTO.builder()
+                .restaurant_id(rest.getRestaurantId())
+                .name(rest.getName())
+                .img_url(rest.getImageUrl())
+                .open_time(rest.getOpenTime())
+                .close_time(rest.getCloseTime())
+                .address(rest.getAddress())
+                .build();
+
         return restDto;
     }
 
+    public int existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long restaurantId, Long userIndex) {
+        int result = 0;
+        if(myRestaurantListRepository.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, userIndex)) {
+            result = 1;
+        }
+        return result;
+    }
 }
