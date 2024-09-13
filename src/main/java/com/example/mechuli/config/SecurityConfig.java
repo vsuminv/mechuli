@@ -35,7 +35,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                        .requestMatchers("/joinPage","/wellcomePage").permitAll()
+                        .requestMatchers("/joinPage","/").permitAll()
 //                                .requestMatchers(hasRole(USER))
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()

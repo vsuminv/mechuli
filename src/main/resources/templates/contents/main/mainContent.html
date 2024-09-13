@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{pages/basicPage}">
-<th:block layout:fragment="script">
-
-    <script type="text/javascript" src="/js/mainCategory.js"></script>
-    <script type="text/javascript" src="/js/mainPage.js"></script>
-
-
-</th:block>
-<main layout:fragment="main" class="main">
-    로그인 전
-
-       <div class="grid place-items-center w-full">
+<div th:fragment="mainContent">
+ <div class="grid place-items-center w-full">
         <div class="flex flex-col items-center w-full">
             <h1 class="text-6xl">메추~리</h1>
             <div class="grid grid-cols-5" id="list-container">
@@ -25,7 +13,4 @@
             </div>
         </div>
     </div>
-
-</main>
-
-</html>
+</div>
