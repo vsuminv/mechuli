@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -94,10 +95,17 @@ public ResponseEntity<String> userJoin(@Valid UserDTO dto, BindingResult binding
 }
     // 회원가입 후 로그인 한 유저의 랜덤카테고리 조회
     @GetMapping("/randomCategory")
-    public List<RestaurantDTO> findCategory(@AuthenticationPrincipal UserDAO authedUser) {
+    public ResponseEntity<List<RestaurantDTO>> findCategory(@AuthenticationPrincipal UserDAO authedUser) {
+        if (authedUser == null) {
+            System.out.println("User is not authenticated.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        System.out.println("Authenticated User: " + authedUser.getUserId());
+
         List<RestaurantDTO> randomCategories = userService.getRandomCategoriesForUser(authedUser.getUserId());
 
-        return randomCategories;
+        return ResponseEntity.ok(randomCategories);
     }
 
 
