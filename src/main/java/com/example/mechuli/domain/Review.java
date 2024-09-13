@@ -26,14 +26,6 @@ public class Review {
     @Column(name="content", nullable = false)
     private String content;
 
-    @CreatedDate
-    @Column(name="createDate")
-    private LocalDateTime createDate;
-
-    @LastModifiedDate
-    @Column(name="updateDate",nullable = false)
-    private LocalDateTime updateDate;
-
     @ManyToOne
     @JoinColumn(name = "restaurant_id",referencedColumnName = "restaurant_id") // 외래키
     private Restaurant restaurant;
@@ -41,6 +33,14 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "user_index",referencedColumnName = "user_index") // 외래키
     private UserDAO userIndex;
+
+    @CreatedDate
+    @Column(name="createDate")
+    private LocalDateTime createDate;
+
+    @LastModifiedDate
+    @Column(name="updateDate",nullable = false)
+    private LocalDateTime updateDate;
 
     @Column(name = "review_img")
     private List<String> reviewImg;
