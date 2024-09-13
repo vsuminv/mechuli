@@ -1,30 +1,25 @@
 package com.example.mechuli.config;
 
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
+//import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+
     @Bean
     public BCryptPasswordEncoder encodePWD(){
         return new BCryptPasswordEncoder();
@@ -41,8 +36,8 @@ public class SecurityConfig {
                 .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**","/home" ,"/css/**", "/img/**","/image/**","tailwinds.css", "/thymeleaf/**","/csrf-token").permitAll()
-                        .requestMatchers("/login","/join","/wellcomePage").permitAll()
+                                .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                                .requestMatchers("/joinPage","/wellcomePage").permitAll()
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 )
@@ -53,6 +48,8 @@ public class SecurityConfig {
                         .usernameParameter("userId")
                         .passwordParameter("userPw")
                         .failureUrl("/error/error500")
+//                        .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+//                        .failureHandler(())
                         .permitAll()
                 )
                 .logout(logout -> logout
