@@ -100,7 +100,6 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-
     public List<RestaurantDTO> getRandomCategoriesForUser(String userId) {
         UserDAO user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));

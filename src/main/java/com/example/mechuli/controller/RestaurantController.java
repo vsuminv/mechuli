@@ -47,9 +47,10 @@ public class RestaurantController {
     }
 
 
+
     //================================================================
 
-    @GetMapping("/detailPage")
+    @GetMapping("/boardPage")
     public Model getRestaurantDetail(@AuthenticationPrincipal UserDAO authedUser, @RequestParam(value = "restaurantId") String restaurantId, Model model) {
 
         if (authedUser != null && userService.existsById(authedUser)) {

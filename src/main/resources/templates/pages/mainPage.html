@@ -1,0 +1,16 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pages/basicPage}">
+<th:block layout:fragment="script">
+    <script type="text/javascript" th:src="@{/js/boardPage.js}"></script>
+</th:block>
+<main layout:fragment="main">
+
+    <div class="w-full h-full text-yellow-700">
+        <div th:replace="~{/component/nav :: nav}"></div>
+
+        <div id="content" class="w-4/5 mx-auto h-full">
+<!--            <div id="myStoreList" th:replace="~{contents/my/myStoreList :: myStoreList}"> </div>-->
+
+            로그인 전 메인
+        </div>
+    </div>
+</main>

@@ -108,8 +108,6 @@ public ResponseEntity<String> userJoin(@Valid UserDTO dto, BindingResult binding
 
         System.out.println("Authenticated User: " + authedUser.getUserId());
 
-
-
         List<RestaurantDTO> randomCategories = userService.getRandomCategoriesForUser(authedUser.getUserId());
 
         return ResponseEntity.ok(randomCategories);
