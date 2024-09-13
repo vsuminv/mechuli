@@ -28,6 +28,7 @@ public class ReviewController {
     public ResponseEntity<List<Review>> createReview(@RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
                                                      @RequestPart(value = "file", required = false) List<MultipartFile> files,
                                                      @AuthenticationPrincipal UserDAO authUser) {
+        System.out.println("==============================================================================================");
         if(authUser == null){
             System.out.println("User is not authenticated.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
