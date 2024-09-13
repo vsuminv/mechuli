@@ -2,7 +2,9 @@ package com.example.mechuli.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.Review;
+import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.ReviewDTO;
 import com.example.mechuli.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +52,36 @@ public class ReviewService {
                 })
                 .collect(Collectors.toList());
     }
+
     // 리뷰 생성
+    public void createReview(UserDAO authUser, ReviewDTO reviewDTO, MultipartFile file) {
+        // 이미지의 유무 판단
+        if (file == null || file.isEmpty()) {
+            System.out.println("No image provided");
+            reviewDTO.setReviewImg(Collections.emptyList());
+            // 리뷰 엔티티 생성
+            Review review = Review.builder()
+                    .content(reviewDTO.getContent())
+                    .userIndex(authUser)  // 로그인한 사용자 정보 저장
+                    .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
+                    .build();
+        }else {
+
+            // 이미지 파일 처리 로직
+            if (file != null && !file.isEmpty()) {
+                // 이미지 업로드 로직 추가
+
+            }
+
+            Review review = Review.builder()
+                    .content(reviewDTO.getContent())
+                    .userIndex(authUser)  // 로그인한 사용자 정보 저장
+                    .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
+                    .build();
+        }
+        // 리뷰 저장
+        reviewRepository.save(review);
+    }
 //    public void saveReview(ReviewDTO dto){
 //        reviewRepository.save(Review.builder()
 //                        .reviewId(dto.getReviewId())
@@ -61,22 +91,7 @@ public class ReviewService {
 //                        .reviewImg(dto.getReviewImg())
 //                .build());
 //    }
-    public void saveReview(ReviewDTO dto){
-//        reviewRepository.save(ReviewDTO.builder()
-//                .reviewId(dto.getReviewId())
-//                .content(dto.getContent())
-//                .restaurant(dto.getRestaurant())
-//                .userIndex(dto.getUserIndex())
-//                .reviewImg(dto.getReviewImg())
-//        );
-        reviewRepository.save(ReviewDTO.builder()
-                .reviewId(dto.getReviewId())
-                .content(dto.getContent())
-                .restaurant(dto.getRestaurant())
-                .userIndex(dto.getUserIndex())
-                .reviewImg(dto.getReviewImg())
-                .build());
-    }
+
 
     // 유저 리뷰 조회
 //    public List<Review> findByUserIndex(Long userIndex){
