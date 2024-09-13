@@ -9,13 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     List<Restaurant> findByRestaurantCategory(RestaurantCategory category);
     List<Restaurant> findByRestaurantCategory_CategoryId(Long categoryId);
 
-
+    Optional<RestaurantDTO> findByRestaurantId(Long restaurantId);
 //    List<Restaurant> findRestaurantCategoryByCategoryId(Long categoryId);
 //    RestaurantCategory findByCategoryName(String categoryName);
 

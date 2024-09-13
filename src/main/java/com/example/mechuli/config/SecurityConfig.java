@@ -32,7 +32,7 @@ public class SecurityConfig {
 //                .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**", "/css/**", "/img/**","/image/**","/tailwind.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                        .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwind.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
                         .requestMatchers("/login","/join","/wellcomePage").permitAll()
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
