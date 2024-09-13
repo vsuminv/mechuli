@@ -12,6 +12,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "my_restaurant_list")
 public class MyRestaurantList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
