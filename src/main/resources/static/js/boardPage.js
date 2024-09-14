@@ -71,7 +71,7 @@ let boardPage = {
             // JSON 데이터를 객체로 수집
             let reviewDto = {
                 content: reviewContent,
-                rating: selectedRating
+                rating: parseInt(selectedRating)
             };
 
             // reviewDto를 JSON 문자열로 변환하여 FormData에 추가

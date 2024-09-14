@@ -49,4 +49,8 @@ public class Review {
     @Column(name = "review_img")
     private List<String> reviewImg;
 
+    @Column(name="rating")
+    private int rating;
+
+
 }
