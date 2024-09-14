@@ -1,11 +1,28 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pages/basicPage}">
 <th:block layout:fragment="script">
+    <!-- 서버에서 전달된 모델 데이터를 JavaScript 변수로 노출 -->
+    <script th:inline="javascript">
+        /* Thymeleaf로 서버에서 가져온 menuList를 JavaScript 변수로 설정 */
+        var menuList = [[${#http.json(menuList)}]] || []; // null인 경우 빈 배열로 설정
+
+        if (menuList.length === 0) {
+            console.log("No menu items available."); // 메뉴가 없는 경우 처리
+        } else {
+            console.log(menuList); // 메뉴가 있는 경우 출력
+        }
+    </script>
+
     <script type="text/javascript" th:src="@{/js/boardPage.js}"></script>
   <script type="text/javascript" th:src="@{/js/detail.js}"></script>
   <script type="text/javascript" th:src="@{/js/write_review_count.js}"></script>
   <script type="text/javascript" th:src="@{/js/write_review_rating.js}"></script>
 </th:block>
 <main layout:fragment="main">
+    <div class="flex flex-col w-full relative">
+        <div class="bg-[#e6e6e6] w-full min-h-80 flex justify-between items-center">
+            <button class="text-4xl text-[#fef445] ">◀</button>
+            <button class="text-4xl text-[#fef445] ">▶</button>
+        </div>
 
  <!-- 가게 상세 페이지에서 가게 배경이미지 및 다른 가게로 이동 구현 -->
   <div class="flex flex-col w-full relative">
@@ -139,6 +156,7 @@
             <span id="selectedRating" class="text-xl font-bold ml-2">0</span>
           </div>
 
+        <div th:replace="~{/../contents/board/boardMeta :: boardMeta}"></div>
 
 
             <!-- 리뷰 입력창과 겹치는 Rounded 사각형 -->
@@ -190,5 +208,26 @@
 
 
 
+        <div id="boardContainer" class="text-sm m-auto w-full h-2/3">
+            <div th:replace="~{/../contents/board/boardNav :: boardNav}"></div>
+
+            <!-- 조건부로 렌더링되는 섹션 -->
+            <div th:replace="~{/../contents/board/boardMenu :: boardMenu}"></div>
+            <div th:replace="~{/../contents/board/boardStore :: boardStore}"></div>
+            <div th:replace="~{/../contents/board/boardReview :: boardReview}"></div>
+        </div>
+
+        <div th:replace="~{/../contents/board/boardModal :: boardModal}"></div>
+        <div th:replace="~{/../contents/board/boardReviewButton :: boardReviewButton}"></div>
+
+<!--        <div class="relative w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center m-4 aspect-square !w-24 !h-24">-->
+<!--            <div class="absolute inset-0 flex items-center justify-center">-->
+<!--                <div class="w-1/2 h-1 bg-black"></div>-->
+<!--            </div>-->
+<!--            <div class="absolute inset-0 flex items-center justify-center">-->
+<!--                <div class="w-1 h-1/2 bg-black"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
 </main>
 </html>

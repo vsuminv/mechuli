@@ -305,7 +305,7 @@ let mainPage = {
         // /detailPage로 이동하면서 query parameter로 restaurantId를 전달
 //        window.location.href = `${localhost:8081}/detailPage?restaurantId=${restaurantId}`;
         const baseUrl = window.location.origin; // 현재 호스트의 기본 URL (예: http://localhost:8081)
-        const detailPageUrl = `${baseUrl}/detailPage?restaurantId=${encodeURIComponent(restaurantId)}`;
+        const detailPageUrl = `${baseUrl}/boardPage?restaurantId=${encodeURIComponent(restaurantId)}`;
 
         // 상세 페이지로 이동
         window.location.href = detailPageUrl;
