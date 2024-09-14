@@ -65,8 +65,6 @@ public class RestaurantController {
         return restaurantService.findRestaurantByRestaurantId(restaurantId);
     }
 
-
-
     // Post ajax로 레스토랑의 메뉴 가져오기
     @RequestMapping(value = "/ajaxRestaurantMenu", method = RequestMethod.POST)
     @ResponseBody
