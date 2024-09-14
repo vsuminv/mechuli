@@ -1,5 +1,6 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pages/basicPage}">
 <th:block layout:fragment="script">
+<!--    <script type="text/javascript" th:src="@{/../static/js/boardPage.js}"></script>-->
     <script type="text/javascript" th:src="@{/js/boardPage.js}"></script>
 </th:block>
 <main layout:fragment="main">
@@ -9,7 +10,7 @@
             <button class="text-4xl text-[#fef445] ">▶</button>
         </div>
 
-        <div th:replace="~{/../contents/board/boardMeta :: boardMeta}"></div>
+        <div th:replace="~{/contents/board/boardMeta :: boardMeta}"></div>
 
         <div id="boardContainer" class="text-sm m-auto w-full h-2/3">
             <div th:replace="~{/../contents/board/boardNav :: boardNav}"></div>
