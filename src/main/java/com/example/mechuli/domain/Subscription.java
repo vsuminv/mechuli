@@ -25,4 +25,5 @@ public class Subscription {
     @ManyToOne
     @JoinColumn(name = "subscriber", referencedColumnName = "user_index")
     private UserDAO subscriber;
+
 }
