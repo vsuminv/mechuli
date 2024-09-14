@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +56,7 @@ public class ReviewService {
     }
 
     // 리뷰 생성
-    public void createReview(UserDAO authUser, ReviewDTO reviewDTO, List<MultipartFile> files) {
+    public void save(UserDAO authUser, ReviewDTO reviewDTO, List<MultipartFile> files) {
         // 이미지의 유무 판단
         if (files == null || files.isEmpty()) {
             System.out.println("No image provided");
@@ -66,9 +67,12 @@ public class ReviewService {
                     .content(reviewDTO.getContent())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
+//                    .updateDate(LocalDateTime.now())
+//                    .createDate(LocalDateTime.now())
                     .build();
-
-            reviewRepository.save(review);
+//            System.out.println("create date : "+review.getCreateDate()+", update_date : "+ review.getUpdateDate());
+//
+//            reviewRepository.save(review);
         }else {// 이미지 파일이 있을 때
 
             // 이미지url 저장할 배열
@@ -91,8 +95,10 @@ public class ReviewService {
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
                     .reviewImg(imageUrls)
+//                    .updateDate(LocalDateTime.now())
+//                    .createDate(LocalDateTime.now())
                     .build();
-        reviewRepository.save(review);
+//        reviewRepository.save(review);
         }
         // 리뷰 저장
     }

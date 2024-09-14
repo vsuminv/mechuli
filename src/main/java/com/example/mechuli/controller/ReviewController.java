@@ -34,9 +34,9 @@ public class ReviewController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         if(files != null && !files.isEmpty()) {
-            reviewService.createReview(authUser, reviewDTO, Collections.emptyList());
+            reviewService.save(authUser, reviewDTO, Collections.emptyList());
         }else {
-            reviewService.createReview(authUser, reviewDTO, files);
+            reviewService.save(authUser, reviewDTO, files);
         }
         return ResponseEntity.ok().build();
     }
