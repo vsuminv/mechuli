@@ -65,6 +65,7 @@ public class ReviewService {
             // 리뷰 엔티티 생성
             reviewRepository.save(Review.builder()
                     .content(reviewDTO.getContent())
+                    .rating(reviewDTO.getRating())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(restaurantId).build())  // 리뷰 대상 식당
                     .updateDate(LocalDateTime.now())
@@ -92,9 +93,9 @@ public class ReviewService {
 
             reviewRepository.save(Review.builder()
                     .content(reviewDTO.getContent())
+                    .rating(reviewDTO.getRating())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(restaurantId).build())  // 리뷰 대상 식당
-                    .rating(reviewDTO.getRating())
                     .reviewImg(imageUrls)
                     .updateDate(LocalDateTime.now())
                     .createDate(LocalDateTime.now())
