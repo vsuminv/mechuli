@@ -63,13 +63,13 @@ public class ReviewService {
             reviewDTO.setReviewImg(Collections.emptyList());
 
             // 리뷰 엔티티 생성
-            Review.builder()
+            reviewRepository.save(Review.builder()
                     .content(reviewDTO.getContent())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
-//                    .updateDate(LocalDateTime.now())
-//                    .createDate(LocalDateTime.now())
-                    .build();
+                    .updateDate(LocalDateTime.now())
+                    .createDate(LocalDateTime.now())
+                    .build());
 //            System.out.println("create date : "+review.getCreateDate()+", update_date : "+ review.getUpdateDate());
 //
 //            reviewRepository.save(review);
@@ -90,14 +90,14 @@ public class ReviewService {
                 }
             }
 
-            Review.builder()
+            reviewRepository.save(Review.builder()
                     .content(reviewDTO.getContent())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
                     .reviewImg(imageUrls)
-//                    .updateDate(LocalDateTime.now())
-//                    .createDate(LocalDateTime.now())
-                    .build();
+                    .updateDate(LocalDateTime.now())
+                    .createDate(LocalDateTime.now())
+                    .build());
 //        reviewRepository.save(review);
         }
         // 리뷰 저장

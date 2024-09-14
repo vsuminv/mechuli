@@ -1,23 +1,27 @@
 package com.example.mechuli.domain;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+@Transactional
 @Entity
 @Builder
 @Getter
 @Setter
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "review")
 public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="review_id")
@@ -35,16 +39,12 @@ public class Review {
     private UserDAO userIndex;
 
     @CreatedDate
-    @Column(name="create_date")
+    @Column(name="createDate")
     private LocalDateTime createDate;
 
-//    @LastModifiedDate
-//    @Column(name="updateDate",nullable = false)
-//    private LocalDateTime updateDate;
-
     @LastModifiedDate
-    @Column(name = "update_date", nullable = false)
-    private Date updateDate;
+    @Column(name = "updateDate", nullable = false)
+    private LocalDateTime updateDate;
 
     @Column(name = "review_img")
     private List<String> reviewImg;
