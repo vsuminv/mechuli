@@ -43,7 +43,7 @@ public class Review {
     private LocalDateTime createDate;
 
     @LastModifiedDate
-    @Column(name = "updateDate", nullable = false)
+    @Column(name = "updateDate")
     private LocalDateTime updateDate;
 
     @Column(name = "review_img")

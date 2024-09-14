@@ -56,7 +56,7 @@ public class ReviewService {
     }
 
     // 리뷰 생성
-    public void save(UserDAO authUser, ReviewDTO reviewDTO, List<MultipartFile> files) {
+    public void save(UserDAO authUser, ReviewDTO reviewDTO, Long restaurantId, List<MultipartFile> files) {
         // 이미지의 유무 판단
         if (files == null || files.isEmpty()) {
             System.out.println("No image provided");
@@ -66,7 +66,7 @@ public class ReviewService {
             reviewRepository.save(Review.builder()
                     .content(reviewDTO.getContent())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
-                    .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
+                    .restaurant(Restaurant.builder().restaurantId(restaurantId).build())  // 리뷰 대상 식당
                     .updateDate(LocalDateTime.now())
                     .createDate(LocalDateTime.now())
                     .build());
@@ -93,7 +93,7 @@ public class ReviewService {
             reviewRepository.save(Review.builder()
                     .content(reviewDTO.getContent())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
-                    .restaurant(Restaurant.builder().restaurantId(reviewDTO.getRestaurant()).build())  // 리뷰 대상 식당
+                    .restaurant(Restaurant.builder().restaurantId(restaurantId).build())  // 리뷰 대상 식당
                     .reviewImg(imageUrls)
                     .updateDate(LocalDateTime.now())
                     .createDate(LocalDateTime.now())
