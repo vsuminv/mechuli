@@ -1,17 +1,5 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pages/basicPage}">
 <th:block layout:fragment="script">
-    <!-- 서버에서 전달된 모델 데이터를 JavaScript 변수로 노출 -->
-    <script th:inline="javascript">
-        /* Thymeleaf로 서버에서 가져온 menuList를 JavaScript 변수로 설정 */
-        var menuList = [[${#http.json(menuList)}]] || []; // null인 경우 빈 배열로 설정
-
-        if (menuList.length === 0) {
-            console.log("No menu items available."); // 메뉴가 없는 경우 처리
-        } else {
-            console.log(menuList); // 메뉴가 있는 경우 출력
-        }
-    </script>
-
     <script type="text/javascript" th:src="@{/js/boardPage.js}"></script>
 </th:block>
 <main layout:fragment="main">

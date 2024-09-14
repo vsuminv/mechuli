@@ -10,6 +10,8 @@ let boardPage = {
     review: document.getElementById('review'),
     charCountElement: document.getElementById('char-count'),
     maxLength: null,
+//    authedUser: null,
+//    menuList: [],
 
     init: function () {
         this.cancelButton = this.modal.querySelector('button:first-of-type');
@@ -17,6 +19,9 @@ let boardPage = {
 
         // 초기화 시 문자 수 업데이트
         this.updateCharacterCount();
+
+        // API 호출하여 데이터를 가져옴
+//        this.fetchBoardPageData();
 
         // 이벤트 리스너 설정
         this.setEventListeners();
@@ -42,6 +47,55 @@ let boardPage = {
         // 리뷰 글자 수 업데이트 이벤트 리스너 추가
         this.review.addEventListener('input', () => this.updateCharacterCount());
     },
+
+//    fetchBoardPageData: function () {
+//        $.ajax({
+//            url: '/boardPage',
+//            method: 'GET',
+//            dataType: 'json',
+//            success: (data) => {
+//                // authedUser와 menuList 데이터를 가져옴
+//                this.authedUser = data.authedUser;
+//                this.menuList = data.menuList;
+//
+//                // 데이터를 콘솔에 출력
+//                this.logDataToConsole();
+//            },
+//            error: (xhr, status, error) => {
+//                console.error('Error fetching board page data:', error);
+//            }
+//        });
+//    },
+//
+//    logDataToConsole: function () {
+//        // authedUser와 menuList를 콘솔에 출력
+//        console.log('Authenticated User:', this.authedUser);
+//        console.log('Menu List:', this.menuList);
+//
+//        // authedUser와 menuList의 데이터 형식을 더 자세히 확인
+//        console.log('Authenticated User (Stringified):', JSON.stringify(this.authedUser, null, 2)); // 문자열로 변환하여 보기
+//        console.table(this.menuList); // 표 형식으로 menuList 보기
+//
+//        // 각각의 key와 value를 확인하여 데이터 구조를 파악
+//        if (this.authedUser) {
+//            Object.keys(this.authedUser).forEach(key => {
+//                console.log(`authedUser Key: ${key}, Value: ${this.authedUser[key]}`);
+//            });
+//        } else {
+//            console.log('authedUser is null or undefined.');
+//        }
+//
+//        if (this.menuList && Array.isArray(this.menuList)) {
+//            this.menuList.forEach((menu, index) => {
+//                console.log(`Menu Item ${index}:`, menu);
+//                Object.keys(menu).forEach(key => {
+//                    console.log(`Menu Key: ${key}, Value: ${menu[key]}`);
+//                });
+//            });
+//        } else {
+//            console.log('menuList is empty or not an array.');
+//        }
+//    },
 
     handleButtonClick: function (event) {
         const button = event.currentTarget;
