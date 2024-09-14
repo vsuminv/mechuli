@@ -200,10 +200,11 @@
             <div th:replace="~{/../contents/board/boardNav :: boardNav}"></div>
 
             <!-- 조건부로 렌더링되는 섹션 -->
-            <div th:replace="~{/../contents/board/boardMenu :: boardMenu}"></div>
+            <div th:replace="~{/../contents/board/boardMenu :: boardMenu(menuList=${menuList})}"></div>
             <div th:replace="~{/../contents/board/boardStore :: boardStore}"></div>
             <div th:replace="~{/../contents/board/boardReview :: boardReview}"></div>
         </div>
+        <div id="menuContainer"></div>
 
         <div th:replace="~{/../contents/board/boardModal :: boardModal}"></div>
         <div th:replace="~{/../contents/board/boardReviewButton :: boardReviewButton}"></div>
