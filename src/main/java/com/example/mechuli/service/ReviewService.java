@@ -94,6 +94,7 @@ public class ReviewService {
                     .content(reviewDTO.getContent())
                     .userIndex(authUser)  // 로그인한 사용자 정보 저장
                     .restaurant(Restaurant.builder().restaurantId(restaurantId).build())  // 리뷰 대상 식당
+                    .rating(reviewDTO.getRating())
                     .reviewImg(imageUrls)
                     .updateDate(LocalDateTime.now())
                     .createDate(LocalDateTime.now())
