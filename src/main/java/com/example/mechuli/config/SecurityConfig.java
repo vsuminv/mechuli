@@ -36,13 +36,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
                                 .requestMatchers("/joinPage","/wellcomePage").permitAll()
+//                                .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+//                .requestMatchers("/joinPage","/wellcomePage").permitAll()
+//                                .requestMatchers(hasRole(USER))
+
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/loginPage")
                         .loginProcessingUrl("/login") // action
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/home", true)
 //                        .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .usernameParameter("userId")
                         .passwordParameter("userPw")

@@ -41,18 +41,6 @@ let mainPage = {
                 console.log('Response Text:', xhr.responseText); // 서버 응답 내용 확인
             }
         });
-//        $.ajax({
-//            url: '/randomCategory',
-//            method: 'POST',
-//            dataType: 'json',
-//            contentType: 'application/x-www-form-urlencoded',
-//            success: (data) => {
-//                this.displayCategoryRestaurants(data);
-//            },
-//            error: (xhr, status, error) => {
-//                console.error('Error fetching random restaurant data:', error);
-//            }
-//        });
     },
 
     displayCategoryRestaurants: function (data) {
@@ -146,10 +134,6 @@ let mainPage = {
                 console.error('Error fetching restaurant data:', error);
             }
         });
-    },
-
-    displayCategoryRestaurants: function (data) {
-        console.log(data);
     },
 
     extractAndLogCategories: function (data) {
@@ -250,7 +234,7 @@ let mainPage = {
 
     fetchCategoryRestaurants: function (selectedCategory) {
         $.ajax({
-            url: 'localhost:8081/api/category',
+            url: '/api/category',
             method: 'GET',
             dataType: 'json',
             success: (data) => {
@@ -316,12 +300,13 @@ let mainPage = {
             console.log("선택된 카테고리:", categoryName);
         }
     },
+
     // 상세 페이지로 넘어감(임시코드)
     goToDetailPage: function (restaurantId) {
         // /detailPage로 이동하면서 query parameter로 restaurantId를 전달
 //        window.location.href = `${localhost:8081}/detailPage?restaurantId=${restaurantId}`;
         const baseUrl = window.location.origin; // 현재 호스트의 기본 URL (예: http://localhost:8081)
-        const detailPageUrl = `${baseUrl}/detailPage?restaurantId=${encodeURIComponent(restaurantId)}`;
+        const detailPageUrl = `${baseUrl}/boardPage?restaurantId=${encodeURIComponent(restaurantId)}`;
 
         // 상세 페이지로 이동
         window.location.href = detailPageUrl;
