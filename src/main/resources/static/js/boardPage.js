@@ -1,169 +1,165 @@
-function getQueryParameter(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
-
 let boardPage = {
     buttons: document.querySelectorAll('button[data-show-table]'),
     tables: document.querySelectorAll('main table'),
-    restaurantId: null,
+    modal: document.getElementById('modal'),
+    addReviewButton: document.querySelector('#addReviewButton'),
+    cancelButton: null,
+    activeButton: document.querySelector('button[data-show-table="menuTable"]'),
+    stars: document.querySelectorAll('input[name="rating"]'),
+    ratingDisplay: document.getElementById('selectedRating'),
+    review: document.getElementById('review'),
+    charCountElement: document.getElementById('char-count'),
+    maxLength: null,
+//    authedUser: null,
+//    menuList: [],
 
     init: function () {
-        // URL에서 restaurantId를 추출
-        this.restaurantId = getQueryParameter('restaurantId');
-        console.log(this.restaurantId);
+        this.cancelButton = this.modal.querySelector('button:first-of-type');
+        this.maxLength = this.review.getAttribute('maxlength');
 
-        // restaurantId가 없을 경우 경고 메시지를 출력하고 종료
-        if (!this.restaurantId) {
-            console.warn('Restaurant ID is missing in the URL.');
-            return;
-        }
+        // 초기화 시 문자 수 업데이트
+        this.updateCharacterCount();
 
-        // 페이지 데이터 가져오기
-        this.fetchBoardPageData();
-        this.fetchRestaurantDetail(); // 레스토랑 정보도 함께 가져오기
+        // API 호출하여 데이터를 가져옴
+//        this.fetchBoardPageData();
 
         // 이벤트 리스너 설정
         this.setEventListeners();
     },
 
-    fetchRestaurantDetail: function () {
-        $.ajax({
-            url: '/api/ajaxRestaurantDetail',
-            method: 'POST',
-            dataType: 'json',
-            data: JSON.stringify({ restaurantId: this.restaurantId }),
-            contentType: 'application/json',
-            success: (data) => {
-                console.log('Restaurant Detail:', data);
-                this.renderRestaurantDetail(data);
-            },
-            error: (xhr, status, error) => {
-                console.error('Error fetching restaurant detail:', error);
-            }
-        });
-    },
-
-    renderRestaurantDetail: function (data) {
-        const infoTable = document.getElementById('infoTable');
-        if (!infoTable) {
-            console.warn('Info Table container is missing.');
-            return;
-        }
-
-        const infoContent = `
-            <tr>
-                <td>
-                    <h1 class="text-4xl">영업시간</h1>
-                    <p class="text-2xl">${data.open_time || '영업시간 정보 없음'} ~ ${data.close_time || '영업시간 정보 없음'}</p>
-                    <h1 class="text-4xl">주소</h1>
-                    <p class="text-2xl">${data.address || '주소 정보 없음'}</p>
-                </td>
-            </tr>
-        `;
-        infoTable.innerHTML = infoContent;
-        infoTable.classList.remove('hidden');
-    },
-
-    fetchBoardPageData: function () {
-        $.ajax({
-            url: `/api/boardPage?restaurantId=${this.restaurantId}`,
-            method: 'GET',
-            dataType: 'json',
-            success: (data) => {
-                this.renderRestaurantMeta(data);
-                this.fetchMenuList(); 
-            },
-            error: (xhr, status, error) => {
-                console.error('Error fetching board page data:', error);
-            }
-        });
-    },
-
-    fetchMenuList: function () {
-        $.ajax({
-            url: '/api/ajaxRestaurantMenu',
-            method: 'POST',
-            dataType: 'json',
-            data: JSON.stringify({ restaurant_id: this.restaurantId }),
-            contentType: 'application/json',
-            success: (menuList) => {
-                this.renderMenuList(menuList);
-            },
-            error: (xhr, status, error) => {
-                console.error('Error fetching menu list:', error);
-            }
-        });
-    },
-
-    renderRestaurantMeta: function (data) {
-        const nameElement = document.getElementById('metaTitle');
-        if (nameElement) {
-            nameElement.textContent = data.name || '가게 이름';
-        }
-
-        const descriptionElement = document.getElementById('metaDescription');
-        if (descriptionElement) {
-            descriptionElement.textContent = `${data.open_time || '오픈 시간'} - ${data.close_time || '닫는 시간'}`;
-        }
-    },
-
-    renderMenuList: function (menuList) {
-        const menuTableBody = document.getElementById('menuTableBody');
-        menuTableBody.innerHTML = '';
-
-        if (!menuList || menuList.length === 0) {
-            menuTableBody.innerHTML = '<tr><td colspan="2" class="text-center">메뉴가 없습니다.</td></tr>';
-            return;
-        }
-
-        menuList.forEach(menu => {
-            const rowElement = document.createElement('tr');
-            rowElement.innerHTML = `
-                <td class="rounded-3xl w-40 h-40 bg-[#e6e6e6]">
-                    <img class="rounded-3xl w-40 h-40" src="${menu.imageUrl}" alt="">
-                </td>
-                <td>
-                    <h1 class="text-2xl">${menu.menuName}</h1>
-                    <h1 class="text-2xl">${menu.price}원</h1>
-                </td>
-            `;
-            menuTableBody.appendChild(rowElement);
-        });
-    },
-
     setEventListeners: function () {
+        // 버튼 클릭 이벤트 리스너 추가
         this.buttons.forEach(button => {
             button.addEventListener('click', (event) => this.handleButtonClick(event));
         });
+
+        // 모달 열기 이벤트
+        this.addReviewButton.addEventListener('click', () => this.showModal());
+
+        // 모달 닫기 이벤트
+        this.cancelButton.addEventListener('click', () => this.hideModal());
+
+        // 별점 클릭 이벤트 리스너 추가
+        this.stars.forEach((star, index) => {
+            star.addEventListener('change', () => this.updateStarRating(index));
+        });
+
+        // 리뷰 글자 수 업데이트 이벤트 리스너 추가
+        this.review.addEventListener('input', () => this.updateCharacterCount());
     },
+
+//    fetchBoardPageData: function () {
+//        $.ajax({
+//            url: '/boardPage',
+//            method: 'GET',
+//            dataType: 'json',
+//            success: (data) => {
+//                // authedUser와 menuList 데이터를 가져옴
+//                this.authedUser = data.authedUser;
+//                this.menuList = data.menuList;
+//
+//                // 데이터를 콘솔에 출력
+//                this.logDataToConsole();
+//            },
+//            error: (xhr, status, error) => {
+//                console.error('Error fetching board page data:', error);
+//            }
+//        });
+//    },
+//
+//    logDataToConsole: function () {
+//        // authedUser와 menuList를 콘솔에 출력
+//        console.log('Authenticated User:', this.authedUser);
+//        console.log('Menu List:', this.menuList);
+//
+//        // authedUser와 menuList의 데이터 형식을 더 자세히 확인
+//        console.log('Authenticated User (Stringified):', JSON.stringify(this.authedUser, null, 2)); // 문자열로 변환하여 보기
+//        console.table(this.menuList); // 표 형식으로 menuList 보기
+//
+//        // 각각의 key와 value를 확인하여 데이터 구조를 파악
+//        if (this.authedUser) {
+//            Object.keys(this.authedUser).forEach(key => {
+//                console.log(`authedUser Key: ${key}, Value: ${this.authedUser[key]}`);
+//            });
+//        } else {
+//            console.log('authedUser is null or undefined.');
+//        }
+//
+//        if (this.menuList && Array.isArray(this.menuList)) {
+//            this.menuList.forEach((menu, index) => {
+//                console.log(`Menu Item ${index}:`, menu);
+//                Object.keys(menu).forEach(key => {
+//                    console.log(`Menu Key: ${key}, Value: ${menu[key]}`);
+//                });
+//            });
+//        } else {
+//            console.log('menuList is empty or not an array.');
+//        }
+//    },
 
     handleButtonClick: function (event) {
         const button = event.currentTarget;
         const tableId = button.getAttribute('data-show-table');
 
+        // 이전 활성화된 버튼을 기본 상태로 되돌림
         if (this.activeButton) {
             this.activeButton.classList.remove('bg-[#fef445]');
             this.activeButton.classList.add('bg-[#e6e6e6]');
         }
 
+        // 현재 클릭된 버튼을 노란색으로 설정
         button.classList.remove('bg-[#e6e6e6]');
         button.classList.add('bg-[#fef445]');
+
+        // 현재 버튼을 활성화된 버튼으로 저장
         this.activeButton = button;
 
+        // 해당하는 테이블을 표시하고 나머지는 숨기기
         this.showTable(tableId);
     },
 
     showTable: function (tableId) {
+        // 모든 테이블 숨기기
         this.tables.forEach(table => {
             table.style.display = 'none';
             table.classList.add('hidden');
         });
+
+        // 선택된 테이블만 표시
         const selectedTable = document.getElementById(tableId);
         if (selectedTable) {
             selectedTable.style.display = 'table';
             selectedTable.classList.remove('hidden');
         }
+    },
+
+    showModal: function () {
+        this.modal.classList.remove('hidden');
+    },
+
+    hideModal: function () {
+        this.modal.classList.add('hidden');
+    },
+
+    updateStarRating: function (index) {
+        const rating = this.stars[index].value;
+        this.ratingDisplay.textContent = rating;
+
+        // 모든 별의 상태 초기화
+        this.stars.forEach((s, i) => {
+            if (i <= index) {
+                s.nextElementSibling.classList.add('text-yellow-500');
+                s.nextElementSibling.classList.remove('text-gray-400');
+            } else {
+                s.nextElementSibling.classList.remove('text-yellow-500');
+                s.nextElementSibling.classList.add('text-gray-400');
+            }
+        });
+    },
+
+    updateCharacterCount: function () {
+        const charCount = this.review.value.length;
+        this.charCountElement.innerText = charCount + ' / ' + this.maxLength + ' 글자';
     }
 };
 
