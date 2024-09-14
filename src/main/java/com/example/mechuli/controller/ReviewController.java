@@ -27,6 +27,7 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<List<Review>> createReview(@RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
                                                      @RequestPart(value = "file", required = false) List<MultipartFile> files,
+                                                     @RequestParam("restaurantId")Long restaurantId,
                                                      @AuthenticationPrincipal UserDAO authUser) {
         System.out.println("==============================================================================================");
         if(authUser == null){
@@ -34,9 +35,9 @@ public class ReviewController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         if(files != null && !files.isEmpty()) {
-            reviewService.save(authUser, reviewDTO, Collections.emptyList());
+            reviewService.save(authUser, reviewDTO, restaurantId, Collections.emptyList());
         }else {
-            reviewService.save(authUser, reviewDTO, files);
+            reviewService.save(authUser, reviewDTO, restaurantId, files);
         }
         return ResponseEntity.ok().build();
     }
