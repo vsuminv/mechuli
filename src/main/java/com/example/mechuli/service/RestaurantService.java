@@ -58,9 +58,18 @@ public class RestaurantService {
         List<Menu> menuList = menuRepository.findByRestaurant_RestaurantId(restaurantId);
         return menuList;
     }
-    public Optional<RestaurantDTO> findRestaurantByRestaurantId(Long restaurantId) {
+    public RestaurantDTO findRestaurantByRestaurantId(Long restaurantId) {
 
-        Optional<RestaurantDTO> restDto = restaurantRepository.findByRestaurantId(restaurantId);
+        Restaurant rest = restaurantRepository.findByRestaurantId(restaurantId);
+        RestaurantDTO restDto = RestaurantDTO.builder()
+                .restaurant_id(rest.getRestaurantId())
+                .name(rest.getName())
+                .img_url(rest.getImageUrl())
+                .open_time(rest.getOpenTime())
+                .close_time(rest.getCloseTime())
+                .address(rest.getAddress())
+                .build();
+
         return restDto;
     }
 
