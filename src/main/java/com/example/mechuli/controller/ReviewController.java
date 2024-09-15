@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,18 +27,21 @@ public class ReviewController {
     // 리뷰 생성
     @PostMapping
     public ResponseEntity<List<Review>> createReview(@RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
-                                                     @RequestPart(value = "file", required = false) List<MultipartFile> files,
+                                                     @RequestPart(value = "files", required = false) List<MultipartFile> files,
                                                      @RequestParam("restaurantId")Long restaurantId,
-                                                     @AuthenticationPrincipal UserDAO authUser) {
+                                                     @AuthenticationPrincipal UserDAO authUser) throws IOException {
         System.out.println("==============================================================================================");
         if(authUser == null){
             System.out.println("User is not authenticated.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         if(files != null && !files.isEmpty()) {
-            reviewService.save(authUser, reviewDTO, restaurantId, Collections.emptyList());
-        }else {
+
+            System.out.println("Files found: " + files.size());
             reviewService.save(authUser, reviewDTO, restaurantId, files);
+        }else {
+            System.out.println("Files is null");
+            reviewService.save(authUser, reviewDTO, restaurantId, Collections.emptyList());
         }
         return ResponseEntity.ok().build();
     }

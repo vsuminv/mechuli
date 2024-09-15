@@ -8,8 +8,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @Transactional
 @Entity
@@ -44,9 +42,14 @@ public class Review {
 
     @LastModifiedDate
     @Column(name = "updateDate")
+
     private LocalDateTime updateDate;
 
-    @Column(name = "review_img")
-    private List<String> reviewImg;
+    @Column(name = "review_img", columnDefinition = "TEXT")
+    private String reviewImg;
+
+    @Column(name="rating")
+    private int rating;
+
 
 }

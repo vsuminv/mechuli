@@ -55,8 +55,14 @@ dependencies {
 //	runtimeOnly 'com.h2database:h2'
 //	implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
 
+	// s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation "com.amazonaws:aws-java-sdk-s3:1.12.395"
+
+	// 이미지 업로드 의존성 JAXB
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
 }
 
 tasks.named('test') {
