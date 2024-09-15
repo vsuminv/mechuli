@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @Builder
@@ -29,8 +28,8 @@ import java.util.stream.Collectors;
 public class UserDAO implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_index", updatable = false)
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @Column(name="user_index", updatable = false)
     private Long userIndex;
 
     @Column(name = "user_id", nullable = false, unique = true)
@@ -72,8 +71,10 @@ public class UserDAO implements UserDetails {
     @OneToMany(mappedBy = "userId")
     private List<Subscription> subscriptions;
 
+    @OneToMany(mappedBy = "subscriber")
+    private List<Subscription> subscriber;
 
-    //권환 반환
+    // 권한 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 //        if (role == null) {
@@ -89,7 +90,6 @@ public class UserDAO implements UserDetails {
 //        return userId;
         return nickname;
     }
-
     //
     @Override
     public String getPassword() {
@@ -121,4 +121,17 @@ public class UserDAO implements UserDetails {
     public boolean isEnabled(){
         return true; // 계정활성화 상태
     }
+
+
+
 }
+
+//User Table
+//- Index
+//- ID
+//- PW
+//- IMG
+//- Address
+//- 생성일
+//- 수정일
+

@@ -1,24 +1,7 @@
-<div th:fragment="boardMenu(menuList)">
+<div th:fragment="boardMenu">
     <table id="menuTable" class="border-separate border-spacing-x-8 border-spacing-y-4">
-        <tr th:if="${menuList != null and !menuList.isEmpty()}" th:each="menu : ${menuList}">
-            <td class="rounded-3xl w-40 h-40 bg-[#e6e6e6]">
-                <img th:src="${menu.imageUrl}" alt="">
-            </td>
-            <td>
-                <h1 class="text-2xl" th:text="${menu.menuName}">함박스테이크</h1>
-                <h1 class="text-2xl" th:text="${menu.price}">12500</h1>
-            </td>
-        </tr>
-        <tr th:if="${menuList == null or menuList.isEmpty()}">
-            <td colspan="2" class="text-center">메뉴가 없습니다.</td>
-        </tr>
+        <tbody id="menuTableBody">
+            <!--boardPage.js의 fetchMenuList에서 메뉴 가져옴-->
+        </tbody>
     </table>
-
-    <!-- JavaScript를 사용하여 menuList를 콘솔에 출력 -->
-    <script th:if="${menuList != null}" th:inline="javascript">
-        /*<![CDATA[*/
-        let menuList = /*[[${#lists.toList(menuList)}]]*/ [];
-        console.log('Menu List:', menuList);
-        /*]]>*/
-    </script>
 </div>
