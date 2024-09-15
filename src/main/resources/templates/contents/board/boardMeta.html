@@ -1,19 +1,19 @@
 <div th:fragment="boardMeta">
     <!-- 가게 로고, 가게 이름, 평점, 간단 설명, 주소, 주소 복사 버튼-->
-    <div class="flex items-center space-x-4 justify-center">
+    <div class="flex items-center space-x-4 justify-center" id="boardMeta">
         <div class="relative -top-16 left-0 rounded-3xl w-32 h-32 bg-[#fef445]">
-            <img src="#" alt="">
+            <img src="#" alt="" class="rounded-3xl w-32 h-32" id="metaImage">
         </div>
         <div class="flex space-x-4"> <!-- 사각형 크기 및 여백을 고려하여 padding-left 추가 -->
             <div>
                 <div class="flex items-center">
-                    <h1 class="text-6xl">멍멍맛집</h1>
+                    <h1 class="text-6xl" id="metaTitle">멍멍맛집</h1>
                 </div>
-                <p class="text-xl">집사와 강아지가 오붓하게 저녁먹는 집</p>
-                <p class="text-xl">서울특별시 은평구 코사길 15 코사빌딩 5층 <button><i>복사</i></button></p>
+                <p class="text-xl" id="metaDescription">집사와 강아지가 오붓하게 저녁먹는 집</p>
+                <p class="text-xl" id="metaAddress">서울특별시 은평구 코사길 15 코사빌딩 5층 <button><i>복사</i></button></p>
             </div>
             <div>
-                <button class="text-4xl text-[#e6e6e6]">★</button>
+                <button class="text-4xl text-[#e6e6e6]" id="subscribe">★</button>
             </div>
         </div>
     </div>
