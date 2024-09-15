@@ -49,12 +49,24 @@ public class UserService implements UserDetailsService {
 
 
     public void save(UserDTO dto) {
-        userRepository.save(UserDAO.builder()
+        List<RestaurantCategory> restaurantCategories = new ArrayList<>();
+        for (Long categoryId : dto.getCategoryIds()) {
+            RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new RuntimeException("Invalid category ID"));
+            restaurantCategories.add(category);
+        }
+
+        UserDAO user = UserDAO.builder()
                 .userId(dto.getUserId())
                 .userPw(bCryptPasswordEncoder.encode(dto.getUserPw()))
                 .nickname(dto.getNickname())
-                .build());
+                .restaurantCategory(restaurantCategories)  // 카테고리 설정
+                .build();
+
+        // 사용자 저장
+        userRepository.save(user);
     }
+
 
     // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음
     public int checkUserId(String userId) {

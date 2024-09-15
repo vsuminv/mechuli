@@ -81,23 +81,24 @@ public class UserController {
 
 //============================//
 
-@PostMapping("/join")
-public ResponseEntity<String> userJoin(@Valid UserDTO dto, BindingResult bindingResult) {
+    @PostMapping("/joinPage")
+    public ResponseEntity<String> userJoin(@Valid @RequestBody UserDTO dto, BindingResult bindingResult) {
 
-    // 카테고리 값 가져오기
-    if (dto.getCategoryIds() == null || dto.getCategoryIds().size() < 3 || dto.getCategoryIds().size() > 5) {
-        bindingResult.rejectValue("restaurantCategories", "error.userDto", "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
-        return ResponseEntity.badRequest().body("카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
+        // 카테고리 값 가져오기
+        if (dto.getCategoryIds() == null || dto.getCategoryIds().size() < 3 || dto.getCategoryIds().size() > 5) {
+            bindingResult.rejectValue("restaurantCategories", "error.userDto", "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
+            return ResponseEntity.badRequest().body("카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
+        }
+
+        try {
+            userService.save(dto);
+            return ResponseEntity.ok("회원가입이 완료되었습니다.");
+        } catch (RuntimeException e) {
+            e.printStackTrace(); // 디버깅을 위해 예외를 출력합니다.
+            return ResponseEntity.badRequest().body("회원가입 중 오류가 발생했습니다: " + e.getMessage());
+        }
     }
 
-    try {
-        userService.save(dto);
-        return ResponseEntity.ok("회원가입이 완료되었습니다.");
-    } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body("회원가입 중 오류가 발생했습니다: " + e.getMessage());
-    }
-
-}
     // 회원가입 후 로그인 한 유저의 랜덤카테고리 조회
     @GetMapping("/randomCategory")
     public ResponseEntity<List<RestaurantDTO>> findCategory(@AuthenticationPrincipal UserDAO authedUser) {
