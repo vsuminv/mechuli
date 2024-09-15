@@ -44,7 +44,7 @@ public class Review {
     @Column(name = "updateDate")
     private LocalDateTime updateDate;
 
-    @Column(name = "review_img", columnDefinition = "TEXT")
+    @Column(name = "review_img")
     private String reviewImg;
 
     @Column(name="rating")
