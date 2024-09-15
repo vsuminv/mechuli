@@ -31,25 +31,19 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-//                .headers(AbstractHttpConfigurer::disable)
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                        .requestMatchers("/joinPage","/").permitAll()
-//                                .requestMatchers(hasRole(USER))
-//                        .anyRequest().permitAll()
+                        .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token").permitAll()
+                        .requestMatchers("/joinPage/**").permitAll()
+                        .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/loginPage")
                         .loginProcessingUrl("/login") // action
                         .defaultSuccessUrl("/", true)
-//                        .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .usernameParameter("userId")
                         .passwordParameter("userPw")
                         .failureUrl("/error/error500")
-//                        .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-//                        .failureHandler(())
                         .permitAll()
                 )
                 .logout(logout -> logout

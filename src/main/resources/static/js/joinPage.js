@@ -1,104 +1,105 @@
-var userIdOverlapCheck = 3;
-var nicknameOverlapCheck = 3;
+$(document).ready(function() {
+    let userIdChecked = false;
+    let nicknameChecked = false;
+    let selectedCategories = [];
 
-$(document).ready(function () {
-    // 아이디 중복 체크
-    $("#userid_check").click(function () {
-        var userId = $("#userId").val();
-        // if (userId.length < 4) {
-        //     alert("아이디는 4자 이상 입력해주세요.");
-        //     return;
-        // }
+    function updateNextButton() {
+        $("#next_btn").prop("disabled", !(userIdChecked && nicknameChecked));
+    }
 
-        $.ajax({
-            type: "POST",
-            url: "/ajaxCheckId",
-            data: { userId: userId },
-            success: function (response) {
-                if (response === 0) {
-                    alert("사용 가능한 아이디입니다.");
-                    userIdOverlapCheck = 0;
-                    $("#userId").attr("readonly", true);
-                    $("#userid_check").attr("disabled", true);
-                    $("#resetUserId").attr("disabled", false);
-                } else if (response === 1) {
-                    alert("이미 사용 중인 아이디입니다.");
-                    userIdOverlapCheck = 1;
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
+    function checkDuplicate(type) {
+        $.post('/joinPage/ajaxCheck', { type: type, value: $(`#${type}`).val() }, function(response) {
+            if (response === 0) {
+                alert(`사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+                $(`#${type}`).prop("readonly", true);
+                $(`#${type}_check`).prop("disabled", true);
+                type === 'userId' ? userIdChecked = true : nicknameChecked = true;
+            } else {
+                alert(`이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+                type === 'userId' ? userIdChecked = false : nicknameChecked = false;
             }
+            updateNextButton();
         });
-    });
-    // 아이디 다시 입력
-    $("#resetUserId").click(function () {
-        $("#userId").attr("readonly", false).val("");
-        $("#userid_check").attr("disabled", false);
-        $("#resetUserId").attr("disabled", true);
-        userIdOverlapCheck = 3;
-    });
+    }
 
-    // 닉네임 중복 체크
-    $("#nickname_check").click(function () {
-        var nickname = $("#nickname").val();
-        if (nickname.length < 2) {
-            alert("닉네임은 2자 이상 입력해주세요.");
-            return;
+    $('#userid_check').click(() => checkDuplicate('userId'));
+    $('#nickname_check').click(() => checkDuplicate('nickname'));
+
+    $("#next_btn").click(function() {
+        let errorMessages = [];
+
+        if (!userIdChecked) {
+            errorMessages.push("id 중복쳌 미완 .");
         }
-
-        $.ajax({
-            type: "POST",
-            url: "/ajaxCheckNickname",
-            data: { nickname: nickname },
-            success: function (response) {
-                if (response === 0) {
-                    alert("사용 가능한 닉네임입니다.");
-                    nicknameOverlapCheck = 0;
-                    $("#nickname").attr("readonly", true);
-                    $("#nickname_check").attr("disabled", true);
-                    $("#resetNickname").attr("disabled", false);
-                } else if (response === 1) {
-                    alert("이미 사용 중인 닉네임입니다.");
-                    nicknameOverlapCheck = 1;
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log(error);
-            }
-        });
-    });
-    // 닉네임 다시 입력
-    $("#resetNickname").click(function () {
-        $("#nickname").attr("readonly", false).val("");
-        $("#nickname_check").attr("disabled", false);
-        $("#resetNickname").attr("disabled", true);
-        nicknameOverlapCheck = 3;
-    });
-
-    // 다음 버튼 클릭 시
-    $("#next_btn").click(function () {
-        if (userIdOverlapCheck === 0 && nicknameOverlapCheck === 0) {
+        if (!nicknameChecked) {
+            errorMessages.push("nickname  중복쳌 미완");
+        }
+        if (errorMessages.length > 0) {
+            alert(errorMessages.join("\n"));
+        } else {
             $("#step1").hide();
             $("#step2").show();
-            $("#step-indicator").text("2 / 2");
-        } else {
-            alert("아이디와 닉네임 중복 체크를 완료해주세요.");
         }
     });
 
-    // 이전 버튼 클릭 시
-    $("#back_btn").click(function () {
+
+    $("#back_btn").click(() => {
         $("#step2").hide();
         $("#step1").show();
-        $("#step-indicator").text("1 / 2");
     });
 
-    // 폼 제출 시
-    $("#joinForm").submit(function (event) {
-        if (userIdOverlapCheck !== 0 || nicknameOverlapCheck !== 0) {
-            alert("아이디와 닉네임 중복 체크를 완료해주세요.");
-            event.preventDefault();
+    $(".category-btn").click(function() {
+        var categoryId = $(this).data("category-id");
+        var categoryName = $(this).text();
+
+        if ($(this).hasClass("selected")) {
+            $(this).removeClass("selected");
+            selectedCategories = selectedCategories.filter(c => c.id !== categoryId);
+        } else {
+            if (selectedCategories.length >= 3) {
+                alert("최대 3개의 카테고리만 선택할 수 있습니다.");
+                return;
+            }
+            $(this).addClass("selected");
+            selectedCategories.push({id: categoryId, name: categoryName});
         }
+        updateSelectedCategories();
+    });
+
+    function updateSelectedCategories() {
+        var $selectedCategory = $("#selected_category");
+        var $hiddenInputs = $("#hidden_category_inputs");
+        $selectedCategory.empty();
+        $hiddenInputs.empty();
+        selectedCategories.forEach(function (category, index) {
+            $selectedCategory.append('<div>' + category.name + '</div>');
+            $hiddenInputs.append('<input type="hidden" name="categoryIds" value="' + category.id + '">');
+        });
+    }
+    $("#joinForm").submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        selectedCategories.forEach(function(categoryId, index) {
+            formData.append('categoryIds[]', categoryId);
+        });
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    alert(response.message);
+                    window.location.href = "/";
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                var response = JSON.parse(xhr.responseText);
+                alert(response.message || "회원가입 중 오류가 발생했습니다.");
+            }
+        });
     });
 });

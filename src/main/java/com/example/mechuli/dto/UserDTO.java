@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
@@ -29,6 +28,7 @@ public class UserDTO {
     private String userImg;
 
     private String role;
+
 
     public UserDTO(UserDAO userDAO){
         this.userIndex = userDAO.getUserIndex();

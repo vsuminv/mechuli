@@ -1,15 +1,19 @@
 
 package com.example.mechuli.service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.RestaurantCategory;
+import com.example.mechuli.domain.Role;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
+import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,49 +33,57 @@ public class UserService implements UserDetailsService {
 
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final RestaurantCategoryRepository restaurantCategoryRepository;
+    private final BCryptPasswordEncoder encode;
     private final Random random = new Random();
     private final RestaurantRepository restaurantRepository;
+    private final AmazonS3 amazonS3;
+    private final String BUCKET_NAME = "mechuliproject";
 
-    public void save(UserDTO dto) {
-        userRepository.save(UserDAO.builder()
-                .userId(dto.getUserId())
-                .userPw(bCryptPasswordEncoder.encode(dto.getUserPw()))
-                .nickname(dto.getNickname())
-                .build());
+    @Transactional
+    public Map<String, Object> save(UserDTO dto) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            List<RestaurantCategory> restaurantCategories = new ArrayList<>();
+            for (Long categoryId : dto.getCategoryIds()) {
+                RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new RuntimeException("Invalid category ID: " + categoryId));
+                restaurantCategories.add(category);
+            }
+            UserDAO user = UserDAO.builder()
+                    .userId(dto.getUserId())
+                    .userPw(encode.encode(dto.getUserPw()))
+                    .nickname(dto.getNickname())
+                    .role(Role.USER)
+                    .restaurantCategory(restaurantCategories)
+                    .build();
+            UserDAO joinedUser = userRepository.save(user);
+            response.put("success", true);
+            response.put("message", "회원가입이 성공적으로 완료되었습니다.");
+            response.put("userId", joinedUser.getUserId());
+            log.info("가입 들옴. userId = [ {} ] ", joinedUser.getUserId());
+            joinedUser.getRestaurantCategory().forEach(category -> {
+                log.info("선택한 카테고리 {},[{}]", category.getCategoryId(), category.getCategoryName());
+            });
+        } catch (Exception e) {
+            log.error("Join failed for user: {}", dto.getUserId(), e);
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
     }
-
-    // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음
-    public int checkUserId(String userId) {
-        int checkResult = userRepository.existsByUserId(userId) ? 1 : 0;
-        log.info("중복체크 들온 아이디 = {}"+"\n"+"중복체크 결과 = {}", userId , checkResult);
+    public int userCheck(String type, String value) {
+        boolean exists = switch (type) {
+            case "userId" -> userRepository.existsByUserId(value);
+            case "nickname" -> userRepository.existsByNickname(value);
+            default -> throw new IllegalArgumentException("Invalid check type: " + type);
+        };
+        int checkResult = exists ? 1 : 0;
+        log.info("[ {} ] 중복 검사 들옴.[ {} ], 결과 = [ {} ] ", type, value, checkResult);
         return checkResult;
     }
-
-    // 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
-    public int checkNickname(String nickname) {
-        int checkResult = userRepository.existsByNickname(nickname) ? 1 : 0;
-        log.info("중복체크 들온 닉 = {}"+"\n"+"중복체크 결과 = {}", nickname , checkResult);
-        return checkResult;
-    }
-    // 인증 테스트
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-//        Optional<UserDAO> currentUser = this.userRepository.findByUserId(userId);
-//        if (userId.isEmpty()) {
-//            throw new UsernameNotFoundException("사용자를 찾을수 없습니다.");
-//        }
-//        UserDAO user = currentUser.get();
-//        List<GrantedAuthority> authorities = new ArrayList<>();
-//        if ("admin".equals(userId)) {
-//            authorities.add(new SimpleGrantedAuthority(Role.ADMIN.name()));
-//        } else {
-//            authorities.add(new SimpleGrantedAuthority(Role.USER.name()));
-//        }
-//        log.info(user.toString());
-//        return new User(user.getUserId(), user.getPassword(), authorities);
-////        return new UserDAO(user.getUserId(), user.getUserPw(), authorities)
-
         Optional<UserDAO> currentUser = this.userRepository.findByUserId(userId);
         if (currentUser.isEmpty()) {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
@@ -80,8 +92,6 @@ public class UserService implements UserDetailsService {
         // UserDAO가 이미 UserDetails를 구현하므로 User 객체로 변환할 필요 없음
         return user;
     }
-
-
     public List<RestaurantDTO> getRandomCategoriesForUser(String userId) {
         UserDAO user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -102,52 +112,8 @@ public class UserService implements UserDetailsService {
                 .map(RestaurantDTO::new)
                 .collect(Collectors.toList());
     }
-
-
     public boolean existsById(UserDAO authedUser) {
 
         return userRepository.existsById(authedUser.getUserIndex());
     }
-
-    // 유저 정보 수정
-
-//    public void updateUser(UserDAO authedUser, UserDTO updateRequest) {
-//        UserDAO userToUpdate = userRepository.findById(authedUser.getUserIndex())
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // 비밀번호 업데이트
-//        if (updateRequest.getUserPw() != null && !updateRequest.getUserPw().isEmpty()) {
-//            userToUpdate.setUserPw(bCryptPasswordEncoder.encode(updateRequest.getUserPw()));
-//        }
-//
-//        // 카테고리 업데이트
-//        if (updateRequest.getCategoryIds() != null && !updateRequest.getCategoryIds().isEmpty()) {
-//            List<RestaurantCategory> restaurantCategories = new ArrayList<>();
-//            for (Long categoryId : updateRequest.getCategoryIds()) {
-//                RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)
-//                        .orElseThrow(() -> new RuntimeException("Invalid category ID"));
-//                restaurantCategories.add(category);
-//            }
-//            userToUpdate.setRestaurantCategory(restaurantCategories);
-//        }
-//
-//        // 이미지 URL 업데이트
-//        if (updateRequest.getUserImg() != null && !updateRequest.getUserImg().isEmpty()) {
-//            userToUpdate.setUserImg(updateRequest.getUserImg());
-//        }
-//
-//        // 변경 사항 저장
-//        userRepository.save(userToUpdate);
-//    }
-
-//    public String uploadImage(MultipartFile file) throws IOException {
-//        String fileName = "images/" + file.getOriginalFilename();
-//        ObjectMetadata metadata = new ObjectMetadata();
-//        metadata.setContentLength(file.getSize());
-//        // S3에 이미지 업로드
-//        amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, fileName, file.getInputStream(), metadata));
-//        // S3의 이미지 URL 생성
-//        return amazonS3.getUrl(BUCKET_NAME, fileName).toString();
-//    }
-
 }

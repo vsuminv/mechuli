@@ -1,5 +1,5 @@
 <div th:fragment="joinForm" class="text-yellow-700 w-full">
-    <form id="joinForm" class="text-yellow-700 w-full" th:action="@{/join}" method="post" th:object="${userData}">
+    <form id="joinForm" class="text-yellow-700 w-full" th:action="@{/joinPage/join}" method="post">
         <div id="step1">
             <div class="mt-4">
                 <label th:for="userId" class="sr-only"></label><span class="ml-2">아이디</span>
@@ -45,18 +45,43 @@
                 <div class="m-auto">1 / 2</div>
             </div>
             <div class="w-full flex">
-                <input type="button" id="next_btn" value="다음"
-                       class="mx-auto mt-4 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-7 rounded-full shadow-md uppercase tracking-wider">
+                <button type="button" id="next_btn" th:id="next_btn"
+                        class="mx-auto mt-4 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-7 rounded-full shadow-md uppercase tracking-wider">
+                    <span class="flex items-center font-bolder border text-yellow-600">다음</span>
+                </button>
             </div>
         </div>
+
         <div id="step2" style="display: none;">
-            <!-- step2 내용은 그대로 유지 -->
-            <div class="flex mt-6">
-                <input type="button" id="back_btn" value="이전"
-                       class="w-1/2 bg-yellow-600 hover:bg-yellow-700 font-bold py-2 px-4 rounded-l">
-                <input type="submit" id="join_btn" value="완료"
-                       class="w-1/2 bg-yellow-200 hover:bg-yellow-400 font-bold py-2 px-4 rounded-r">
+            <h2>카테고리 선택</h2>
+            <div id="categoryList" class="grid grid-cols-5 gap-2 overflow-y-auto h-48 mt-4">
+                <button th:each="category : ${categories}"
+                        type="button"
+                        class="category-btn bg-yellow-200 hover:bg-yellow-500 font-bold py-1 px-2 rounded"
+                        th:data-category-id="${category.categoryId}"
+                        th:text="${category.categoryName}">
+                </button>
             </div>
+            <h2>선택된 카테고리</h2>
+            <div id="selected_category">
+            </div>
+            <div class="flex mt-6">
+                <button type="button" id="back_btn"
+                        class="w-1/2 bg-yellow-600 hover:bg-yellow-700 font-bold py-2 px-4 rounded-l">
+                    이전
+                </button>
+                <button type="submit" id="join_btn"
+                class="w-1/2 bg-yellow-200 hover:bg-yellow-400 font-bold py-2 px-4 rounded-r">
+
+                선택 완료
+                </button>
+                <div id="hidden_category_inputs"></div>
+
+                <input id="submit" name="submit" type="submit"
+                       class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
+                       placeholder="ㄱㄱ">
+            </div>
+            <!-- 선택된 카테고리 ID를 저장할 hidden input 필드들 -->
         </div>
     </form>
 </div>

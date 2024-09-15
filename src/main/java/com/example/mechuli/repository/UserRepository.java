@@ -10,11 +10,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<UserDAO, Long> {
 
-//    public UserDAO findByUserIndex(Integer userIndex);
-
 
     boolean existsByUserId(String userId);
-
     boolean existsByNickname(String nickname);
 
     Optional<UserDAO> findByUserId(String userId);
