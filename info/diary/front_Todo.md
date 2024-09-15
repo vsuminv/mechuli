@@ -166,7 +166,7 @@ myPage 위주 작업
 ----
 ### 9.15
 #### 한거
-1. 회원가입시 중복로직탓에 화면상 버벅이던 문제 해결.
+1. 회원가입시 중복로직탓에 화면상 버벅이던 문제 해결.(무한 리다이랙트 아님)
 2. joinPage 로드했을 때 카테고리 바로 뿌려줌.
 3. joinForm 제출시 유저정보(+ role), 카테고리 정보 같이 담아감. user_img 빼고 다 담김.
 #### 나중에 할 거
@@ -178,9 +178,9 @@ myPage 위주 작업
   1. save 메서드 변경. void 타입이던거 UserDAO 타입으로 변경,
   2. 중복체크 코드 줄임. 로직에는 변화 없음.
 - userController
-  1. 나중에 requestMapping에 "/joinPage" 넣기 위해 우선 컨트롤러메서드들 마다 집어넣음.
-  2. 회원가입 메서드 모델엔뷰 ResponseEntity로 반환 맵에 담아서 뿌림. 이거로 JoinPage에 카테고리 선택창 구현
-
+  1. 나중에 requestMapping에 "/joinPage" 넣기. 우선 회원가입 관련된 매핑메서드들에 집어넣고, securityConfig에 "/joinPage/**" 허용
+  2. 회원가입 메서드 모델엔뷰 ResponseEntity로 반환. 맵에 담아서 뿌림. 이거로 JoinPage에 카테고리 선택창 구현
+  3. 위에 맞게 joinPage.js,joinForm.html 수정.
 ----
 
 

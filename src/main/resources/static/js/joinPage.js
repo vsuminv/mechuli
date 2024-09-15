@@ -57,7 +57,7 @@ $(document).ready(function() {
             selectedCategories = selectedCategories.filter(c => c.id !== categoryId);
         } else {
             if (selectedCategories.length >= 3) {
-                alert("최대 3개의 카테고리만 선택할 수 있습니다.");
+                alert("3개 이상의 카테고리를 고르세요.");
                 return;
             }
             $(this).addClass("selected");
