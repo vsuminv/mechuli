@@ -1,12 +1,14 @@
 package com.example.mechuli.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.Review;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.ReviewDTO;
 import com.example.mechuli.repository.ReviewRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,35 +34,41 @@ public class ReviewService {
 
     public String uploadImageToS3(MultipartFile file) throws IOException {
         try {
-            String fileName = "images/" + file.getOriginalFilename();
-            amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, fileName, file.getInputStream(), null));
-            return amazonS3.getUrl(BUCKET_NAME, fileName).toString();
+            String fileName = "review_images/" + file.getOriginalFilename();
+
+            // 이미지 메타데이터 설정 (파일 크기)
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(file.getSize());
+
+            amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, fileName, file.getInputStream(), metadata));
+            return amazonS3.getUrl(BUCKET_NAME, fileName).toString();  // 업로드된 파일의 S3 URL 반환
         } catch (IOException e) {
             throw new RuntimeException("이미지 업로드 실패", e);
         }
     }
+
     // 이미지 업로드 처리
     public List<String> uploadImages(List<MultipartFile> images) throws IOException {
-        if (images == null){
-            return Collections.emptyList();
+        if (images == null || images.isEmpty()) {
+            return Collections.emptyList();  // 이미지가 없을 경우 빈 리스트 반환
         }
         return images.stream()
                 .map(image -> {
                     try {
-                        return uploadImageToS3(image);  // S3 업로드 서비스 호출
+                        return uploadImageToS3(image);  // 개별 이미지 업로드 처리
                     } catch (IOException e) {
                         throw new RuntimeException("이미지 업로드 실패", e);
                     }
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());  // 업로드된 이미지 URL들을 리스트로 반환
     }
 
     // 리뷰 생성
-    public void save(UserDAO authUser, ReviewDTO reviewDTO, Long restaurantId, List<MultipartFile> files) {
+    public void save(UserDAO authUser, ReviewDTO reviewDTO, Long restaurantId, List<MultipartFile> files) throws IOException {
         // 이미지의 유무 판단
         if (files == null || files.isEmpty()) {
             System.out.println("No image provided");
-            reviewDTO.setReviewImg(Collections.emptyList());
+            reviewDTO.setReviewImg(null);
 
             // 리뷰 엔티티 생성
             reviewRepository.save(Review.builder()
@@ -75,35 +83,32 @@ public class ReviewService {
 //
 //            reviewRepository.save(review);
         }else {// 이미지 파일이 있을 때
+            // 이미지 URL 저장을 위한 리스트
+            List<String> imageUrls = uploadImages(files);  // 이미지 업로드 후 URL 리스트 반환
 
-            // 이미지url 저장할 배열
-            List<String> imageUrls = new ArrayList<>();
+            // JSON 형식으로 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonImageUrls = objectMapper.writeValueAsString(imageUrls);  // 이미지 URL 리스트를 JSON 문자열로 변환
 
-            // 이미지 파일 처리
-            if (files != null && !files.isEmpty()) {
-                for (MultipartFile file : files) {
-                    try {
-                        String imageUrl = uploadImageToS3(file);
-                        imageUrls.add(imageUrl);
-                    } catch (IOException e) {
-                        throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.", e);
-                    }
-                }
-            }
-
+            // 리뷰 엔티티 생성 및 저장
             reviewRepository.save(Review.builder()
                     .content(reviewDTO.getContent())
-                    .rating(reviewDTO.getRating())
-                    .userIndex(authUser)  // 로그인한 사용자 정보 저장
+                    .rating(reviewDTO.getRating())  // 별점 저장
+                    .userIndex(authUser)  // 로그인한 사용자 정보
                     .restaurant(Restaurant.builder().restaurantId(restaurantId).build())  // 리뷰 대상 식당
-                    .reviewImg(imageUrls)
+                    .reviewImg(jsonImageUrls)  // 이미지 URL을 JSON 형식으로 저장
                     .updateDate(LocalDateTime.now())
                     .createDate(LocalDateTime.now())
                     .build());
-//        reviewRepository.save(review);
         }
-        // 리뷰 저장
     }
+
+
+//    public List<String> getReviewImages(Review review) throws IOException {
+//        // JSON 문자열을 다시 List<String> 형식으로 변환
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        return objectMapper.readValue(review.getReviewImg(), new TypeReference<List<String>>() {});
+//    }
 //    public void saveReview(ReviewDTO dto){
 //        reviewRepository.save(Review.builder()
 //                        .reviewId(dto.getReviewId())

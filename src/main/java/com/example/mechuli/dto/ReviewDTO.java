@@ -17,7 +17,7 @@ public class ReviewDTO {
     private String content;
     private int rating;
     private Long userIndex;
-    private List<String> reviewImg;
+    private String reviewImg;
 
     public ReviewDTO(Review review){
         this.reviewId = review.getReviewId();
