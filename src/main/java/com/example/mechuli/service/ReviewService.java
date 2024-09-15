@@ -8,7 +8,6 @@ import com.example.mechuli.domain.Review;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.ReviewDTO;
 import com.example.mechuli.repository.ReviewRepository;
-import com.example.mechuli.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,9 +26,7 @@ import java.util.stream.Collectors;
 public class ReviewService {
 
     @Autowired
-    private ReviewRepository reviewRepository;
-//    @Autowired
-//    private UserRepository userRepository;
+    private  ReviewRepository reviewRepository;
     @Autowired
     private AmazonS3 amazonS3;
 
@@ -82,7 +79,9 @@ public class ReviewService {
                     .updateDate(LocalDateTime.now())
                     .createDate(LocalDateTime.now())
                     .build());
-
+//            System.out.println("create date : "+review.getCreateDate()+", update_date : "+ review.getUpdateDate());
+//
+//            reviewRepository.save(review);
         }else {// 이미지 파일이 있을 때
             // 이미지 URL 저장을 위한 리스트
             List<String> imageUrls = uploadImages(files);  // 이미지 업로드 후 URL 리스트 반환
@@ -104,20 +103,29 @@ public class ReviewService {
         }
     }
 
-    // 특정 식당의 리뷰 조회
-    public List<ReviewDTO> getReviewsByRestaurant(Long restaurantId) {
-        List<Review> reviews = reviewRepository.findByRestaurantId(restaurantId);
-        return reviews.stream()
-                .map(ReviewDTO::new)  // Review 엔티티를 ReviewDTO로 변환
-                .collect(Collectors.toList());
-    }
 
-    // 특정 유저의 리뷰 조회 (userIndex로 조회)
-    public List<ReviewDTO> getReviewsByUserIndex(Long userIndex) {
-        List<Review> reviews = reviewRepository.findByUserIndex(userIndex);  // UserDAO 객체로 조회
-        return reviews.stream()
-                .map(ReviewDTO::new)
-                .collect(Collectors.toList());
-    }
+//    public List<String> getReviewImages(Review review) throws IOException {
+//        // JSON 문자열을 다시 List<String> 형식으로 변환
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        return objectMapper.readValue(review.getReviewImg(), new TypeReference<List<String>>() {});
+//    }
+//    public void saveReview(ReviewDTO dto){
+//        reviewRepository.save(Review.builder()
+//                        .reviewId(dto.getReviewId())
+//                        .content(dto.getContent())
+//                        .restaurant(dto.getRestaurant())
+//                        .userIndex(dto.getUserIndex())
+//                        .reviewImg(dto.getReviewImg())
+//                .build());
+//    }
 
+
+    // 유저 리뷰 조회
+//    public List<Review> findByUserIndex(Long userIndex){
+//        return reviewRepository.findByUserIndex(userIndex);
+//    }
+    // 매장 리뷰 조회
+//    public List<Review> findByRestaurantId(Long restaurantId){
+//        return reviewRepository.findByRestaurantId(restaurantId);
+//    }
 }

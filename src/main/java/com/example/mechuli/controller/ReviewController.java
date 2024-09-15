@@ -30,7 +30,7 @@ public class ReviewController {
                                                      @RequestPart(value = "files", required = false) List<MultipartFile> files,
                                                      @RequestParam("restaurantId")Long restaurantId,
                                                      @AuthenticationPrincipal UserDAO authUser) throws IOException {
-       // 유저 인
+        System.out.println("==============================================================================================");
         if(authUser == null){
             System.out.println("User is not authenticated.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -45,25 +45,25 @@ public class ReviewController {
         }
         return ResponseEntity.ok().build();
     }
-
-    // 특정 식당의 리뷰 조회
-    @GetMapping("/review")
-    public ResponseEntity<List<ReviewDTO>> getReviewsByRestaurant(@RequestParam("restaurantId")Long restaurantId) {
-        List<ReviewDTO> reviews = reviewService.getReviewsByRestaurant(restaurantId);
-        return ResponseEntity.ok(reviews);
-    }
-
-    // 특정 유저의 리뷰 조회
-    @GetMapping("/review-user")
-    public ResponseEntity<List<ReviewDTO>> getReviewsByUser(@AuthenticationPrincipal UserDAO authUser) {
-        // 유저 인증
-        if(authUser == null){
-            System.out.println("User is not authenticated.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        List<ReviewDTO> reviews = reviewService.getReviewsByUserIndex(authUser.getUserIndex());
-        return ResponseEntity.ok(reviews);
-    }
+//
+//    // 특정 리뷰 조회
+//    @GetMapping("/{reviewId}")
+//    public ResponseEntity<ReviewDTO> getReview(@PathVariable Long reviewId) {
+//        try {
+//            ReviewDTO reviewDTO = reviewService.getReview(reviewId);
+//            return new ResponseEntity<>(reviewDTO, HttpStatus.OK);
+//        } catch (IllegalArgumentException e) {
+//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//        }
+//    }
+//
+//    // 모든 리뷰 조회
+//    @GetMapping
+//    public List<ReviewDTO> getAllReviews() {
+//        List<ReviewDTO> reviews = reviewService.getAllReviews();
+//        return reviews;
+//    }
+//
 //    // 리뷰 삭제
 //    @DeleteMapping("/{reviewId}")
 //    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
