@@ -8,6 +8,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "subscription")
 public class Subscription {
 
     @Id
@@ -15,9 +16,11 @@ public class Subscription {
     @Column(name = "subscript_id")
     private Long subscriptId;
 
+    // 로그인 한 유저
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false, referencedColumnName = "user_index")
     private UserDAO userId;
+
 
     @ManyToOne
     @JoinColumn(name = "subscriber", referencedColumnName = "user_index")

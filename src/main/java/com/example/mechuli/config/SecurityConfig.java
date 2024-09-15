@@ -35,25 +35,25 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                                .requestMatchers("/joinPage","/wellcomePage").permitAll()
+                                .requestMatchers("/joinPage","/wellcomePage","/join").permitAll()
 //                                .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
 //                .requestMatchers("/joinPage","/wellcomePage").permitAll()
 //                                .requestMatchers(hasRole(USER))
 
 //                        .anyRequest().permitAll()
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/loginPage")
-                        .loginProcessingUrl("/login") // action
-                        .defaultSuccessUrl("/home", true)
+                                .loginPage("/loginPage")
+                                .loginProcessingUrl("/login") // action
+                                .defaultSuccessUrl("/home", true)
 //                        .defaultSuccessUrl("/swagger-ui/index.html", true)
-                        .usernameParameter("userId")
-                        .passwordParameter("userPw")
-                        .failureUrl("/error/error500")
+                                .usernameParameter("userId")
+                                .passwordParameter("userPw")
+                                .failureUrl("/error/error500")
 //                        .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
 //                        .failureHandler(())
-                        .permitAll()
+                                .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
