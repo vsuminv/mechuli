@@ -86,15 +86,26 @@ public class RestaurantController {
 
 
     // 내 식당 찜 조회해서 뿌리기
-//    @RequestMapping(value = "/ajaxMyRestaurant", method = RequestMethod.POST)
+    @RequestMapping(value = "/ajax/CheckMyRestaurant", method = RequestMethod.POST)
+    @ResponseBody
+    public int ajaxCheckMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+        int result = 0;
+        try {
+            result = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+        } catch(Exception e) {
+            System.out.println("existsByRestaurantList_restaurantIdAndUserDAO_userIndex 메소드가 정상 실행되지 않았습니다.");
+        }
+        return result;
+    }
+
+//    // 내 식당 찜하기 / 해제
+//    @RequestMapping(value = "/ajax/GetMyRestaurant", method = RequestMethod.POST)
 //    @ResponseBody
-//    public int ajaxCheckMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
-//        int result = 0;
-//        try {
-//            result = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
-//        } catch(Exception e) {
-//            System.out.println("existsByRestaurantList_restaurantIdAndUserDAO_userIndex 메소드가 정상 실행되지 않았습니다.");
+//    public int ajaxGetMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+//        if(restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex())) {
+//            findById
+//        } else {
+//
 //        }
-//        return result;
 //    }
 }
