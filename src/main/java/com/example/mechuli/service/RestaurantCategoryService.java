@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 public class RestaurantCategoryService {
 
+    @Autowired
     private RestaurantCategoryRepository restaurantCategoryRepository;
 
     public List<RestaurantCategory> getCategoryList() {

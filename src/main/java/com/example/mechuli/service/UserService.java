@@ -61,12 +61,12 @@ public class UserService implements UserDetailsService {
             response.put("success", true);
             response.put("message", "회원가입이 성공적으로 완료되었습니다.");
             response.put("userId", joinedUser.getUserId());
-            log.info("가입 들옴. userId = [ {} ] ", joinedUser.getUserId());
             joinedUser.getRestaurantCategory().forEach(category -> {
-                log.info("선택한 카테고리 {},[{}]", category.getCategoryId(), category.getCategoryName());
+                log.info("가입 성공. id: [ {} ] 선택한 카테고리 [{},{}]",
+                        joinedUser.getUserId(), category.getCategoryId(), category.getCategoryName());
             });
         } catch (Exception e) {
-            log.error("Join failed for user: {}", dto.getUserId(), e);
+            log.error("가입 실패. {}", dto.getUserId(), e);
             response.put("success", false);
             response.put("message", e.getMessage());
         }
@@ -76,7 +76,7 @@ public class UserService implements UserDetailsService {
         boolean exists = switch (type) {
             case "userId" -> userRepository.existsByUserId(value);
             case "nickname" -> userRepository.existsByNickname(value);
-            default -> throw new IllegalArgumentException("Invalid check type: " + type);
+            default -> throw new IllegalArgumentException("이상한거 들옴 : " + type);
         };
         int checkResult = exists ? 1 : 0;
         log.info("[ {} ] 중복 검사 들옴.[ {} ], 결과 = [ {} ] ", type, value, checkResult);
