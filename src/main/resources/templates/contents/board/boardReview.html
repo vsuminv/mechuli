@@ -1,3 +1,31 @@
 <div th:fragment="boardReview">
-
+    <table id="reviewTable" class="border-separate border-spacing-x-8 border-spacing-y-4 hidden">
+        <tr class="relative flex">
+            <!-- Main TD -->
+            <td class="bg-gray-300 w-32 h-32 border border-gray-400">
+                <img id="user_photo" src="" alt="">
+            </td>
+            <!-- TD 1 -->
+            <td class="relative w-32 h-8 border border-gray-400">
+                <h1 id="user_nickname">홍회장님</h1>
+            </td>
+            <!-- Other TDs -->
+            <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                <h1 id="upload_date">24-09-05</h1>
+            </td>
+<!--            <td class="w-16 h-8 bg-gray-200 border border-gray-400">-->
+<!--                <h1 id="upload_time">19:18</h1>-->
+<!--            </td>-->
+            <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                <div id="mod_del_button" class="flex justify-end">
+                    <button>수정</button>
+                    &nbsp;&nbsp;
+                    <button>삭제</button>
+                </div>
+            </td>
+            <td class="absolute w-96 h-24 top-8 left-32 bg-red-200">
+                <p id="comment">다음번에도 개르신 데리고 올게요.</p>
+            </td>
+        </tr>
+    </table>
 </div>
