@@ -16,16 +16,23 @@ import java.util.stream.Collectors;
 public class SubscriptionDTO {
 
     private Long subscriptId;
-
     private Long userIndex;
 
-    private List<MyRestaurantList> myRestaurantIndex;
+    private String userName;
 
-    public SubscriptionDTO(Subscription subscription){
+
+
+    private List<String> restaurantNames;
+
+    public SubscriptionDTO(Subscription subscription) {
         this.subscriptId = subscription.getSubscriptId();
-        this.userIndex = subscription.getUserId().getUserIndex();
+        this.userIndex = subscription.getSubscriber().getUserIndex();         this.userName = subscription.getSubscriber().getNickname();
 
-        this.myRestaurantIndex = subscription.getUserId().getMyRestaurantLists();
-
+        // 구독자의 맛집 리스트 출력
+        this.restaurantNames = subscription.getSubscriber()
+                .getMyRestaurantLists()
+                .stream()
+                .map(myRestaurant -> myRestaurant.getRestaurantList().getName())
+                .collect(Collectors.toList());
     }
 }
