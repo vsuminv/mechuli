@@ -26,19 +26,33 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"})
 public class UserController {
+
     @Autowired
-    private final UserService userService;
-    @Autowired
+    private UserService userService;
+
     private final RestaurantService restaurantService;
-    @Autowired
+
     private final RestaurantCategoryService restaurantCategoryService;
 
-    @PostMapping(value = {"/ajaxCheckId", "/ajaxCheckNickname"},consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> joinCheck(@RequestBody String value, HttpServletRequest request) {
-        String path = request.getServletPath();
-        boolean check = path.contains("Id");
-        log.info("회원가입 중복체크 들옴 {} : {}", check ? "userId" : "nickname", value);
-        int result = check ? userService.checkUserId(value) : userService.checkNickname(value);
+
+    //중복 체크
+//    @PostMapping(value = {"/ajaxCheckId", "/ajaxCheckNickname"},consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Integer> userJoinCheck(@RequestBody String value, HttpServletRequest request) {
+//        String path = request.getServletPath();
+//        boolean check = path.contains("Id");
+//        log.info("회원가입 중복체크 들옴 {} : {}", check ? "userId" : "nickname", value);
+//        int result = check ? userService.checkUserId(value) : userService.checkNickname(value);
+//        return ResponseEntity.ok(result);
+//    }
+    @PostMapping("/ajaxCheckId")
+    public ResponseEntity<Integer> ajaxCheckId(@RequestParam("userId") String userId) {
+        int result = userService.checkUserId(userId);
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/ajaxCheckNickname")
+    public ResponseEntity<Integer> userNicknameCheck(@RequestParam("nickname") String nickname) {
+        int result = userService.checkNickname(nickname);
         return ResponseEntity.ok(result);
     }
 

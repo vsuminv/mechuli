@@ -1,20 +1,15 @@
 
 package com.example.mechuli.service;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.RestaurantCategory;
-import com.example.mechuli.domain.Role;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,9 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,19 +43,15 @@ public class UserService implements UserDetailsService {
 
     // 아이디 중복체크하여 0 리턴 시 중복아이디 없음, 1 리턴 시 중복아이디 있음
     public int checkUserId(String userId) {
-        int checkResult = 0;
-        boolean boolResult = userRepository.existsByUserId(userId);
-        if (boolResult) checkResult = 1;
-        log.info("아이디 중복체크 들옴 {}", userId);
+        int checkResult = userRepository.existsByUserId(userId) ? 1 : 0;
+        log.info("중복체크 들온 아이디 = {}"+"\n"+"중복체크 결과 = {}", userId , checkResult);
         return checkResult;
     }
 
     // 닉네임 중복체크하여 0 리턴 시 중복닉네임 없음, 1 리턴 시 중복닉네임 있음
     public int checkNickname(String nickname) {
-        int checkResult = 0;
-        boolean boolResult = userRepository.existsByNickname(nickname);
-        if (boolResult) checkResult = 1;
-        log.info("닉넴 중복체크 들옴 {}", nickname);
+        int checkResult = userRepository.existsByNickname(nickname) ? 1 : 0;
+        log.info("중복체크 들온 닉 = {}"+"\n"+"중복체크 결과 = {}", nickname , checkResult);
         return checkResult;
     }
     // 인증 테스트

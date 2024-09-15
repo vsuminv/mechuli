@@ -54,7 +54,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/")
                         .invalidateHttpSession(true));
         return http.build();
     }
@@ -66,13 +66,4 @@ public class SecurityConfig {
         daoProvider.setPasswordEncoder(encodePWD());
         return daoProvider;
     }
-
-//    @Bean
-//    public AuthenticationManager authenticationManager(BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailsService) throws Exception {
-//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-//        authProvider.setUserDetailsService(userDetailsService);
-//        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
-//
-//        return new ProviderManager(authProvider);
-//    }
 }

@@ -1,4 +1,4 @@
-<footer th:fragment="footer">
+<footer th:fragment="footer" xmlns:sec="http://www.w3.org/1999/xhtml">
 
     <div class="grid grid-cols-3 h-full bg-yellow-200 w-full">
         <div class="grid-col-1 m-auto">
@@ -12,6 +12,9 @@
             </div>
         </div>
         <div class="grid-col-3 m-auto">
+            <a sec:authorize="isAnonymous()" class="float-end pe-3 text-white text-decoration-none" href="/loginPage">로그인</a>
+            <a sec:authorize="isAuthenticated()" class="float-end pe-3 text-white text-decoration-none" th:text="${nickname}"></a>
+            <a sec:authorize="isAuthenticated()" class="float-end pe-3 text-white text-decoration-none" href="/logout">로그아웃</a>
               </div>
 
     </div>

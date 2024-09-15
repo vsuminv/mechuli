@@ -114,14 +114,3 @@ public class UserDAO implements UserDetails {
     }
 
 }
-
-
-//User Table
-//- Index
-//- ID
-//- PW
-//- IMG
-//- Address
-//- 생성일
-//- 수정일
-

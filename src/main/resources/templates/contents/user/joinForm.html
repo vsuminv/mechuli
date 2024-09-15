@@ -12,7 +12,24 @@
                     <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
                 </div>
             </div>
-            <!-- 비밀번호 필드는 그대로 유지 -->
+            <div class="mt-4">
+                <label th:for="userPw" class="sr-only"></label><span class="ml-2">비밀번호</span>
+                <div class="relative">
+                    <input id="userPw" name="userPw" type="password"
+                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
+                           placeholder="8자 이상 입력하세요" th:value="${userPw}">
+                    <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
+                </div>
+            </div>
+            <div class="mt-4">
+                <label th:for="userPw2" class="sr-only"></label><span class="ml-2">비밀번호 확인</span>
+                <div class="relative">
+                    <input id="userPw2" name="password2" type="password"
+                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
+                           placeholder="비밀번호를 다시 입력하세요">
+                    <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
+                </div>
+            </div>
             <div class="mt-4">
                 <label th:for="nickname" class="sr-only"></label><span class="ml-2">닉네임</span>
                 <div class="relative">
@@ -21,7 +38,7 @@
                            placeholder="2자 이상 입력하세요" th:value="${nickname}">
                     <input type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="nickname_check" value="중복 체크">
                     <input type="button" class="btn btn-outline-success btn-sm reType" id="resetNickname" value="다시입력" disabled>
-                    <div class="validation-icon absolute right-3 top-1/2 transform -tanslate-y-1/2"></div>
+                    <div class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></div>
                 </div>
             </div>
             <div id="step-indicator" class="w-full flex mt-6">
