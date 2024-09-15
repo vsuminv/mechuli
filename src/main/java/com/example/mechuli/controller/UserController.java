@@ -81,7 +81,7 @@ public class UserController {
 
 //============================//
 
-    @PostMapping("/joinPage")
+    @PostMapping("/join")
     public ResponseEntity<String> userJoin(@Valid @RequestBody UserDTO dto, BindingResult bindingResult) {
 
         // 카테고리 값 가져오기
