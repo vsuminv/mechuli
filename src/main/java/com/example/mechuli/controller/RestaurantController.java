@@ -4,6 +4,7 @@ package com.example.mechuli.controller;
 import com.example.mechuli.domain.Menu;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.UserDAO;
+import com.example.mechuli.dto.MenuDTO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.service.RestaurantService;
 import com.example.mechuli.service.UserService;
@@ -68,7 +69,7 @@ public class RestaurantController {
     // Post ajax로 레스토랑의 메뉴 가져오기
     @RequestMapping(value = "/ajaxRestaurantMenu", method = RequestMethod.POST)
     @ResponseBody
-    public List<Menu> ajaxRestaurantMenu(@RequestBody RestaurantDTO restDto) {
+    public List<MenuDTO> ajaxRestaurantMenu(@RequestBody RestaurantDTO restDto) {
         Long restaurantId = restDto.getRestaurant_id();
         return restaurantService.findMenusByRestaurantId(restaurantId);
     }

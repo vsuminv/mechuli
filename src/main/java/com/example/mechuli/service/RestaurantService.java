@@ -2,6 +2,7 @@ package com.example.mechuli.service;
 
 import com.example.mechuli.domain.Menu;
 import com.example.mechuli.domain.Restaurant;
+import com.example.mechuli.dto.MenuDTO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.repository.MenuRepository;
 import com.example.mechuli.repository.RestaurantRepository;
@@ -53,9 +54,20 @@ public class RestaurantService {
 
 
     // ==============================================================================
-    public List<Menu>  findMenusByRestaurantId(Long restaurantId) {
-        List<Menu> menuList = menuRepository.findByRestaurant_RestaurantId(restaurantId);
-        return menuList;
+    public List<MenuDTO> findMenusByRestaurantId(Long restaurantId) {
+        List<Menu> menuList = menuRepository.findAllByRestaurant_RestaurantId(restaurantId);
+        List<MenuDTO> menuDtoList = new ArrayList<MenuDTO>();
+        for(Menu m : menuList) {
+            MenuDTO menuDto = MenuDTO.builder()
+                    .menuId(m.getMenuId())
+                    .menuName(m.getMenuName())
+                    .price(m.getPrice())
+                    .imageUrl(m.getImageUrl())
+                    .build();
+            menuDtoList.add(menuDto);
+        }
+
+        return menuDtoList;
     }
     public RestaurantDTO findRestaurantByRestaurantId(Long restaurantId) {
 
