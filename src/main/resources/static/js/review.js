@@ -8,12 +8,13 @@ const reviewPage = {
     charCountElement: document.getElementById('char-count'),
     maxLength: 2000,
     restaurantId: null,
+    restaurantName: null, // 식당 이름을 저장할 변수
 
     init: function () {
         this.cancelButton = this.modal.querySelector('button:first-of-type');
         this.maxLength = this.review.getAttribute('maxlength');
 
-        // URL에서 restaurantId 추출
+        // URL에서 restaurantId를 추출
         const urlParams = new URLSearchParams(window.location.search);
         this.restaurantId = urlParams.get('restaurantId');
         console.log(this.restaurantId);
@@ -23,8 +24,38 @@ const reviewPage = {
             return;
         }
 
+        // 식당 이름을 가져오는 함수 호출
+        this.fetchRestaurantName();
+
         this.updateCharacterCount();
         this.setEventListeners();
+    },
+
+    // 식당 이름을 가져오는 함수
+    fetchRestaurantName: function () {
+        $.ajax({
+            url: '/api/ajaxRestaurantDetail',
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({ restaurantId: this.restaurantId }),
+            contentType: 'application/json',
+            success: (data) => {
+                console.log('Restaurant Detail:', data);
+                this.restaurantName = data.name || '식당 이름 없음';  // 식당 이름 저장
+                this.updateModalWithRestaurantName();  // 모달에 식당 이름 반영
+            },
+            error: (xhr, status, error) => {
+                console.error('Error fetching restaurant name:', error);
+            }
+        });
+    },
+
+    // 모달에 식당 이름 반영
+    updateModalWithRestaurantName: function () {
+        const modalTitle = document.getElementById('modalRestaurantName');  // 모달 내 식당 이름을 표시할 요소
+        if (modalTitle && this.restaurantName) {
+            modalTitle.textContent = this.restaurantName;
+        }
     },
 
     setEventListeners: function () {
@@ -81,6 +112,7 @@ const reviewPage = {
     },
 
     showModal: function () {
+        this.updateModalWithRestaurantName();  // 모달을 열 때 식당 이름을 업데이트
         this.modal.classList.remove('hidden');
     },
 
