@@ -15,7 +15,7 @@ let boardPage = {
 
         // restaurantId가 없을 경우 경고 메시지를 출력하고 종료
         if (!this.restaurantId) {
-            console.warn('Restaurant ID is missing in the URL.');
+            console.warn('URL에서 레스토랑 ID를 찾을 수 없습니다.');
             return;
         }
 
