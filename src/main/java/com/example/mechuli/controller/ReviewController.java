@@ -17,46 +17,36 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
 
     @Autowired
     private final ReviewService reviewService;
 
-    // 리뷰 생성
-    @PostMapping
+    @PostMapping("/reviews")
     public ResponseEntity<List<Review>> createReview(@RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
                                                      @RequestPart(value = "files", required = false) List<MultipartFile> files,
-                                                     @RequestParam("restaurantId")Long restaurantId,
+                                                     @RequestParam("restaurantId") Long restaurantId,
                                                      @AuthenticationPrincipal UserDAO authUser) throws IOException {
-        System.out.println("==============================================================================================");
-        if(authUser == null){
-            System.out.println("User is not authenticated.");
+        if (authUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        if(files != null && !files.isEmpty()) {
 
-            System.out.println("Files found: " + files.size());
+        if (files != null && !files.isEmpty()) {
             reviewService.save(authUser, reviewDTO, restaurantId, files);
-        }else {
-            System.out.println("Files is null");
+        } else {
             reviewService.save(authUser, reviewDTO, restaurantId, Collections.emptyList());
         }
+
         return ResponseEntity.ok().build();
     }
-//
-//    // 특정 리뷰 조회
-//    @GetMapping("/{reviewId}")
-//    public ResponseEntity<ReviewDTO> getReview(@PathVariable Long reviewId) {
-//        try {
-//            ReviewDTO reviewDTO = reviewService.getReview(reviewId);
-//            return new ResponseEntity<>(reviewDTO, HttpStatus.OK);
-//        } catch (IllegalArgumentException e) {
-//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
-//    }
-//
+
+    @GetMapping("/boardPage")
+    public List<ReviewDTO> getReviewsByRestaurant(@RequestParam("restaurantId")Long restaurantId) {
+        System.out.println("restaurant id : "+restaurantId);
+        List<ReviewDTO> reviews = reviewService.getReviewsByRestaurant(restaurantId);
+        return reviews;
+    }
 //    // 모든 리뷰 조회
 //    @GetMapping
 //    public List<ReviewDTO> getAllReviews() {

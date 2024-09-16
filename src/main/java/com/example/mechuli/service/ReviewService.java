@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -103,21 +104,15 @@ public class ReviewService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<ReviewDTO> getReviewsByRestaurant(Long restaurantId) {
+        List<Review> reviews = reviewRepository.findByRestaurantRestaurantId(restaurantId);
 
-//    public List<String> getReviewImages(Review review) throws IOException {
-//        // JSON 문자열을 다시 List<String> 형식으로 변환
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        return objectMapper.readValue(review.getReviewImg(), new TypeReference<List<String>>() {});
-//    }
-//    public void saveReview(ReviewDTO dto){
-//        reviewRepository.save(Review.builder()
-//                        .reviewId(dto.getReviewId())
-//                        .content(dto.getContent())
-//                        .restaurant(dto.getRestaurant())
-//                        .userIndex(dto.getUserIndex())
-//                        .reviewImg(dto.getReviewImg())
-//                .build());
-//    }
+        // 리뷰 엔티티를 DTO로 변환하여 반환
+        return reviews.stream()
+                .map(ReviewDTO::new)  // Review 엔티티를 ReviewDTO로 변환
+                .collect(Collectors.toList());
+    }
 
 
     // 유저 리뷰 조회
