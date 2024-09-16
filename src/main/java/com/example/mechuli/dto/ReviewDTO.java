@@ -26,7 +26,8 @@ public class ReviewDTO {
     public ReviewDTO(Review review){
         this.reviewId = review.getReviewId();
         this.content = review.getContent();
-        this.rating = review.getRating();
+        this.createDate = review.getCreateDate();
+        this.updateDate = review.getUpdateDate();
         this.userIndex = review.getUserIndex().getUserIndex();
         this.reviewImg = review.getReviewImg();
     }
@@ -37,7 +38,6 @@ public class ReviewDTO {
         this.createDate = review.getCreateDate();
         this.updateDate = review.getUpdateDate();
         this.content = review.getContent();
-        this.rating = review.getRating();
         this.reviewImg = review.getReviewImg();
     }
 }

@@ -49,6 +49,17 @@ public class ReviewController {
         return reviews;
     }
 
+    @GetMapping("/api/u_reviews")
+    public List<ReviewDTO> getReviewsByUser(@AuthenticationPrincipal UserDAO authUser) {
+        if (authUser == null) {
+            return null;
+        }
+        List<ReviewDTO> reviews = reviewService.getReviewsByUserIndex(authUser.getUserIndex());
+        System.out.println(reviews);
+        return reviews;
+    }
+
+
     // 리뷰 삭제
     @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {

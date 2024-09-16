@@ -10,6 +10,7 @@ import com.example.mechuli.dto.ReviewDTO;
 import com.example.mechuli.repository.ReviewRepository;
 import com.example.mechuli.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +126,20 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+    public List<ReviewDTO> getReviewsByUserIndex(Long userIndex) {
+        // userIndex로 UserDAO 객체를 먼저 조회
+        UserDAO user = userRepository.findById(userIndex)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        // UserDAO 객체로 리뷰 조회
+        List<Review> reviews = reviewRepository.findByUserIndex(user);
+
+        // 리뷰 엔티티를 DTO로 변환하여 반환
+        return reviews.stream()
+                .map(ReviewDTO::new)  // Review 엔티티를 ReviewDTO로 변환
+                .collect(Collectors.toList());
+    }
+
     public void deleteReview(Long reviewId) {
         // 리뷰가 존재하는지 확인
         Review review = reviewRepository.findById(reviewId)
@@ -134,12 +149,5 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    // 유저 리뷰 조회
-//    public List<Review> findByUserIndex(Long userIndex){
-//        return reviewRepository.findByUserIndex(userIndex);
-//    }
-    // 매장 리뷰 조회
-//    public List<Review> findByRestaurantId(Long restaurantId){
-//        return reviewRepository.findByRestaurantId(restaurantId);
-//    }
+
 }
