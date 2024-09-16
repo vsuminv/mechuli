@@ -17,61 +17,72 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
 
     @Autowired
     private final ReviewService reviewService;
 
-    // 리뷰 생성
-    @PostMapping
+    @PostMapping("/reviews")
     public ResponseEntity<List<Review>> createReview(@RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
                                                      @RequestPart(value = "files", required = false) List<MultipartFile> files,
-                                                     @RequestParam("restaurantId")Long restaurantId,
+                                                     @RequestParam("restaurantId") Long restaurantId,
                                                      @AuthenticationPrincipal UserDAO authUser) throws IOException {
-        System.out.println("==============================================================================================");
-        if(authUser == null){
-            System.out.println("User is not authenticated.");
+        if (authUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        if(files != null && !files.isEmpty()) {
 
-            System.out.println("Files found: " + files.size());
+        if (files != null && !files.isEmpty()) {
             reviewService.save(authUser, reviewDTO, restaurantId, files);
-        }else {
-            System.out.println("Files is null");
+        } else {
             reviewService.save(authUser, reviewDTO, restaurantId, Collections.emptyList());
         }
+
         return ResponseEntity.ok().build();
     }
-//
-//    // 특정 리뷰 조회
-//    @GetMapping("/{reviewId}")
-//    public ResponseEntity<ReviewDTO> getReview(@PathVariable Long reviewId) {
-//        try {
-//            ReviewDTO reviewDTO = reviewService.getReview(reviewId);
-//            return new ResponseEntity<>(reviewDTO, HttpStatus.OK);
-//        } catch (IllegalArgumentException e) {
-//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
-//    }
-//
-//    // 모든 리뷰 조회
-//    @GetMapping
-//    public List<ReviewDTO> getAllReviews() {
-//        List<ReviewDTO> reviews = reviewService.getAllReviews();
-//        return reviews;
-//    }
-//
-//    // 리뷰 삭제
-//    @DeleteMapping("/{reviewId}")
-//    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
-//        try {
-//            reviewService.deleteReview(reviewId);
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } catch (IllegalArgumentException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+
+    // 리뷰 수정
+    @PutMapping("/reviews")
+    public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,
+                                             @RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
+                                             @RequestPart(value = "files", required = false) List<MultipartFile> files,
+                                             @AuthenticationPrincipal UserDAO authUser) throws IOException {
+        if (authUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 수정된 리뷰 저장
+        reviewService.updateReview(reviewId, authUser, reviewDTO, files);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 특정 식당의 리뷰 데이터를 JSON으로 반환하는 API
+    @GetMapping("/api/r_reviews")
+    public List<ReviewDTO> getReviewsByRestaurant(@RequestParam("restaurantId") Long restaurantId) {
+        List<ReviewDTO> reviews = reviewService.getReviewsByRestaurant(restaurantId);
+        System.out.println(reviews);
+        return reviews;
+    }
+
+    @GetMapping("/api/u_reviews")
+    public List<ReviewDTO> getReviewsByUser(@AuthenticationPrincipal UserDAO authUser) {
+        if (authUser == null) {
+            return null;
+        }
+        List<ReviewDTO> reviews = reviewService.getReviewsByUserIndex(authUser.getUserIndex());
+        System.out.println(reviews);
+        return reviews;
+    }
+
+    // 리뷰 삭제
+    @DeleteMapping("/reviews/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
+        try {
+            reviewService.deleteReview(reviewId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
