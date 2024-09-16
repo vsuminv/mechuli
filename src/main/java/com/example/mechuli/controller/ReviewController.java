@@ -41,9 +41,9 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/boardPage")
-    public List<ReviewDTO> getReviewsByRestaurant(@RequestParam("restaurantId")Long restaurantId) {
-        System.out.println("restaurant id : "+restaurantId);
+    // 특정 식당의 리뷰 데이터를 JSON으로 반환하는 API
+    @GetMapping("/api/r_reviews")
+    public List<ReviewDTO> getReviewsByRestaurant(@RequestParam("restaurantId") Long restaurantId) {
         List<ReviewDTO> reviews = reviewService.getReviewsByRestaurant(restaurantId);
         return reviews;
     }
