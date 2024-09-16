@@ -2,7 +2,6 @@
 package com.example.mechuli.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.mechuli.domain.Restaurant;
@@ -15,7 +14,6 @@ import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @Transactional
 @Slf4j
@@ -60,7 +59,6 @@ public class UserService implements UserDetailsService {
                         .orElseThrow(() -> new RuntimeException("Invalid category ID: " + categoryId));
                 restaurantCategories.add(category);
             }
-
             UserDAO user = UserDAO.builder()
                     .userId(dto.getUserId())
                     .userPw(encode.encode(dto.getUserPw()))
@@ -95,6 +93,7 @@ public class UserService implements UserDetailsService {
         return checkResult;
     }
 
+    // 인증 테스트
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         return this.userRepository.findByUserId(userId)
@@ -109,18 +108,16 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
 
-
     public List<RestaurantDTO> getRandomCategoriesForUser(String userId) {
         UserDAO user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<RestaurantCategory> categories = user.getRestaurantCategory();
 
-        Collections.shuffle(categories, random);
+        Collections.shuffle(categories);
         List<RestaurantCategory> randomCategories = categories.stream()
                 .limit(3)
                 .collect(Collectors.toList());
-
 
         List<Restaurant> restaurants = randomCategories.stream()
                 .flatMap(category -> restaurantRepository.findByRestaurantCategory(category).stream())
@@ -131,17 +128,6 @@ public class UserService implements UserDetailsService {
                 .map(RestaurantDTO::new)
                 .collect(Collectors.toList());
     }
-
-    // 권한 주는 조건. 아직 설정된거 없음
-    private boolean roleCondition(UserDTO dto) {
-
-        return false;
-    }
-    public boolean existsById(UserDAO authedUser) {
-
-        return userRepository.existsById(authedUser.getUserIndex());
-    }
-
     // 유저 정보 수정
 
     public void updateUser(UserDAO authedUser, UserDTO updateRequest) {
@@ -150,7 +136,7 @@ public class UserService implements UserDetailsService {
 
         // 비밀번호 업데이트
         if (updateRequest.getUserPw() != null && !updateRequest.getUserPw().isEmpty()) {
-            userToUpdate.setUserPw(bCryptPasswordEncoder.encode(updateRequest.getUserPw()));
+            userToUpdate.setUserPw(encode.encode(updateRequest.getUserPw()));
         }
 
         // 카테고리 업데이트
@@ -183,4 +169,14 @@ public class UserService implements UserDetailsService {
         return amazonS3.getUrl(BUCKET_NAME, fileName).toString();
     }
 
+    // 권한 주는 조건. 아직 설정된거 없음
+    private boolean roleCondition(UserDTO dto) {
+
+        return false;
+    }
+
+    public boolean existsById(UserDAO authedUser) {
+
+        return userRepository.existsById(authedUser.getUserIndex());
+    }
 }
