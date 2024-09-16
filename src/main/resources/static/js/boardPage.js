@@ -22,7 +22,7 @@ let boardPage = {
         // 페이지 데이터 가져오기
         this.fetchBoardPageData();
         this.fetchRestaurantDetail(); // 레스토랑 정보도 함께 가져오기
-
+        this.fetchReviews();
         // 이벤트 리스너 설정
         this.setEventListeners();
     },
@@ -136,7 +136,7 @@ let boardPage = {
     // 새로운 fetchReviews 함수 추가
     fetchReviews: function(restaurantId) {
         $.ajax({
-            url: `/api/r_reviews?restaurantId=${restaurantId}`,  // 리뷰 데이터를 가져오는 API 경로
+            url: `/api/r_reviews?restaurantId=${this.restaurantId}`,  // 리뷰 데이터를 가져오는 API 경로
             method: 'GET',
             dataType: 'json',
             success: (reviews) => {
@@ -196,6 +196,12 @@ let boardPage = {
         });
     },
 
+    setEventListeners: function () {
+        this.buttons.forEach(button => {
+            button.addEventListener('click', (event) => this.handleButtonClick(event));
+        });
+    },
+    
     handleButtonClick: function (event) {
         const button = event.currentTarget;
         const tableId = button.getAttribute('data-show-table');
