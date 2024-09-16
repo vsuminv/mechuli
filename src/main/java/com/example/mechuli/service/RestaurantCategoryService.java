@@ -21,6 +21,6 @@ public class RestaurantCategoryService {
 
     public List<RestaurantCategory> findByUserIndex(UserDAO authedUser) {
 //        List<RestaurantCategory> restaurantCategoryList = restaurantCategoryRepository.findRestaurantCateogyByUserDAOUserIndex(authedUser.getUserIndex());
-        return restaurantCategoryRepository.findRestaurantCatgoByUserDAOUserIndex(authedUser.getUserIndex());
+        return restaurantCategoryRepository.findRestaurantCategoryByUserDAOUserIndex(authedUser.getUserIndex());
     }
 }

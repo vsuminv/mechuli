@@ -1,194 +1,38 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pages/basicPage}">
 <th:block layout:fragment="script">
     <script type="text/javascript" th:src="@{/js/boardPage.js}"></script>
-  <script type="text/javascript" th:src="@{/js/detail.js}"></script>
-  <script type="text/javascript" th:src="@{/js/write_review_count.js}"></script>
-  <script type="text/javascript" th:src="@{/js/write_review_rating.js}"></script>
+    <script type="text/javascript" th:src="@{/js/review.js}"></script>
 </th:block>
 <main layout:fragment="main">
-
- <!-- 가게 상세 페이지에서 가게 배경이미지 및 다른 가게로 이동 구현 -->
-  <div class="flex flex-col w-full relative">
-    <div class="bg-[#e6e6e6] w-full min-h-80 flex justify-between items-center">
-      <button class="text-4xl text-[#fef445] ">◀</button>
-      <button class="text-4xl text-[#fef445] ">▶</button>
-    </div>
-
-      <!-- 가게 로고, 가게 이름, 평점, 간단 설명, 주소, 주소 복사 버튼-->
-    <div class="flex items-center space-x-4 justify-center">
-      <div class="relative -top-16 left-0 rounded-3xl w-32 h-32 bg-[#fef445]">
-        <img src="#" alt="">
-      </div>
-      <div class="flex space-x-4"> <!-- 사각형 크기 및 여백을 고려하여 padding-left 추가 -->
-        <div>
-          <div class="flex items-center">
-            <h1 class="text-6xl">멍멍맛집</h1>
-            &nbsp;&nbsp;
-            <sup class="text-xl top-1">5.0</sup>
-          </div>
-          <p class="text-xl">집사와 강아지가 오붓하게 저녁먹는 집</p>
-          <p class="text-xl">서울특별시 은평구 코사길 15 코사빌딩 5층 <button><i>복사</i></button></p>
+    <div class="flex flex-col w-full relative">
+        <div class="bg-[#e6e6e6] w-full min-h-80 flex justify-between items-center">
+            <button class="text-4xl text-[#fef445] ">◀</button>
+            <button class="text-4xl text-[#fef445] ">▶</button>
         </div>
-        <div>
-          <button class="text-4xl text-[#e6e6e6]">★</button>
+
+        <div th:replace="~{/../contents/board/boardMeta :: boardMeta}"></div>
+
+        <div id="boardContainer" class="text-sm m-auto w-full h-2/3">
+            <div th:replace="~{/../contents/board/boardNav :: boardNav}"></div>
+
+            <!-- 조건부로 렌더링되는 섹션 -->
+            <div th:replace="~{/../contents/board/boardMenu :: boardMenu}"></div>
+            <div th:replace="~{/../contents/board/boardStore :: boardStore}"></div>
+            <div th:replace="~{/../contents/board/boardReview :: boardReview}"></div>
         </div>
-      </div>
+        <div id="menuContainer"></div>
+
+        <div th:replace="~{/../contents/board/boardModal :: boardModal}"></div>
+        <div th:replace="~{/../contents/board/boardReviewButton :: boardReviewButton}"></div>
+
+<!--        <div class="relative w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center m-4 aspect-square !w-24 !h-24">-->
+<!--            <div class="absolute inset-0 flex items-center justify-center">-->
+<!--                <div class="w-1/2 h-1 bg-black"></div>-->
+<!--            </div>-->
+<!--            <div class="absolute inset-0 flex items-center justify-center">-->
+<!--                <div class="w-1 h-1/2 bg-black"></div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
-
-    <div class="grid grid-cols-3 mx-4 gap-x-4 content-center">
-      <button data-show-table="menuTable" class="rounded-lg bg-[#fef445] hover:bg-[#fef445] text-4xl h-16">
-        <h1>메뉴</h1>
-      </button>
-      <button data-show-table="infoTable" class="rounded-lg bg-[#e6e6e6] hover:bg-[#fef445] text-4xl h-16">
-        <h1>가게정보</h1>
-      </button>
-      <button data-show-table="reviewTable" class="rounded-lg bg-[#e6e6e6] hover:bg-[#fef445] text-4xl h-16">
-        <h1>리뷰</h1>
-      </button>
-    </div>
-
-    <table id="menuTable" class="border-separate border-spacing-x-8 border-spacing-y-4">
-      <tr class="">
-        <td class="rounded-3xl w-40 h-40 bg-[#e6e6e6]"><img src="" alt=""></td>
-        <td>
-          <h1 class="text-2xl">함박스테이크</h1>
-          <h1 class="text-2xl">12500</h1>
-        </td>
-      </tr>
-      <tr class="">
-        <td class="rounded-3xl w-40 h-40 bg-[#e6e6e6]"><img src="" alt=""></td>
-        <td>
-          <h1 class="text-2xl">훈제연어</h1>
-          <h1 class="text-2xl">16000</h1>
-        </td>
-      </tr>
-    </table>
-    <br>
-    <table id="infoTable" class="border-separate border-spacing-x-8 border-spacing-y-4 hidden">
-      <tr>
-        <td>
-          <p>영업시간 : 9:00~18:00(일요일만 쉼)</p>
-        </td>
-      </tr>
-    </table>
-    <br>
-    <table id="reviewTable" class="border-separate border-spacing-x-8 border-spacing-y-4 hidden">
-      <tr class="relative flex">
-        <!-- Main TD -->
-        <td class="bg-gray-300 w-32 h-32 border border-gray-400">
-          <img id="user_photo" src="" alt="">
-        </td>
-          <!-- TD 1 -->
-        <td class="relative w-32 h-16 border border-gray-400">
-          <h1 id="user_nickname">홍회장님</h1>
-        </td>
-          <!-- Other TDs -->
-        <td class="w-32 h-16 bg-blue-200 border border-blue-400">
-          <h1 id="upload_date">24-09-05</h1>
-        </td>
-        <td class="w-16 h-16 bg-gray-200 border border-gray-400">
-          <h1 id="upload_time">19:18</h1>
-        </td>
-        <td class="w-32 h-16 bg-blue-200 border border-blue-400">
-          <div id="mod_del_button" class="flex justify-end">
-            <button>수정</button>
-            &nbsp;&nbsp;
-            <button>삭제</button>
-          </div>
-        </td>
-        <td class="absolute w-[28rem] h-16 top-16 left-32 bg-red-200">
-          <p id="comment">다음번에도 개르신 데리고 올게요.</p>
-        </td>
-      </tr>
-    </table>
-
-      <!-- 모달 구현 -->
-    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-      <div class="bg-white p-8 rounded-lg w-96">
-        <div class="w-full">
-          <div class="flex justify-between">
-            <button class="text-4xl">취소</button>
-            <button class="text-4xl text-[#2D9BF0]">등록</button>
-          </div>
-          <div>
-            <h1 class="text-6xl text-center">멍멍맛집</h1>
-
-          </div>
-          <div class="flex justify-center items-center space-x-1">
-            <!-- 별 1 -->
-            <input type="radio" id="star1" name="rating" value="1" class="hidden peer">
-            <label for="star1" class="text-3xl text-gray-400 cursor-pointer hover:text-yellow-400">&#9733;</label>
-
-              <!-- 별 2 -->
-            <input type="radio" id="star2" name="rating" value="2" class="hidden peer">
-            <label for="star2" class="text-3xl text-gray-400 cursor-pointer hover:text-yellow-400">&#9733;</label>
-
-              <!-- 별 3 -->
-            <input type="radio" id="star3" name="rating" value="3" class="hidden peer">
-            <label for="star3" class="text-3xl text-gray-400 cursor-pointer hover:text-yellow-400">&#9733;</label>
-
-              <!-- 별 4 -->
-            <input type="radio" id="star4" name="rating" value="4" class="hidden peer">
-            <label for="star4" class="text-3xl text-gray-400 cursor-pointer hover:text-yellow-400">&#9733;</label>
-
-              <!-- 별 5 -->
-            <input type="radio" id="star5" name="rating" value="5" class="hidden peer">
-            <label for="star5" class="text-3xl text-gray-400 cursor-pointer hover:text-yellow-400">&#9733;</label>
-            &nbsp;&nbsp;
-              <!-- 선택된 평점 표시 -->
-            <span id="selectedRating" class="text-xl font-bold ml-2">0</span>
-          </div>
-
-
-
-            <!-- 리뷰 입력창과 겹치는 Rounded 사각형 -->
-          <div class="relative max-w-lg mx-auto shadow-lg group">
-            <!-- 리뷰 입력창 -->
-            <label for="review" class="block text-sm font-medium text-gray-700 mb-2"><!--이 식당의 리뷰를 작성해 주세요.--></label>
-            <textarea id="review" name="review" rows="6" class="w-full border bg-[#e6e6e6] rounded-lg p-2" placeholder="이 식당의 리뷰를 작성해주세요."></textarea>
-          </div>
-
-          <div class="relative group -top-[88px] left-[8px]">
-            <div class="bg-white rounded-md w-20 h-20 flex justify-center items-center">
-              <img src="/img/photo.png" class="w-8 h-8">
-            </div>
-              <!-- Hover 시 나타나는 검은색 사각형들 -->
-            <div class="absolute left-20 top-0 hidden group-hover:flex space-x-2 px-2 ">
-              <div class="bg-[#808080] rounded-md w-20 h-20 flex justify-center items-center">
-                <label for="file-upload1" class="cursor-pointer p-2">사진1</label>
-                <input id="file-upload1" type="file" class="hidden">
-              </div>
-              <div class="bg-[#808080] rounded-md w-20 h-20 flex justify-center items-center">
-                <label for="file-upload2" class="cursor-pointer p-2">사진2</label>
-                <input id="file-upload2" type="file" class="hidden">
-              </div>
-            </div>
-          </div>
-
-            <!-- 글자 수 표시 -->
-          <div id="char-count" class="text-right text-sm text-gray-500 mt-2">0 / 2000 글자</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="sticky bottom-0 right-4 p-4 w-full h-full flex justify-end">
-      <button id="addReviewButton" class="">
-        <img class="w-24 h-24" th:src="@{/img/add.png}">
-      </button>
-    </div>
-  </div>
-
-<!--    <div id="boardContainer" class="text-sm m-auto w-3/5 h-2/3">-->
-<!--        <div th:replace="~{/../contents/board/board :: board}"></div>-->
-<!--        <div th:replace="~{/../contents/board/boardNav :: boardNav}"></div>-->
-<!--        <div th:replace="~{/../contents/board/boardStore :: boardStore}"></div>-->
-<!--        <div th:replace="~{/../contents/board/boardReview :: boardReview}"></div>-->
-<!--    </div>-->
-
-
-
-
-
-
 </main>
 </html>

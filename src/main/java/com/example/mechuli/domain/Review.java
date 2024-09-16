@@ -1,23 +1,25 @@
 package com.example.mechuli.domain;
 
-
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+@Transactional
 @Entity
 @Builder
 @Getter
 @Setter
-@ToString
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "review")
 public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="review_id")
@@ -26,19 +28,28 @@ public class Review {
     @Column(name="content", nullable = false)
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id",referencedColumnName = "restaurant_id") // 외래키
+    private Restaurant restaurant;
+
+    @ManyToOne
+    @JoinColumn(name = "user_index",referencedColumnName = "user_index") // 외래키
+    private UserDAO userIndex;
+
     @CreatedDate
     @Column(name="createDate")
     private LocalDateTime createDate;
 
     @LastModifiedDate
-    @Column(name="updateDate",nullable = false)
+    @Column(name = "updateDate")
+
     private LocalDateTime updateDate;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id") // 외래키
-    private Restaurant restaurant;
+    @Column(name = "review_img", columnDefinition = "TEXT")
+    private String reviewImg;
 
-    @OneToMany( mappedBy = "review")
-    private List<Review_img> review_img;
+    @Column(name="rating")
+    private int rating;
+
 
 }

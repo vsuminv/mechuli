@@ -72,10 +72,18 @@ public class UserDAO implements UserDetails {
     @OneToMany(mappedBy = "userId")
     private List<Subscription> subscriptions;
 
+    @OneToMany(mappedBy = "subscriber")
+    private List<Subscription> subscriber;
+
+    // 권한 반환
 
     //권환 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
+//        if (role == null) {
+//            return Collections.emptyList(); // 역할이 없을 경우 빈 리스트 반환
+//        }
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
@@ -83,6 +91,7 @@ public class UserDAO implements UserDetails {
     @Override
     public String getUsername() {
         return nickname;
+//        return userId;
     }
 
     //
