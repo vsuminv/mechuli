@@ -1,21 +1,22 @@
 package com.example.mechuli.config;
 
-
-import com.example.mechuli.service.UserService;
+import jakarta.servlet.Filter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
-import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasRole;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -34,9 +35,8 @@ public class SecurityConfig {
                 .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                                .requestMatchers("/joinPage","/wellcomePage").permitAll()
-//                        .anyRequest().permitAll()
+                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token").permitAll()
+                                .requestMatchers("/joinPage/**","/").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
@@ -52,7 +52,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/")
                         .invalidateHttpSession(true));
         return http.build();
     }
