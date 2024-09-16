@@ -8,8 +8,10 @@ import com.example.mechuli.domain.Review;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.ReviewDTO;
 import com.example.mechuli.repository.ReviewRepository;
+import com.example.mechuli.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ public class ReviewService {
 
     @Autowired
     private  ReviewRepository reviewRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private AmazonS3 amazonS3;
 
@@ -104,13 +108,20 @@ public class ReviewService {
         }
     }
 
-    @Transactional(readOnly = true)
     public List<ReviewDTO> getReviewsByRestaurant(Long restaurantId) {
         List<Review> reviews = reviewRepository.findByRestaurantRestaurantId(restaurantId);
 
         // 리뷰 엔티티를 DTO로 변환하여 반환
         return reviews.stream()
-                .map(ReviewDTO::new)  // Review 엔티티를 ReviewDTO로 변환
+                .map(review -> {
+                    UserDAO user = userRepository.findById(review.getUserIndex().getUserIndex())  // 유저 인덱스로 유저 정보 조회
+                            .orElse(null);  // 유저가 없을 경우 null 처리
+                    String nickname = (user != null && user.getNickname() != null)
+                            ? user.getNickname()
+                            : "익명";  // 닉네임이 없으면 기본값 설정
+
+                    return new ReviewDTO(review, nickname);  // DTO 생성 시 유저의 닉네임 전달
+                })
                 .collect(Collectors.toList());
     }
 
