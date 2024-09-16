@@ -19,6 +19,18 @@ let boardPage = {
             return;
         }
 
+        // 모든 테이블 숨김
+        this.tables.forEach(table => {
+            table.style.display = 'none';
+            table.classList.add('hidden');
+        });
+
+        const menuTable = document.getElementById('menuTable');
+        if(menuTable) {
+            menuTable.style.display = 'table';
+            menuTable.classList.remove('hidden');
+        }
+
         // 페이지 데이터 가져오기
         this.fetchBoardPageData();
         this.fetchRestaurantDetail(); // 레스토랑 정보도 함께 가져오기
