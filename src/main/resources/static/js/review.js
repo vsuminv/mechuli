@@ -11,22 +11,8 @@ const reviewPage = {
     restaurantName: null, // 식당 이름을 저장할 변수
 
     init: function () {
-        // 'modal' 요소와 'addReviewButton'이 제대로 선택되었는지 확인
-        if (!this.modal) {
-            console.warn('Modal element is missing.');
-            return;
-        }
-        if (!this.addReviewButton) {
-            console.warn('Add review button is missing.');
-            return;
-        }
-
-        // 취소 버튼 선택
         this.cancelButton = this.modal.querySelector('button:first-of-type');
-        if (!this.cancelButton) {
-            console.warn('Cancel button in modal is missing.');
-            return;
-        }
+        this.maxLength = this.review.getAttribute('maxlength');
 
         // URL에서 restaurantId 추출
         const urlParams = new URLSearchParams(window.location.search);
@@ -43,43 +29,15 @@ const reviewPage = {
 
         // 이벤트 리스너 설정
         this.setEventListeners();
-    },
 
-    setEventListeners: function () {
-        // 리뷰 추가 버튼 이벤트 리스너 설정
-        if (this.addReviewButton) {
-            this.addReviewButton.addEventListener('click', () => this.showModal());
-        }
-
-        // 취소 버튼 이벤트 리스너 설정
-        if (this.cancelButton) {
-            this.cancelButton.addEventListener('click', () => this.hideModal());
-        }
-
-        // 별점 선택 이벤트 리스너 설정
-        this.stars.forEach((star, index) => {
-            star.addEventListener('change', () => this.updateStarRating(index));
+        // 클릭 이벤트로 리뷰 데이터를 요청
+        document.getElementById('reviewButton').addEventListener('click', () => {
+            if (this.restaurantId) {
+                this.fetchReviews(this.restaurantId);  // 버튼 클릭 시 리뷰 데이터를 가져옴
+            } else {
+                console.warn('식당 ID가 없습니다.');
+            }
         });
-
-        // 리뷰 입력 이벤트 리스너 설정
-        if (this.review) {
-            this.review.addEventListener('input', () => this.updateCharacterCount());
-        }
-
-        // 리뷰 제출 버튼 클릭 이벤트
-        $('#submit-button').click((event) => {
-            event.preventDefault();
-            this.submitReview();
-        });
-    },
-
-    showModal: function () {
-        this.updateModalWithRestaurantName();  // 모달을 열 때 식당 이름을 업데이트
-        this.modal.classList.remove('hidden'); // 모달 표시
-    },
-
-    hideModal: function () {
-        this.modal.classList.add('hidden'); // 모달 숨기기
     },
 
     fetchRestaurantName: function () {
@@ -100,53 +58,66 @@ const reviewPage = {
         });
     },
 
-    updateModalWithRestaurantName: function () {
-        const modalRestaurantName = document.getElementById('modalRestaurantName'); // 식당 이름을 업데이트하기 위한 요소
+    setEventListeners: function () {
+        this.addReviewButton.addEventListener('click', () => this.showModal());
+        this.cancelButton.addEventListener('click', () => this.hideModal());
 
-        // 모달의 식당 이름 업데이트
-        if (modalRestaurantName && this.restaurantName) {
-            modalRestaurantName.textContent = this.restaurantName; // 식당 이름 반영
-        }
+        this.stars.forEach((star, index) => {
+            star.addEventListener('change', () => this.updateStarRating(index));
+        });
+
+        this.review.addEventListener('input', () => this.updateCharacterCount());
+
+        $('#submit-button').click((event) => {
+            event.preventDefault();
+
+            let reviewData = new FormData();
+            let reviewDto = {
+                content: $('#review').val(),
+                rating: $('input[name="rating"]:checked').val()
+            };
+
+            reviewData.append('reviewDto', new Blob([JSON.stringify(reviewDto)], { type: 'application/json' }));
+
+            const files = [];
+            if ($('#file-upload1')[0].files.length > 0) {
+                files.push($('#file-upload1')[0].files[0]);
+            }
+            if ($('#file-upload2')[0].files.length > 0) {
+                files.push($('#file-upload2')[0].files[0]);
+            }
+
+            files.forEach(file => {
+                reviewData.append('files', file);
+            });
+
+            reviewData.append('restaurantId', this.restaurantId);
+
+            $.ajax({
+                url: '/reviews',
+                method: 'POST',
+                processData: false,
+                contentType: false,
+                data: reviewData,
+                success: function(response) {
+                    alert('리뷰가 성공적으로 등록되었습니다.');
+                    reviewPage.hideModal();
+                },
+                error: function(xhr) {
+                    alert('리뷰 등록 중 오류가 발생했습니다.');
+                    console.log(xhr.responseText);
+                }
+            });
+        });
     },
 
-    submitReview: function () {
-        let reviewData = new FormData();
-        let reviewDto = {
-            content: $('#review').val(),
-            rating: $('input[name="rating"]:checked').val()
-        };
+    showModal: function () {
+        this.updateModalWithRestaurantName();  // 모달을 열 때 식당 이름을 업데이트
+        this.modal.classList.remove('hidden');
+    },
 
-        reviewData.append('reviewDto', new Blob([JSON.stringify(reviewDto)], { type: 'application/json' }));
-
-        const files = [];
-        if ($('#file-upload1')[0].files.length > 0) {
-            files.push($('#file-upload1')[0].files[0]);
-        }
-        if ($('#file-upload2')[0].files.length > 0) {
-            files.push($('#file-upload2')[0].files[0]);
-        }
-
-        files.forEach(file => {
-            reviewData.append('files', file);
-        });
-
-        reviewData.append('restaurantId', this.restaurantId);
-
-        $.ajax({
-            url: '/reviews',
-            method: 'POST',
-            processData: false,
-            contentType: false,
-            data: reviewData,
-            success: function(response) {
-                alert('리뷰가 성공적으로 등록되었습니다.');
-                reviewPage.hideModal();
-            },
-            error: function(xhr) {
-                alert('리뷰 등록 중 오류가 발생했습니다.');
-                console.log(xhr.responseText);
-            }
-        });
+    hideModal: function () {
+        this.modal.classList.add('hidden');
     },
 
     updateStarRating: function (index) {
