@@ -1,5 +1,5 @@
 # security filter
-
+[제일 정확함](https://wikidocs.net/162255)
 
 - SecurityContextPersistenceFilter
   - SecurityContextRepository에서 SecurityContext(접근 주체와 인증에 대한 정보를 담고 있는 객체)를 가져오거나 저장하는 역할
@@ -23,6 +23,8 @@
   - 요청을 처리하는 중에 발생할 수 있는 예외를 위임하거나 전달
 - vFilterSecurityInterceptor
   - 접근 결정 관리자. AccessDecisionManager로 권한 부여 처리를 위임함으로써 접근 제어 결정을 쉽게 해준다. 이 과정에서 이미 사용자 인증이 되어있으므로 유효한 사용자인지도 알 수 있음. 인가 관련 설정 가능.
+
+## 
 
 
 # UserDetails
@@ -84,6 +86,7 @@ role이 여러 개가 아니라 user 하나만 있다면 authenticated()를 사�
 
 - role을 그냥 USER라고 해두면 security에서 인식을 하지 못하기 때문에 꼭 "ROLE_" 을 포함시켜줘야 한다.
 - role을 생성했다면 member entity에도 role을 추가해줘야 한다.
+- Role 관련 필터엔 prefix가 자동으로 붙어있으니 어디 설정 편하게 한답시고 prefix 따로 설정 시키지 말자
 
 ## thymeleaf
 
@@ -143,8 +146,8 @@ role이 여러 개가 아니라 user 하나만 있다면 authenticated()를 사�
 - `<input type="button" th:onclick="|location.href='@{이동할 url}'|"> `
 
 
-
-
+# 인가 api 표현식
+![img_3.png](img_3.png)
 
 
 
@@ -152,3 +155,37 @@ role이 여러 개가 아니라 user 하나만 있다면 authenticated()를 사�
 
 [Spring Security - 인증과 인가 : 정보 저장](https://chaeyami.tistory.com/251)
 [SecurityContextHolder 이용하여 로그인 정보 가져오기](https://januaryman.tistory.com/165)
+
+
+
+# 찐 보안
+
+XContentTypeOptionsHeaderWriter: MIME타입 스니핑 방어
+
+X-Content-Type-Options:nosniff
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
+
+
+XXssProtectionHeaderWriter: 브라우저에 내장된 XSS 필터 적용
+
+X-XSS-Protection:1;mode=block
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+
+
+CacheControlHeadersWriter: 캐시 히스토리 취약점 방어
+
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+
+
+HstsHeaderWriter: https 프로토콜 사용을 강제(https를 사용해야함)
+
+https://datatracker.ietf.org/doc/html/rfc6797
+
+
+XFrameOptionsHeaderWriter: HTML삽입 취약점 방어로 iframe, object 등을 삽입을 방지함(clickjacking 방어)
+
+DENY: 컨텐츠를 다른 사이트에서 표현 금지
+SAMEORIGIN: 동일한 도메인에서만 표현
+ALLOW-FROMuri: uri에 해당하는 도메인에서만 표현
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+출처: https://taeu.kr/73 [절대적 발전:티스토리]

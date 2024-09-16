@@ -16,7 +16,6 @@ public class RestaurantService {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
-
     @Autowired
     private MenuRepository menuRepository;
 

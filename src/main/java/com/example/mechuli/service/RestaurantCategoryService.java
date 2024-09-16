@@ -12,9 +12,13 @@ import java.util.List;
 @Service
 public class RestaurantCategoryService {
 
-
     @Autowired
-    RestaurantCategoryRepository restaurantCategoryRepository;
+    private RestaurantCategoryRepository restaurantCategoryRepository;
+
+    public List<RestaurantCategory> getCategoryList() {
+        return restaurantCategoryRepository.findAll();
+    }
+
     public List<RestaurantCategory> findByUserIndex(UserDAO authedUser) {
 //        List<RestaurantCategory> restaurantCategoryList = restaurantCategoryRepository.findRestaurantCateogyByUserDAOUserIndex(authedUser.getUserIndex());
         return restaurantCategoryRepository.findRestaurantCatgoByUserDAOUserIndex(authedUser.getUserIndex());

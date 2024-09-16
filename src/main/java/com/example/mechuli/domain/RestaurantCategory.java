@@ -12,6 +12,7 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "restaurant_category")
 public class RestaurantCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

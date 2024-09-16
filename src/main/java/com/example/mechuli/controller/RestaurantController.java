@@ -20,9 +20,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class RestaurantController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
+    private final UserService userService;
     private final RestaurantService restaurantService;
 
     // 메인페이지 전체조회
