@@ -77,6 +77,19 @@ const reviewPage = {
                 rating: $('input[name="rating"]:checked').val()
             };
 
+            // UI에 실시간 반영할 사용자가 입력한 데이터를 준비
+            const userReview = {
+                reviewId: `temp-${Date.now()}`, // 임시 ID를 사용해 고유하게 설정
+                userPhoto: '/images/default-profile.png', // 사용자가 로그인 상태라면 실제 사진을 사용할 수 있음
+                nickname: '익명', // 사용자의 닉네임 (필요시 실제 닉네임 사용)
+                createDate: new Date().toISOString(),
+                content: reviewDto.content,
+                rating: reviewDto.rating
+            };
+
+            // 사용자가 작성한 리뷰를 먼저 화면에 표시
+            this.addReviewToPage(userReview);
+
             reviewData.append('reviewDto', new Blob([JSON.stringify(reviewDto)], { type: 'application/json' }));
             reviewData.append('restaurantId', this.restaurantId);
 
@@ -88,7 +101,11 @@ const reviewPage = {
                 data: reviewData,
                 success: (response) => {
                     alert('리뷰가 성공적으로 등록되었습니다.');
-                    this.addReviewToPage(response);  // 새 리뷰만 추가
+                    // 서버로부터 응답받은 리뷰 정보를 콘솔에 출력
+//                    console.log(response);
+//                    this.addReviewToPage(response);  // 새 리뷰만 추가
+                    // 서버로부터 받은 응답을 바탕으로 UI 업데이트 (필요 시)
+                    this.updateReviewWithServerData(userReview.reviewId, response);
                     this.hideModal();  // 모달 닫기
                 },
                 error: (xhr) => {
@@ -105,6 +122,18 @@ const reviewPage = {
                 reviewPage.deleteReview(reviewId);  // 리뷰 삭제 함수 호출
             }
         });
+    },
+
+    // 서버 응답에 따라 UI를 업데이트하는 함수
+    updateReviewWithServerData: function (tempReviewId, response) {
+        const existingRow = document.getElementById(`review-${tempReviewId}`);
+        if (existingRow) {
+            existingRow.setAttribute('id', `review-${response.reviewId}`); // 임시 ID를 실제 리뷰 ID로 변경
+            existingRow.querySelector('#user_nickname').textContent = response.nickname || '익명';
+            existingRow.querySelector('#upload_date').textContent = new Date(response.createDate).toLocaleDateString();
+            existingRow.querySelector('#comment').textContent = response.content || '내용 없음';
+            // 서버에서 받은 다른 정보들도 필요시 업데이트
+        }
     },
     
     // 리뷰 삭제 함수
@@ -143,6 +172,7 @@ const reviewPage = {
         // 만약 기존 태그가 없다면 새로 추가
         const rowElement = document.createElement('tr');
         rowElement.setAttribute('id', `review-${review.reviewId}`);  // 리뷰 ID를 사용해 행 ID 설정
+        rowElement.classList.add('relative', 'flex');
 
         rowElement.innerHTML = `
             <td class="bg-gray-300 w-32 h-32 border border-gray-400">
@@ -165,7 +195,6 @@ const reviewPage = {
                 <p id="comment">${review.content || '내용 없음'}</p>
             </td>
         `;
-        rowElement.classList.add('relative', 'flex');
 
         const reviewTable = document.getElementById('reviewTable');
         reviewTable.appendChild(rowElement); // 테이블에 새 리뷰 추가
@@ -175,7 +204,7 @@ const reviewPage = {
         document.getElementById(review.reviewId).addEventListener('click', (event) => {
             const reviewId = event.target.id;
             reviewPage.deleteReview(reviewId); // 리뷰 삭제 함수 호출
-    });
+        });
     },
         
     showModal: function () {
