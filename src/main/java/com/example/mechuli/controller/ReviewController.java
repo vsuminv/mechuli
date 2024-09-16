@@ -45,6 +45,7 @@ public class ReviewController {
     @GetMapping("/api/r_reviews")
     public List<ReviewDTO> getReviewsByRestaurant(@RequestParam("restaurantId") Long restaurantId) {
         List<ReviewDTO> reviews = reviewService.getReviewsByRestaurant(restaurantId);
+       System.out.println(reviews);
         return reviews;
     }
 //    // 모든 리뷰 조회
