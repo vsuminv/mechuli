@@ -85,9 +85,6 @@ public class ReviewService {
                     .updateDate(LocalDateTime.now())
                     .createDate(LocalDateTime.now())
                     .build());
-//            System.out.println("create date : "+review.getCreateDate()+", update_date : "+ review.getUpdateDate());
-//
-//            reviewRepository.save(review);
         }else {// 이미지 파일이 있을 때
             // 이미지 URL 저장을 위한 리스트
             List<String> imageUrls = uploadImages(files);  // 이미지 업로드 후 URL 리스트 반환
@@ -107,6 +104,34 @@ public class ReviewService {
                     .createDate(LocalDateTime.now())
                     .build());
         }
+    }
+
+    @Transactional
+    public void updateReview(Long reviewId, UserDAO authUser, ReviewDTO reviewDTO, List<MultipartFile> files) throws IOException {
+        // 수정할 리뷰가 존재하는지 확인
+        Review existingReview = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
+
+        // 리뷰 작성자가 현재 로그인한 사용자인지 확인
+        if (!existingReview.getUserIndex().getUserIndex().equals(authUser.getUserIndex())) {
+            throw new SecurityException("해당 리뷰를 수정할 권한이 없습니다.");
+        }
+
+        // 리뷰 수정
+        existingReview.setContent(reviewDTO.getContent());
+        existingReview.setRating(reviewDTO.getRating());
+        existingReview.setUpdateDate(LocalDateTime.now());
+
+        // 이미지 파일이 있으면 처리
+        if (files != null && !files.isEmpty()) {
+            List<String> imageUrls = uploadImages(files);  // 이미지 업로드
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonImageUrls = objectMapper.writeValueAsString(imageUrls);  // 이미지 URL 리스트를 JSON으로 변환
+            existingReview.setReviewImg(jsonImageUrls);  // 수정된 이미지 설정
+        }
+
+        // 수정된 리뷰 저장
+        reviewRepository.save(existingReview);
     }
 
     public List<ReviewDTO> getReviewsByRestaurant(Long restaurantId) {
@@ -148,6 +173,4 @@ public class ReviewService {
         // 리뷰 삭제
         reviewRepository.delete(review);
     }
-
-
 }

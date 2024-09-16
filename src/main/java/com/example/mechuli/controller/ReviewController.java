@@ -41,11 +41,27 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
+    // 리뷰 수정
+    @PutMapping("/reviews")
+    public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,
+                                             @RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
+                                             @RequestPart(value = "files", required = false) List<MultipartFile> files,
+                                             @AuthenticationPrincipal UserDAO authUser) throws IOException {
+        if (authUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 수정된 리뷰 저장
+        reviewService.updateReview(reviewId, authUser, reviewDTO, files);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     // 특정 식당의 리뷰 데이터를 JSON으로 반환하는 API
     @GetMapping("/api/r_reviews")
     public List<ReviewDTO> getReviewsByRestaurant(@RequestParam("restaurantId") Long restaurantId) {
         List<ReviewDTO> reviews = reviewService.getReviewsByRestaurant(restaurantId);
-       System.out.println(reviews);
+        System.out.println(reviews);
         return reviews;
     }
 
@@ -58,7 +74,6 @@ public class ReviewController {
         System.out.println(reviews);
         return reviews;
     }
-
 
     // 리뷰 삭제
     @DeleteMapping("/reviews/{reviewId}")
