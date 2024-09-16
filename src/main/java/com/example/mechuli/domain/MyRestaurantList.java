@@ -28,5 +28,4 @@ public class MyRestaurantList {
     @JoinColumn(name = "user_index") // 외래키
     private UserDAO userDAO;
 
-
 }

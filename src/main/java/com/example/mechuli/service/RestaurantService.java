@@ -1,12 +1,16 @@
 package com.example.mechuli.service;
 
 import com.example.mechuli.domain.Menu;
+import com.example.mechuli.domain.MyRestaurantList;
 import com.example.mechuli.domain.Restaurant;
+import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.MenuDTO;
+import com.example.mechuli.dto.MyRestaurantListDTO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.repository.MenuRepository;
 import com.example.mechuli.repository.MyRestaurantListRepository;
 import com.example.mechuli.repository.RestaurantRepository;
+import com.example.mechuli.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +28,9 @@ public class RestaurantService {
 
     @Autowired
     private MyRestaurantListRepository myRestaurantListRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<RestaurantDTO> findAll() {
         // Restaurant 리스트를 RestaurantDTO 리스트로 변환
@@ -55,14 +62,11 @@ public class RestaurantService {
     }
 
 
-
-
-
     // ==============================================================================
     public List<MenuDTO> findMenusByRestaurantId(Long restaurantId) {
         List<Menu> menuList = menuRepository.findAllByRestaurant_RestaurantId(restaurantId);
         List<MenuDTO> menuDtoList = new ArrayList<MenuDTO>();
-        for(Menu m : menuList) {
+        for (Menu m : menuList) {
             MenuDTO menuDto = MenuDTO.builder()
                     .menuId(m.getMenuId())
                     .menuName(m.getMenuName())
@@ -74,6 +78,7 @@ public class RestaurantService {
 
         return menuDtoList;
     }
+
     public RestaurantDTO findRestaurantByRestaurantId(Long restaurantId) {
 
         Restaurant rest = restaurantRepository.findByRestaurantId(restaurantId);
@@ -89,9 +94,38 @@ public class RestaurantService {
         return restDto;
     }
 
-    public int existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long restaurantId, Long userIndex) {
-        int result = 0;
-        if(myRestaurantListRepository.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, userIndex)) { result = 1; }
-        return result;
+    public boolean existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long restaurantId, Long userIndex) {
+
+        return myRestaurantListRepository.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, userIndex);
+    }
+
+//    public Long findByRestaurantList_restaurantIdAndUserDAO_userIndex(Long restaurantId, Long userIndex) {
+//        Long result = null;
+//        Optional<MyRestaurantList> myRestList = myRestaurantListRepository.findByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, userIndex);
+//        if(myRestList.isPresent()) {
+//            result = myRestList.get().getMyListIndex();
+//        }
+//        return result;
+//    }
+
+    public void save(Long restaurantId, Long userIndex) {
+
+        // Restaurant과 UserDAO 엔티티 조회
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        UserDAO userDAO = userRepository.findById(userIndex)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // MyRestaurantList 엔티티 builder로 생성
+        MyRestaurantList myRestaurantList = MyRestaurantList.builder()
+                .restaurantList(restaurant)
+                .userDAO(userDAO)
+                .build();
+
+        myRestaurantListRepository.save(myRestaurantList);
+    }
+
+    public void deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(Long restaurantId, Long userIndex) {
+        myRestaurantListRepository.deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, userIndex);
     }
 }

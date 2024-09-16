@@ -2,6 +2,7 @@ package com.example.mechuli.controller;
 
 
 import com.example.mechuli.domain.Menu;
+import com.example.mechuli.domain.MyRestaurantList;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.MenuDTO;
@@ -89,23 +90,43 @@ public class RestaurantController {
     @RequestMapping(value = "/ajax/CheckMyRestaurant", method = RequestMethod.POST)
     @ResponseBody
     public int ajaxCheckMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
-        int result = 0;
+        int result = -1;
+        boolean isExist;
         try {
-            result = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            isExist = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            if(isExist) {
+                result = 1;
+            } else {
+                result = 0;
+            }
         } catch(Exception e) {
             System.out.println("existsByRestaurantList_restaurantIdAndUserDAO_userIndex 메소드가 정상 실행되지 않았습니다.");
         }
         return result;
     }
 
-//    // 내 식당 찜하기 / 해제
-//    @RequestMapping(value = "/ajax/GetMyRestaurant", method = RequestMethod.POST)
-//    @ResponseBody
-//    public int ajaxGetMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
-//        if(restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex())) {
-//            findById
-//        } else {
-//
-//        }
-//    }
+    // 내 식당 찜하기 / 해제 ajax
+    @RequestMapping(value = "/ajax/DoMyRestaurant", method = RequestMethod.POST)
+    @ResponseBody
+    public int ajaxDoMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+        int result = -1;
+        boolean isExist;
+        try {
+            isExist = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+        } catch (Exception e) {
+            System.out.println("restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex가 정상작동하지 않았습니다.");
+            return result;  // ajax 실행 중 에러 발생 시 -1 리턴
+        }
+        // 이미 값이 들어 있다면(찜 상태라면 삭제)
+        if (isExist) {
+            // delete
+            restaurantService.deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            result = 0;
+        } else {    // 값이 존재하지 않는다면 insert (찜 생성)
+            // insert
+            restaurantService.save(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            result = 1;
+        }
+        return result;
+    }
 }
