@@ -30,8 +30,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -51,9 +51,9 @@ dependencies {
 
 	// DB
 	runtimeOnly 'com.mysql:mysql-connector-j'
-//	implementation 'mysql:mysql-connector-java:8.0.32'
-//	runtimeOnly 'com.h2database:h2'
-//	implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
+//   implementation 'mysql:mysql-connector-java:8.0.32'
+//   runtimeOnly 'com.h2database:h2'
+//   implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
 
 	// s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
@@ -62,6 +62,7 @@ dependencies {
 	// 이미지 업로드 의존성 JAXB
 	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 	implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
 
 }
 
