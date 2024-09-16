@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Builder
@@ -75,12 +76,18 @@ public class UserDAO implements UserDetails {
     private List<Subscription> subscriber;
 
     // 권한 반환
+
+    // 권한 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 //        if (role == null) {
 //            return Collections.emptyList(); // 역할이 없을 경우 빈 리스트 반환
 //        }
 //        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
+//        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
+//        if (role == null) {
+//            return Collections.emptyList(); // 역할이 없을 경우 빈 리스트 반환
+//        }
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
@@ -89,6 +96,7 @@ public class UserDAO implements UserDetails {
     public String getUsername() {
         //        return userId;
         return nickname;
+//        return userId;
     }
     //
     @Override
@@ -122,16 +130,4 @@ public class UserDAO implements UserDetails {
         return true; // 계정활성화 상태
     }
 
-
-
 }
-
-//User Table
-//- Index
-//- ID
-//- PW
-//- IMG
-//- Address
-//- 생성일
-//- 수정일
-

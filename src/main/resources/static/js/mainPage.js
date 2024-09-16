@@ -300,7 +300,6 @@ let mainPage = {
             console.log("선택된 카테고리:", categoryName);
         }
     },
-    // 상세 페이지로 넘어감(임시코드)
 
     goToDetailPage: function (restaurantId) {
         // 현재 호스트의 기본 URL을 가져옴 (예: http://localhost:8081)

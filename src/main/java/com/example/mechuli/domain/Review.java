@@ -28,14 +28,6 @@ public class Review {
     @Column(name="content", nullable = false)
     private String content;
 
-    @CreatedDate
-    @Column(name="createDate")
-    private LocalDateTime createDate;
-
-    @LastModifiedDate
-    @Column(name="updateDate")
-    private LocalDateTime updateDate;
-
     @ManyToOne
     @JoinColumn(name = "restaurant_id",referencedColumnName = "restaurant_id") // 외래키
     private Restaurant restaurant;
@@ -50,6 +42,7 @@ public class Review {
 
     @LastModifiedDate
     @Column(name = "updateDate")
+
     private LocalDateTime updateDate;
 
     @Column(name = "review_img", columnDefinition = "TEXT")
