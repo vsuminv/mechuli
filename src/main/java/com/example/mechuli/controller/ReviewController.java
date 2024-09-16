@@ -48,21 +48,15 @@ public class ReviewController {
        System.out.println(reviews);
         return reviews;
     }
-//    // 모든 리뷰 조회
-//    @GetMapping
-//    public List<ReviewDTO> getAllReviews() {
-//        List<ReviewDTO> reviews = reviewService.getAllReviews();
-//        return reviews;
-//    }
-//
-//    // 리뷰 삭제
-//    @DeleteMapping("/{reviewId}")
-//    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
-//        try {
-//            reviewService.deleteReview(reviewId);
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        } catch (IllegalArgumentException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+
+    // 리뷰 삭제
+    @DeleteMapping("/reviews/{reviewId}")
+    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
+        try {
+            reviewService.deleteReview(reviewId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
