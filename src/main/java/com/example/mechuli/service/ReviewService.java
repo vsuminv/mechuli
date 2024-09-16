@@ -125,6 +125,14 @@ public class ReviewService {
                 .collect(Collectors.toList());
     }
 
+    public void deleteReview(Long reviewId) {
+        // 리뷰가 존재하는지 확인
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
+
+        // 리뷰 삭제
+        reviewRepository.delete(review);
+    }
 
     // 유저 리뷰 조회
 //    public List<Review> findByUserIndex(Long userIndex){

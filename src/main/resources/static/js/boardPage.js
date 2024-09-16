@@ -246,15 +246,15 @@ let boardPage = {
     // 리뷰 데이터를 렌더링하는 함수
     renderReviews: function(reviews) {
         const reviewTable = document.getElementById('reviewTable');
-        reviewTable.innerHTML = ''; // 기존 테이블 내용을 초기화
 
         if (!reviews || reviews.length === 0) {
-            reviewTable.innerHTML = '<tr><td colspan="5" class="text-center">리뷰가 없습니다.</td></tr>';
+            reviewTable.innerHTML = '<tr id="review-${review.reviewId}"><td colspan="5" class="text-center">리뷰가 없습니다.</td></tr>';
             return;
         }
 
         reviews.forEach(review => {
             const rowElement = document.createElement('tr');
+            rowElement.setAttribute('id',`review-${review.reviewId}`);
             rowElement.classList.add('relative', 'flex');
 
             rowElement.innerHTML = `
@@ -271,7 +271,7 @@ let boardPage = {
                     <div id="mod_del_button" class="flex justify-end">
                         <button>수정</button>
                         &nbsp;&nbsp;
-                        <button>삭제</button>
+                        <button class="delete-button" id="${review.reviewId}">삭제</button>
                     </div>
                 </td>
                 <td class="absolute w-96 h-24 top-8 left-32 bg-red-200">

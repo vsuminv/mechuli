@@ -12,7 +12,7 @@ const reviewPage = {
 
     init: function () {
         this.cancelButton = this.modal.querySelector('button:first-of-type');
-        this.maxLength = this.review.getAttribute('maxlength') || 2000;
+        this.maxLength = this.review.getAttribute('maxlength');
 
         // URL에서 restaurantId 추출
         const urlParams = new URLSearchParams(window.location.search);
@@ -78,19 +78,6 @@ const reviewPage = {
             };
 
             reviewData.append('reviewDto', new Blob([JSON.stringify(reviewDto)], { type: 'application/json' }));
-
-            const files = [];
-            if ($('#file-upload1')[0].files.length > 0) {
-                files.push($('#file-upload1')[0].files[0]);
-            }
-            if ($('#file-upload2')[0].files.length > 0) {
-                files.push($('#file-upload2')[0].files[0]);
-            }
-
-            files.forEach(file => {
-                reviewData.append('files', file);
-            });
-
             reviewData.append('restaurantId', this.restaurantId);
 
             $.ajax({
@@ -99,18 +86,122 @@ const reviewPage = {
                 processData: false,
                 contentType: false,
                 data: reviewData,
-                success: function(response) {
+                success: (response) => {
                     alert('리뷰가 성공적으로 등록되었습니다.');
-                    reviewPage.hideModal();
+                    this.addReviewToPage(response);  // 새 리뷰만 추가
+                    this.hideModal();  // 모달 닫기
                 },
-                error: function(xhr) {
+                error: (xhr) => {
                     alert('리뷰 등록 중 오류가 발생했습니다.');
                     console.log(xhr.responseText);
                 }
             });
         });
+    
+        // 리뷰 삭제 처리 (이벤트 위임 방식으로 처리)
+        document.getElementById('reviewTable').addEventListener('click', function (event) {
+            if (event.target.classList.contains('delete-button')) {
+                const reviewId = event.target.id;  // 클릭된 버튼의 ID를 사용하여 리뷰 ID 가져오기
+                reviewPage.deleteReview(reviewId);  // 리뷰 삭제 함수 호출
+            }
+        });
+    },
+    
+    // 리뷰 삭제 함수
+    deleteReview: function(reviewId) {
+        if (!confirm('정말 이 리뷰를 삭제하시겠습니까?')) {
+            return;  // 사용자가 취소한 경우 삭제 중단
+        }
+    
+        $.ajax({
+            url: `/reviews/${reviewId}`,  // DELETE 요청 보낼 API 경로
+            method: 'DELETE',
+            success: function(response) {
+                alert('리뷰가 삭제되었습니다.');
+    
+                // DOM에서 삭제된 리뷰 제거 (애니메이션 효과 추가)
+                const reviewRow = $(`#review-${reviewId}`);
+                if (reviewRow.length) {
+                    reviewRow.fadeOut(500, function() {
+                        reviewRow.remove();  // 페이드아웃 후 DOM에서 제거
+                    });
+                } else {
+                    console.error('삭제할 리뷰 요소를 찾을 수 없습니다.');
+                }
+            },
+            error: function(xhr) {
+                alert('리뷰 삭제 중 오류가 발생했습니다.');
+                console.log(xhr.responseText);
+            }
+        });
     },
 
+    // 개별 리뷰만 추가하는 함수
+    addReviewToPage: function (review) {
+        const existingRow = document.getElementById(`#reviewTable tr#review-${review.reviewId}`); // 기존 tr 태그 찾기
+    
+
+        // 기존 태그가 있으면 그 안에 내용을 업데이트
+        if (existingRow) {
+            existingRow.innerHTML =`
+            <td class="bg-gray-300 w-32 h-32 border border-gray-400">
+                <img id="user_photo" src="${review.userPhoto || '/images/default-profile.png'}" alt="프로필 사진">
+            </td>
+            <td class="relative w-32 h-8 border border-gray-400">
+                <h1 id="user_nickname">${review.nickname || '익명'}</h1>
+            </td>
+            <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                <h1 id="upload_date">${new Date(review.createDate).toLocaleDateString()}</h1>
+            </td>
+            <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                <div id="mod_del_button" class="flex justify-end">
+                    <button>수정</button>
+                    &nbsp;&nbsp;
+                    <button class="delete-button" id="${review.reviewId}">삭제</button>
+                </div>
+            </td>
+            <td class="absolute w-96 h-24 top-8 left-32 bg-red-200">
+                <p id="comment">${review.content || '내용 없음'}</p>
+            </td>
+        `;
+    } else {
+        // 만약 기존 태그가 없다면 새로 추가
+        const rowElement = document.createElement('tr');
+        rowElement.setAttribute('id', `review-${review.reviewId}`);  // 리뷰 ID를 사용해 행 ID 설정
+
+        rowElement.innerHTML = `
+            <td class="bg-gray-300 w-32 h-32 border border-gray-400">
+                <img id="user_photo" src="${review.userPhoto || '/images/default-profile.png'}" alt="프로필 사진">
+            </td>
+            <td class="relative w-32 h-8 border border-gray-400">
+                <h1 id="user_nickname">${review.nickname || '익명'}</h1>
+            </td>
+            <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                <h1 id="upload_date">${new Date(review.createDate).toLocaleDateString()}</h1>
+            </td>
+            <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                <div id="mod_del_button" class="flex justify-end">
+                    <button>수정</button>
+                    &nbsp;&nbsp;
+                    <button class="delete-button" id="${review.reviewId}">삭제</button>
+                </div>
+            </td>
+            <td class="absolute w-96 h-24 top-8 left-32 bg-red-200">
+                <p id="comment">${review.content || '내용 없음'}</p>
+            </td>
+        `;
+
+        const reviewTable = document.getElementById('reviewTable');
+        reviewTable.appendChild(rowElement); // 테이블에 새 리뷰 추가
+        }
+
+        // 새로 추가된 삭제 버튼에 이벤트 리스너 추가
+        document.getElementById(review.reviewId).addEventListener('click', (event) => {
+            const reviewId = event.target.id;
+            reviewPage.deleteReview(reviewId); // 리뷰 삭제 함수 호출
+    });
+    },
+        
     showModal: function () {
         this.updateModalWithRestaurantName();  // 모달을 열 때 식당 이름을 업데이트
         this.modal.classList.remove('hidden');
