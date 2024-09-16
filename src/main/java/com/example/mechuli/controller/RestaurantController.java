@@ -2,7 +2,9 @@ package com.example.mechuli.controller;
 
 
 import com.example.mechuli.domain.Menu;
+import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.UserDAO;
+import com.example.mechuli.dto.MenuDTO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.service.RestaurantService;
 import com.example.mechuli.service.UserService;
@@ -59,41 +61,38 @@ public class RestaurantController {
     //================================================================
 
     @GetMapping("/boardPage")
-    public Model getRestaurantDetail(@AuthenticationPrincipal UserDAO authedUser, @RequestParam(value = "restaurantId") String restaurantId, Model model) {
+    public RestaurantDTO getRestaurantDetail(@RequestParam(value = "restaurantId") Long restaurantId) {
 
-        if (authedUser != null && userService.existsById(authedUser)) {
-            model.addAttribute("authedUser", authedUser);
-        }
-
-        Long restId = Long.parseLong(restaurantId);
-        List<Menu> menuList = restaurantService.findMenusByRestaurantId(restId);
-        model.addAttribute("menuList", menuList);
-
-        // authedUser가 null이 아니라면 내 식당 찜 조회해서 뿌리기
-
-        return model;
+        return restaurantService.findRestaurantByRestaurantId(restaurantId);
     }
 
     // Post ajax로 레스토랑의 메뉴 가져오기
     @RequestMapping(value = "/ajaxRestaurantMenu", method = RequestMethod.POST)
     @ResponseBody
-    public String ajaxRestaurantMenu(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId, Model model) {
-        Long restId = Long.parseLong(restaurantId);
-        List<Menu> menuList = restaurantService.findMenusByRestaurantId(restId);
-        model.addAttribute("menuList", menuList);
-
-//        return "/detailPage";
-        return "/detailPage?restaurantId=" + restaurantId;
+    public List<MenuDTO> ajaxRestaurantMenu(@RequestBody RestaurantDTO restDto) {
+        Long restaurantId = restDto.getRestaurant_id();
+        return restaurantService.findMenusByRestaurantId(restaurantId);
     }
 
     // Post ajax로 한 페이지의 레스토랑 정보 가져오기
     @RequestMapping(value = "/ajaxRestaurantDetail", method = RequestMethod.POST)
     @ResponseBody
-    public String ajaxRestaurantDetail(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId, Model model) {
-        // 식당 영업시간(오픈, 클로즈), 추후 식당 정보
-        Long restId = Long.parseLong(restaurantId);
-        model.addAttribute("restaurantDetailResult", restaurantService.findRestaurantByRestaurantId(restId));
-//        return "/detailPage";
-        return "/detailPage?restaurantId=" + restaurantId;
+    public RestaurantDTO ajaxRestaurantDetail(@RequestBody Map<String, Long> data) {
+        Long restaurantId = data.get("restaurantId");
+        return restaurantService.findRestaurantByRestaurantId(restaurantId);
     }
+
+
+    // 내 식당 찜 조회해서 뿌리기
+//    @RequestMapping(value = "/ajaxMyRestaurant", method = RequestMethod.POST)
+//    @ResponseBody
+//    public int ajaxCheckMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+//        int result = 0;
+//        try {
+//            result = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+//        } catch(Exception e) {
+//            System.out.println("existsByRestaurantList_restaurantIdAndUserDAO_userIndex 메소드가 정상 실행되지 않았습니다.");
+//        }
+//        return result;
+//    }
 }

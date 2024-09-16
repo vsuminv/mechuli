@@ -1,7 +1,9 @@
 package com.example.mechuli.dto;
 
+import com.example.mechuli.domain.RestaurantCategory;
 import com.example.mechuli.domain.UserDAO;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.List;
@@ -23,11 +25,13 @@ public class UserDTO {
 
     @NotBlank
     private String nickname;
+    @Size(min = 3, max = 5, message = "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.")
     private List<Long> categoryIds;
 
     private String userImg;
 
     private String role;
+
 
 
     public UserDTO(UserDAO userDAO){

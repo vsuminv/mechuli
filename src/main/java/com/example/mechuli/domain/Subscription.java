@@ -16,10 +16,13 @@ public class Subscription {
     @Column(name = "subscript_id")
     private Long subscriptId;
 
+    // 로그인 한 유저
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false, referencedColumnName = "user_index")
     private UserDAO userId;
 
-    @Column(name = "subuser_id")
-    private Long subuserId;
+
+    @ManyToOne
+    @JoinColumn(name = "subscriber", referencedColumnName = "user_index")
+    private UserDAO subscriber;
 }
