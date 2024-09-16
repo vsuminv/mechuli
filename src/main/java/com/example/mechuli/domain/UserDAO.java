@@ -12,8 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Builder
@@ -27,8 +29,8 @@ import java.util.List;
 public class UserDAO implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    @Column(name="user_index", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_index", updatable = false)
     private Long userIndex;
 
     @Column(name = "user_id", nullable = false, unique = true)
@@ -64,16 +66,17 @@ public class UserDAO implements UserDetails {
 
     private List<RestaurantCategory> restaurantCategory;
 
-    @OneToMany( mappedBy = "userDAO")
+    @OneToMany(mappedBy = "userDAO")
     private List<MyRestaurantList> myRestaurantLists;
 
     @OneToMany(mappedBy = "userId")
     private List<Subscription> subscriptions;
 
-    // 권한 반환
+
+    //권환 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     //유니크 아이디를 닉넴으로 반환
@@ -81,6 +84,7 @@ public class UserDAO implements UserDetails {
     public String getUsername() {
         return nickname;
     }
+
     //
     @Override
     public String getPassword() {
@@ -89,27 +93,27 @@ public class UserDAO implements UserDetails {
 
     // 계정 만료 여부 반환
     @Override
-    public boolean isAccountNonExpired(){
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     // 계정 잠금 여부 반환
     @Override
-    public boolean isAccountNonLocked(){
+    public boolean isAccountNonLocked() {
         //계정 잠금되었는지 확인하는 로직
-        return  true; //true: 잠금 되지 않음
+        return true; //true: 잠금 되지 않음
     }
 
     //패스워드의 만료 여부 반환
     @Override
-    public boolean isCredentialsNonExpired(){
+    public boolean isCredentialsNonExpired() {
         //패스워드가 만료되었는지 확인하는 로직
         return true; // true -> 만료되지 않음
     }
 
     //계정 사용 가능 여부 반환
     @Override
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return true; // 계정활성화 상태
     }
 

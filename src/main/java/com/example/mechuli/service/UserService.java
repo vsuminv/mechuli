@@ -13,7 +13,6 @@ import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.example.mechuli.domain.Role.USER;
 
 @Transactional
 @Slf4j
@@ -43,6 +44,12 @@ public class UserService implements UserDetailsService {
     @Transactional
     public Map<String, Object> save(UserDTO dto) {
         Map<String, Object> response = new HashMap<>();
+        Role role;
+        if (roleCondition(dto)) {// roleCondition() 밑에 있음. 나중에 조건 로직 넣어서 쓰면됨
+            role = Role.ADMIN;
+        } else {
+            role = Role.USER; // 기본으로 줌
+        }
         try {
             List<RestaurantCategory> restaurantCategories = new ArrayList<>();
             for (Long categoryId : dto.getCategoryIds()) {
@@ -50,11 +57,12 @@ public class UserService implements UserDetailsService {
                         .orElseThrow(() -> new RuntimeException("Invalid category ID: " + categoryId));
                 restaurantCategories.add(category);
             }
+
             UserDAO user = UserDAO.builder()
                     .userId(dto.getUserId())
                     .userPw(encode.encode(dto.getUserPw()))
                     .nickname(dto.getNickname())
-                    .role(Role.USER)
+                    .role(role)
                     .restaurantCategory(restaurantCategories)
                     .build();
             UserDAO joinedUser = userRepository.save(user);
@@ -72,6 +80,7 @@ public class UserService implements UserDetailsService {
         }
         return response;
     }
+
     public int userCheck(String type, String value) {
         boolean exists = switch (type) {
             case "userId" -> userRepository.existsByUserId(value);
@@ -82,16 +91,21 @@ public class UserService implements UserDetailsService {
         log.info("[ {} ] 중복 검사 들옴.[ {} ], 결과 = [ {} ] ", type, value, checkResult);
         return checkResult;
     }
+
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        Optional<UserDAO> currentUser = this.userRepository.findByUserId(userId);
-        if (currentUser.isEmpty()) {
-            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
-        }
-        UserDAO user = currentUser.get();
-        // UserDAO가 이미 UserDetails를 구현하므로 User 객체로 변환할 필요 없음
-        return user;
+        return this.userRepository.findByUserId(userId)
+                .map(UserDAO -> {
+                    log.info("로그인 들온거 id,nic,role [ {} ] ,[ {} ], ,[ {} ]", UserDAO.getUserId(), UserDAO.getNickname(), UserDAO.getRole());
+                    String categories = String.join(", ", UserDAO.getRestaurantCategory().stream()
+                            .map(RestaurantCategory::getCategoryName)
+                            .toList());
+                    log.info(" [ {} ] 가입할 때 선택했던 취향 : [{}]", UserDAO.getUserId(), categories);
+                    return UserDAO;
+                })
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
     }
+
     public List<RestaurantDTO> getRandomCategoriesForUser(String userId) {
         UserDAO user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -111,6 +125,12 @@ public class UserService implements UserDetailsService {
         return restaurants.stream()
                 .map(RestaurantDTO::new)
                 .collect(Collectors.toList());
+    }
+    
+    // 권한 주는 조건. 아직 설정된거 없음
+    private boolean roleCondition(UserDTO dto) {
+
+        return false;
     }
     public boolean existsById(UserDAO authedUser) {
 
