@@ -12,7 +12,7 @@ const reviewPage = {
 
     init: function () {
         this.cancelButton = this.modal.querySelector('button:first-of-type');
-        this.maxLength = this.review.getAttribute('maxlength');
+        this.maxLength = this.review.getAttribute('maxlength') || 2000;
 
         // URL에서 restaurantId 추출
         const urlParams = new URLSearchParams(window.location.search);
@@ -118,6 +118,15 @@ const reviewPage = {
 
     hideModal: function () {
         this.modal.classList.add('hidden');
+    },
+
+    updateModalWithRestaurantName: function () {
+        const modalRestaurantName = document.getElementById('modalRestaurantName'); // 식당 이름을 업데이트하기 위한 요소
+
+        // 모달의 식당 이름 업데이트
+        if (modalRestaurantName && this.restaurantName) {
+            modalRestaurantName.textContent = this.restaurantName; // 식당 이름 반영
+        }
     },
 
     updateStarRating: function (index) {
