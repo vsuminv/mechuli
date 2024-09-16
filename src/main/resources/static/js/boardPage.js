@@ -25,6 +25,40 @@ let boardPage = {
 
         // 이벤트 리스너 설정
         this.setEventListeners();
+
+        // 페이지 로드 시와 윈도우 크기 변경 시 버튼 위치 조정
+        this.bindEvents();
+        this.adjustButtonPosition(); // 초기화 시 버튼 위치 조정
+    },
+
+    bindEvents: function () {
+        window.addEventListener('load', this.adjustButtonPosition.bind(this));
+        window.addEventListener('resize', this.adjustButtonPosition.bind(this));
+    },
+
+    adjustButtonPosition: function () {
+        // 'page' 요소를 찾아서 그 위치와 크기를 계산
+        var pageElement = document.querySelector('.page');
+        var footerElement = document.querySelector('footer');
+        var reviewButtonContainer = document.getElementById('reviewButtonContainer');
+
+        if (pageElement && footerElement && reviewButtonContainer) {
+            // basicPage.html 중앙에 위치한 'page' 요소의 위치 및 크기를 가져옴
+            var pageRect = pageElement.getBoundingClientRect();
+            var pageRight = pageRect.right;
+            var pageBottom = pageRect.bottom;
+
+            // footer 높이 계산
+            var footerHeight = footerElement.getBoundingClientRect().height || 0;
+
+            // 버튼의 오른쪽 여백 설정
+            var buttonRightOffset = 0; // 오른쪽 16px 여백
+            var buttonBottomOffset = 60; // 하단 16px 여백
+
+            // 버튼 컨테이너의 위치를 조정
+            reviewButtonContainer.style.right = `${window.innerWidth - pageRight + buttonRightOffset}px`;
+            reviewButtonContainer.style.bottom = `${window.innerHeight - pageBottom + buttonBottomOffset}px`;
+        }
     },
 
     setEventListeners: function () {
