@@ -52,7 +52,7 @@ let boardPage = {
         // 'page' 요소를 찾아서 그 위치와 크기를 계산
         var pageElement = document.querySelector('.page');
         var footerElement = document.querySelector('footer');
-        var reviewButtonContainer = document.getElementById('reviewButtonContainer');
+        var reviewButtonContainer = document.getElementById('addReviewButton');
 
         if (pageElement && footerElement && reviewButtonContainer) {
             // basicPage.html 중앙에 위치한 'page' 요소의 위치 및 크기를 가져옴
@@ -143,6 +143,12 @@ let boardPage = {
     },
 
     renderRestaurantMeta: function (data) {
+        const imageElement = document.getElementById('metaImage');
+
+        if (imageElement) {
+            imageElement.setAttribute('src', data.img_url || '#'); // 이미지 URL이 없을 경우 기본값 설정
+        }
+
         const nameElement = document.getElementById('metaTitle');
         if (nameElement) {
             nameElement.textContent = data.name || '가게 이름';
@@ -153,6 +159,49 @@ let boardPage = {
         if (descriptionElement) {
             descriptionElement.textContent = `${data.open_time || '오픈 시간'} - ${data.close_time || '닫는 시간'}`;
         }
+
+        const addressElement = document.getElementById('metaAddress');
+        // 가게 주소 업데이트
+        if (addressElement) {
+            addressElement.innerHTML = `${data.address || '주소 정보'} <button id="copyButton"><i>복사</i></button>`; // 주소 표시
+        }
+        // 복사 버튼에 클릭 이벤트 리스너 추가
+        const copyButton = document.getElementById('copyButton');
+        if (copyButton) {
+            copyButton.addEventListener('click', () => this.copyToClipboard(data.address));
+        }
+
+        const subscribeButton = document.getElementById('subscribe'); // ★ 버튼 요소 가져오기
+        // ★ 버튼 클릭 시 색상을 변경하는 이벤트 리스너 추가
+        if (subscribeButton) {
+            subscribeButton.addEventListener('click', () => this.toggleStarColor());
+        }
+    },
+
+    toggleStarColor: function () {
+        const subscribeButton = document.getElementById('subscribe'); // ★ 버튼 요소 가져오기
+        if (subscribeButton) {
+            // 버튼의 색상이 이미 채워져 있는지 확인
+            if (subscribeButton.classList.contains('text-[#ffdd33]')) {
+                // 색상이 채워져 있다면, 원래 색상으로 변경
+                subscribeButton.classList.remove('text-[#ffdd33]');
+                subscribeButton.classList.add('text-[#e5e5e5]');
+            } else {
+                // 색상이 채워져 있지 않다면, 색상을 채움
+                subscribeButton.classList.remove('text-[#e5e5e5]');
+                subscribeButton.classList.add('text-[#ffdd33]');
+            }
+        }
+    },
+
+    copyToClipboard: function (text) {
+        // 클립보드에 텍스트를 복사하는 기능
+        navigator.clipboard.writeText(text).then(() => {
+            console.log('주소가 클립보드에 복사되었습니다:', text);
+            alert('주소가 복사되었습니다!');
+        }).catch(err => {
+            console.error('주소 복사에 실패했습니다:', err);
+        });
     },
 
     renderMenuList: function (menuList) {
