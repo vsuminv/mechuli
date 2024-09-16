@@ -5,6 +5,7 @@ import com.example.mechuli.domain.Review;
 import com.example.mechuli.domain.UserDAO;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,12 +19,25 @@ public class ReviewDTO {
     private int rating;
     private Long userIndex;
     private String reviewImg;
+    private String nickname;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     public ReviewDTO(Review review){
         this.reviewId = review.getReviewId();
         this.content = review.getContent();
         this.rating = review.getRating();
         this.userIndex = review.getUserIndex().getUserIndex();
+        this.reviewImg = review.getReviewImg();
+    }
+
+    public ReviewDTO(Review review, String nickname) {
+        this.reviewId = review.getReviewId();
+        this.nickname = nickname;
+        this.createDate = review.getCreateDate();
+        this.updateDate = review.getUpdateDate();
+        this.content = review.getContent();
+        this.rating = review.getRating();
         this.reviewImg = review.getReviewImg();
     }
 }

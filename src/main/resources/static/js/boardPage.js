@@ -213,7 +213,7 @@ let boardPage = {
                     <img id="user_photo" src="${review.userPhoto || '/images/default-profile.png'}" alt="프로필 사진">
                 </td>
                 <td class="relative w-32 h-8 border border-gray-400">
-                    <h1 id="user_nickname">${review.userNickname || '익명'}</h1>
+                    <h1 id="user_nickname">${review.nickname || '익명'}</h1>
                 </td>
                 <td class="w-32 h-8 bg-blue-200 border border-blue-400">
                     <h1 id="upload_date">${new Date(review.createDate).toLocaleDateString()}</h1>
