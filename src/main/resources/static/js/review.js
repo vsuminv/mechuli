@@ -40,7 +40,6 @@ const reviewPage = {
         });
     },
 
-    // 식당 이름을 가져오는 함수
     fetchRestaurantName: function () {
         $.ajax({
             url: '/api/ajaxRestaurantDetail',
@@ -59,14 +58,13 @@ const reviewPage = {
         });
     },
 
-    // 식당 리뷰 데이터를 가져오는 함수
     fetchReviews: function (restaurantId) {
         $.ajax({
             url: `/api/r_reviews?restaurantId=${restaurantId}`,  // 리뷰 데이터를 가져오는 경로
             method: 'GET',
             dataType: 'json',
             success: (reviews) => {
-                this.renderReviews(reviews);  // 성공적으로 데이터를 가져오면 렌더링 함수 호출
+                this.renderReviews(reviews);  // 데이터를 가져오면 렌더링 함수 호출
             },
             error: (xhr, status, error) => {
                 console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);
@@ -74,9 +72,8 @@ const reviewPage = {
         });
     },
 
-    // 리뷰 데이터를 테이블에 렌더링
     renderReviews: function (reviews) {
-        const reviewTable = document.getElementById('reviewTable');
+        const reviewTable = document.getElementById('reviewTableBody');
         reviewTable.innerHTML = ''; // 기존 테이블 내용을 초기화
 
         if (!reviews || reviews.length === 0) {
@@ -89,19 +86,15 @@ const reviewPage = {
             rowElement.classList.add('relative', 'flex');
 
             rowElement.innerHTML = `
-                <!-- 프로필 사진 -->
                 <td class="bg-gray-300 w-32 h-32 border border-gray-400">
                     <img id="user_photo" src="${review.userPhoto || '/images/default-profile.png'}" alt="프로필 사진">
                 </td>
-                <!-- 닉네임 -->
                 <td class="relative w-32 h-8 border border-gray-400">
                     <h1 id="user_nickname">${review.userNickname || '익명'}</h1>
                 </td>
-                <!-- 날짜 -->
                 <td class="w-32 h-8 bg-blue-200 border border-blue-400">
                     <h1 id="upload_date">${new Date(review.createDate).toLocaleDateString()}</h1>
                 </td>
-                <!-- 수정/삭제 버튼 -->
                 <td class="w-32 h-8 bg-blue-200 border border-blue-400">
                     <div id="mod_del_button" class="flex justify-end">
                         <button>수정</button>
@@ -109,7 +102,6 @@ const reviewPage = {
                         <button>삭제</button>
                     </div>
                 </td>
-                <!-- 리뷰 내용 -->
                 <td class="absolute w-96 h-24 top-8 left-32 bg-red-200">
                     <p id="comment">${review.content || '내용 없음'}</p>
                 </td>
@@ -119,14 +111,6 @@ const reviewPage = {
         });
 
         reviewTable.classList.remove('hidden'); // 테이블을 보이게 설정
-    },
-
-    // 모달에 식당 이름 반영
-    updateModalWithRestaurantName: function () {
-        const modalTitle = document.getElementById('modalRestaurantName');  // 모달 내 식당 이름을 표시할 요소
-        if (modalTitle && this.restaurantName) {
-            modalTitle.textContent = this.restaurantName;
-        }
     },
 
     setEventListeners: function () {
