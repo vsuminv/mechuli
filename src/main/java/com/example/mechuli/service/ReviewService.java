@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.Review;
 import com.example.mechuli.domain.UserDAO;
+import com.example.mechuli.dto.MyReviewDTO;
 import com.example.mechuli.dto.ReviewDTO;
 import com.example.mechuli.repository.ReviewRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -103,6 +104,18 @@ public class ReviewService {
         }
     }
 
+    public List<MyReviewDTO> findAllByUserIndex(Long userIndex) {
+        UserDAO userDAO = UserDAO.builder()
+                .userIndex(userIndex).build();
+        List<Review> reviewList = reviewRepository.findAllByUserIndex(userDAO);
+        List<MyReviewDTO> myReviewDTOList = new ArrayList<>();
+        for (Review review : reviewList) {
+            MyReviewDTO myReviewDTO = new MyReviewDTO(review);
+            myReviewDTOList.add(myReviewDTO);
+        }
+
+        return myReviewDTOList;
+    }
 
 //    public List<String> getReviewImages(Review review) throws IOException {
 //        // JSON 문자열을 다시 List<String> 형식으로 변환

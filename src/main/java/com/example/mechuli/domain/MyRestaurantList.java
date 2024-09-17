@@ -16,7 +16,7 @@ import lombok.*;
 public class MyRestaurantList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="myList_index")
+    @Column(name="my_list_index")
     private Long myListIndex; // index
 
 
@@ -27,5 +27,4 @@ public class MyRestaurantList {
     @ManyToOne
     @JoinColumn(name = "user_index") // 외래키
     private UserDAO userDAO;
-
 }
