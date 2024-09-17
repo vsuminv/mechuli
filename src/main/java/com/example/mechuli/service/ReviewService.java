@@ -106,9 +106,10 @@ public class ReviewService {
         }
     }
 
-    public Review getReviewById(Long reviewId) {
-        return reviewRepository.findById(reviewId)
+    public ReviewDTO getReviewById(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
+        return new ReviewDTO(review);
     }
 
     @Transactional

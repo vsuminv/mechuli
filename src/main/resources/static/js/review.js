@@ -30,15 +30,6 @@ const reviewPage = {
 
         // 이벤트 리스너 설정
         this.setEventListeners();
-
-        // 클릭 이벤트로 리뷰 데이터를 요청
-        document.getElementById('reviewButton').addEventListener('click', () => {
-            if (this.restaurantId) {
-                this.fetchReviews(this.restaurantId);  // 버튼 클릭 시 리뷰 데이터를 가져옴
-            } else {
-                console.warn('식당 ID가 없습니다.');
-            }
-        });
     },
 
     fetchRestaurantName: function () {
@@ -88,6 +79,7 @@ const reviewPage = {
 
             if (event.target.classList.contains('delete-button')) {
                 const reviewId = event.target.getAttribute('data-review-id');  // 삭제할 리뷰 ID
+                // reviewId = parseInt(reviewId, 10);
                 this.deleteReview(reviewId);  // 리뷰 삭제 함수 호출
             }
         });
@@ -122,24 +114,28 @@ const reviewPage = {
         });
     },
 
-            let reviewData = new FormData();
-            let reviewDto = {
-                content: $('#review').val(),
-                rating: $('input[name="rating"]:checked').val()
-            };
+    loadReviewForEdit: function (reviewId) {
+        $.ajax({
+            url: `/reviews/${reviewId}`,
+            method: 'GET',
+            success: (review) => {
+                // 리뷰 데이터를 모달에 채워넣음 (내용만 수정 가능)
+                this.isEditMode = true;
+                this.editReviewId = reviewId;
+                $('#review').val(review.content);  // 내용만 수정 가능하게 설정
+                this.showModal();
+            },
+            error: (xhr) => {
+                console.error('리뷰 불러오기 오류:', xhr.responseText);
+            }
+        });
+    },
 
-            // UI에 실시간 반영할 사용자가 입력한 데이터를 준비
-            const userReview = {
-                reviewId: `temp-${Date.now()}`, // 임시 ID를 사용해 고유하게 설정
-                userPhoto: '/images/default-profile.png', // 사용자가 로그인 상태라면 실제 사진을 사용할 수 있음
-                nickname: '익명', // 사용자의 닉네임 (필요시 실제 닉네임 사용)
-                createDate: new Date().toISOString(),
-                content: reviewDto.content,
-                rating: reviewDto.rating
-            };
-
-            // 사용자가 작성한 리뷰를 먼저 화면에 표시
-            this.addReviewToPage(userReview);
+    submitReview: function () {
+        let reviewData = new FormData();
+        let reviewDto = {
+            content: $('#review').val()
+        };
 
         reviewData.append('reviewDto', new Blob([JSON.stringify(reviewDto)], { type: 'application/json' }));
         reviewData.append('restaurantId', this.restaurantId);
@@ -196,6 +192,7 @@ const reviewPage = {
             rowElement.querySelector('#comment').textContent = review.content;  // 내용만 수정
         }
     },
+
     updateModalWithRestaurantName: function () {
         const modalRestaurantName = document.getElementById('modalRestaurantName'); // 모달 내 식당 이름 요소
         if (modalRestaurantName && this.restaurantName) {
