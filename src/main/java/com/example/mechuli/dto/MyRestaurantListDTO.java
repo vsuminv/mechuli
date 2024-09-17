@@ -16,6 +16,7 @@ public class MyRestaurantListDTO {
     private Long myListIndex;
     private Long restaurant_id;
     private Long user_index;
+    private String restaurantName;
 
     public MyRestaurantListDTO(Restaurant restaurantList, UserDAO userDAO) {
         this.restaurant_id = restaurantList.getRestaurantId();
@@ -31,5 +32,6 @@ public class MyRestaurantListDTO {
         this.myListIndex = myRestaurantList.getMyListIndex();
         this.restaurant_id = myRestaurantList.getRestaurantList().getRestaurantId();
         this.user_index = myRestaurantList.getMyListIndex();
+        this.restaurantName = myRestaurantList.getRestaurantList().getName();
     }
 }
