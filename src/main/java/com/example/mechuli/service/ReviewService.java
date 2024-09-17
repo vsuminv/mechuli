@@ -106,6 +106,11 @@ public class ReviewService {
         }
     }
 
+    public Review getReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰가 존재하지 않습니다."));
+    }
+
     @Transactional
     public void updateReview(Long reviewId, UserDAO authUser, ReviewDTO reviewDTO, List<MultipartFile> files) throws IOException {
         // 수정할 리뷰가 존재하는지 확인
