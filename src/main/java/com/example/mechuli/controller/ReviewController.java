@@ -41,6 +41,16 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
+    // 수정할 리뷰 조회
+    @GetMapping("/reviews/{reviewId}")
+    public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long reviewId) {
+        ReviewDTO reviewDTO = reviewService.getReviewById(reviewId);
+        if (reviewDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(reviewDTO);
+    }
+
     // 리뷰 수정
     @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,

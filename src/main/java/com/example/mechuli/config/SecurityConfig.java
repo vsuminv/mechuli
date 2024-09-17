@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token").permitAll()
+                                .requestMatchers("/boardPage/**","/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token").permitAll()
                                 .requestMatchers("/joinPage/**","/").permitAll()
                         .anyRequest().authenticated()
                 )

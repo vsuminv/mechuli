@@ -269,7 +269,7 @@ let boardPage = {
                 </td>
                 <td class="w-32 h-8 bg-blue-200 border border-blue-400">
                     <div id="mod_del_button" class="flex justify-end">
-                        <button>수정</button>
+                        <button class="edit-button" data-review-id="${review.reviewId}">수정</button>
                         &nbsp;&nbsp;
                         <button class="delete-button" id="${review.reviewId}">삭제</button>
                     </div>
