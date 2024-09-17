@@ -132,12 +132,13 @@ public class RestaurantService {
         myRestaurantListRepository.deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, userIndex);
     }
 
-    // 내가 찜한 맛집리스트 조회
+    // 내가 찜한 맛집리스트 조회 (가게 이름 포함)
     public List<MyRestaurantListDTO> findAllByUserDAO_userIndex(Long userIndex) {
 
         List<MyRestaurantList> myRestaurantListList = myRestaurantListRepository.findAllByUserDAO_UserIndex(userIndex);
         List<MyRestaurantListDTO> myRestaurantListDTOList = new ArrayList<>();
         for(MyRestaurantList mr : myRestaurantListList) {
+
             MyRestaurantListDTO mrDto = new MyRestaurantListDTO(mr);
             myRestaurantListDTOList.add(mrDto);
 
