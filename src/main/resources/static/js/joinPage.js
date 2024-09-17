@@ -18,7 +18,7 @@ $(document).ready(function() {
 
         let errorMessages = [];
         if (!allFieldCheck) errorMessages.push("모든 필드를 입력해주세요.");
-        // if (!userPwCondition) errorMessages.push("비밀번호가 조건에 맞추주세요");
+        // if (!userPwCondition) errorMessages.push("비밀번호를 조건에 맞추주세요");
         if (!userPwMatch) errorMessages.push("비밀번호가 일치하지 않습니다.");
         if (!userIdChecked) errorMessages.push("아이디 중복 체크를 완료해주세요.");
         if (!nicknameChecked) errorMessages.push("닉네임 중복 체크를 완료해주세요.");
@@ -26,34 +26,34 @@ $(document).ready(function() {
         return errorMessages;
     }
 
-    // function checkDuplicate(type) {
-    //     const value = $(`#${type}`).val();
-    //     if (!value) {
-    //         updateValidationState(type, false, `${type === 'userId' ? '아이디' : '닉네임'}를 입력해주세요.`);
-    //         return;
-    //     }
-    //
-    //     $.post('/ajaxCheckNickname', {  value: value }, function(response) {
-    //         if (response === 0) {
-    //             updateValidationState(type, true, `사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
-    //             type === 'userId' ? userIdChecked = true : nicknameChecked = true;
-    //         } else {
-    //             updateValidationState(type, false, `이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
-    //             type === 'userId' ? userIdChecked = false : nicknameChecked = false;
-    //         }
-    //         updateNextButton();
-    //     });
-    //     $.post('/ajaxCheckId', { type: type, value: value }, function(response) {
-    //         if (response === 0) {
-    //             updateValidationState(type, true, `사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
-    //             type === 'userId' ? userIdChecked = true : nicknameChecked = true;
-    //         } else {
-    //             updateValidationState(type, false, `이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
-    //             type === 'userId' ? userIdChecked = false : nicknameChecked = false;
-    //         }
-    //         updateNextButton();
-    //     });
-    // }
+    function checkDuplicate(type) {
+        const value = $(`#${type}`).val();
+        if (!value) {
+            updateValidationState(type, false, `${type === 'userId' ? '아이디' : '닉네임'}를 입력해주세요.`);
+            return;
+        }
+
+        $.post('/ajaxCheckNickname', {  value: value }, function(response) {
+            if (response === 0) {
+                updateValidationState(type, true, `사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+                type === 'userId' ? userIdChecked = true : nicknameChecked = true;
+            } else {
+                updateValidationState(type, false, `이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+                type === 'userId' ? userIdChecked = false : nicknameChecked = false;
+            }
+            updateNextButton();
+        });
+        $.post('/ajaxCheckId', { type: type, value: value }, function(response) {
+            if (response === 0) {
+                updateValidationState(type, true, `사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+                type === 'userId' ? userIdChecked = true : nicknameChecked = true;
+            } else {
+                updateValidationState(type, false, `이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+                type === 'userId' ? userIdChecked = false : nicknameChecked = false;
+            }
+            updateNextButton();
+        });
+    }
 
     function updateValidationState(type, isValid, message) {
         const $input = $(`#${type}`);
@@ -124,20 +124,20 @@ $(document).ready(function() {
 
 
     // 카테고리 선택 로직
-    // $(".category-btn").click(function() {
-    //     var categoryId = $(this).data("category-id");
-    //     var categoryName = $(this).text();
-    //
-    //     if ($(this).hasClass("selected")) {
-    //         $(this).removeClass("selected bg-gray-200").addClass("bg-yellow-200");
-    //         selectedCategories = selectedCategories.filter(c => c.id !== categoryId);
-    //     } else {
-    //         $(this).removeClass("bg-yellow-200").addClass("selected bg-gray-200");
-    //         selectedCategories.push({id: categoryId, name: categoryName});
-    //     }
-    //
-    //     updateSelectedCategories();
-    // });
+    $(".category-btn").click(function() {
+        var categoryId = $(this).data("category-id");
+        var categoryName = $(this).text();
+
+        if ($(this).hasClass("selected")) {
+            $(this).removeClass("selected bg-gray-200").addClass("bg-yellow-200");
+            selectedCategories = selectedCategories.filter(c => c.id !== categoryId);
+        } else {
+            $(this).removeClass("bg-yellow-200").addClass("selected bg-gray-200");
+            selectedCategories.push({id: categoryId, name: categoryName});
+        }
+
+        updateSelectedCategories();
+    });
     $(".category-btn").click(function() {
         const categoryId = $(this).data("category-id");
         const categoryName = $(this).text();

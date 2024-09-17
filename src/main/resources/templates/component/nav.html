@@ -1,20 +1,43 @@
 <div th:fragment="nav">
     <div class="h-44">
-        <div class="w-1/5 h-1/2 mx-auto text-center">
-            <img class="w-4/6 h-full m-auto shadow-md rounded-full" th:src="@{/img/face.png}" alt="Profile Picture">
+        <div class="w-1/5 h-1/2 mx-auto text-center relative">
+            <img class="w-4/6 h-full m-auto shadow-md rounded-full" th:src="${session.userImg}" alt="Profile Picture">
+            <label for="userImgInput" class="absolute bottom-0 right-0 mb-2 mr-2 bg-white rounded-full p-1 cursor-pointer">
+                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                </svg>
+                <input id="userImgInput" type="file" class="hidden" accept="image/*">
+            </label>
             <span th:text="${session.nickname} + ' 님'"></span>
-            <h1 class="p-4 w-full h-10"></h1>
         </div>
     </div>
     <div class="flex mx-auto w-5/6">
-        <button id="myState_btn" name="myState_btn"
-                th:classappend="${#strings.equals(activeTab, 'myState')} ? 'bg-yellow-500' : 'bg-yellow-200'"
-                class="flex-1 py-2 px-4 text-yellow-800 rounded-l-lg">개인정보</button>
-        <button id="myStoreList_btn" name="myStoreList_btn"
-                th:classappend="${#strings.equals(activeTab, 'myStoreList')} ? 'bg-yellow-500' : 'bg-yellow-200'"
-                class="flex-1 py-2 px-4 text-yellow-800">맛집리스트</button>
-        <button id="mySub_btn" name="mySub_btn"
-                th:classappend="${#strings.equals(activeTab, 'mySub')} ? 'bg-yellow-500' : 'bg-yellow-200'"
-                class="flex-1 py-2 px-4 text-yellow-900 rounded-r-lg">구독</button>
+        <button id="myState_btn" class="flex-1 py-2 px-4 text-yellow-800 rounded-l-lg bg-yellow-200 hover:bg-yellow-500">개인정보</button>
+        <button id="myStoreList_btn" class="flex-1 py-2 px-4 text-yellow-800 bg-yellow-200 hover:bg-yellow-500">맛집리스트</button>
+        <button id="mySub_btn" class="flex-1 py-2 px-4 text-yellow-900 rounded-r-lg bg-yellow-200 hover:bg-yellow-500">구독</button>
     </div>
 </div>
+<script>
+    $(function() {
+        $("#userImgInput").on("change", function() {
+            const file = this.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                url: "/user/imgUpload",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function() {
+                    console.log("프사 업로드 성공.");
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.log("프사 업로드 실패");
+                }
+            });
+        });
+    });
+</script>
