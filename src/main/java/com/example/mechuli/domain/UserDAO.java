@@ -1,5 +1,6 @@
 package com.example.mechuli.domain;
 
+import com.example.mechuli.dto.RestaurantDetailsDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -72,7 +73,7 @@ public class UserDAO implements UserDetails {
     private List<Subscription> subscriptions;
 
     @OneToMany(mappedBy = "subscriber")
-    private List<Subscription> subscriber;
+    private List<Subscription> subscribers;
 
     // 권한 반환
     @Override

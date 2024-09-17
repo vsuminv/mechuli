@@ -2,6 +2,7 @@ package com.example.mechuli.controller;
 
 
 import com.example.mechuli.domain.Menu;
+import com.example.mechuli.domain.MyRestaurantList;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.MenuDTO;
@@ -10,6 +11,8 @@ import com.example.mechuli.service.RestaurantService;
 import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -86,15 +89,55 @@ public class RestaurantController {
 
 
     // 내 식당 찜 조회해서 뿌리기
-//    @RequestMapping(value = "/ajaxMyRestaurant", method = RequestMethod.POST)
-//    @ResponseBody
-//    public int ajaxCheckMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
-//        int result = 0;
-//        try {
-//            result = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
-//        } catch(Exception e) {
-//            System.out.println("existsByRestaurantList_restaurantIdAndUserDAO_userIndex 메소드가 정상 실행되지 않았습니다.");
+    @RequestMapping(value = "/ajax/CheckMyRestaurant", method = RequestMethod.POST)
+    @ResponseBody
+    public int ajaxCheckMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+//        if (authedUser == null) {
+//            System.out.println("User is not authenticated.");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 //        }
-//        return result;
-//    }
+
+        int result = -1;
+        boolean isExist;
+        try {
+            isExist = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            if(isExist) {
+                result = 1;
+            } else {
+                result = 0;
+            }
+        } catch(Exception e) {
+            System.out.println("existsByRestaurantList_restaurantIdAndUserDAO_userIndex 메소드가 정상 실행되지 않았습니다.");
+        }
+        return result;
+    }
+
+    // 내 식당 찜하기 / 해제 ajax
+    @RequestMapping(value = "/ajax/DoMyRestaurant", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Integer> ajaxDoMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+        int result;
+        if (authedUser == null) {
+            System.out.println("User is not authenticated.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        boolean isExist;
+        try {
+            isExist = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+        } catch (Exception e) {
+            System.out.println("restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex가 정상작동하지 않았습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        // 이미 값이 들어 있다면(찜 상태라면 삭제)
+        if (isExist) {
+            // delete
+            restaurantService.deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            result = 0;
+        } else {    // 값이 존재하지 않는다면 insert (찜 생성)
+            // insert
+            restaurantService.save(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            result = 1;
+        }
+        return ResponseEntity.ok(result);
+    }
 }

@@ -2,10 +2,10 @@
 package com.example.mechuli.controller;
 
 import com.example.mechuli.domain.UserDAO;
-import com.example.mechuli.dto.RestaurantDTO;
-import com.example.mechuli.dto.UserDTO;
+import com.example.mechuli.dto.*;
 import com.example.mechuli.service.RestaurantCategoryService;
 import com.example.mechuli.service.RestaurantService;
+import com.example.mechuli.service.ReviewService;
 import com.example.mechuli.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -27,7 +27,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping( method = RequestMethod.POST)
+@RequestMapping(method = RequestMethod.POST)
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -37,6 +37,8 @@ public class UserController {
     private final RestaurantCategoryService restaurantCategoryService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private ReviewService reviewService;
 
     @GetMapping("/csrf-token")
     public CsrfToken getCsrfToken(HttpServletRequest request) {
@@ -61,7 +63,6 @@ public class UserController {
 //    }
 
 
-
     @RequestMapping(value = "/ajaxCheckId", method = RequestMethod.POST)
     @ResponseBody
     public int ajaxCheckId(@RequestBody String userId) {
@@ -75,8 +76,6 @@ public class UserController {
         log.info("nickname : {}", nickname);
         return userService.checkNickname(nickname);
     }
-
-
 
 
 //============================//
@@ -143,6 +142,38 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+    // ====================================================
+    // 내가 찜한 맛집리스트 조회 + 내 리뷰 조회
+    @PostMapping("/api/myPage/myLists")
+    public ResponseEntity<MypageListsDTO> findMypageLists(@AuthenticationPrincipal UserDAO authedUser) {
+
+        if (authedUser == null) {
+            System.out.println("User is not authenticated.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        MypageListsDTO mypageListsDTO = new MypageListsDTO();
+
+        // 찜한 맛집리스트 조회
+        List<MyRestaurantListDTO> myRestaurantListDTOList = restaurantService.findAllByUserDAO_userIndex(authedUser.getUserIndex());
+
+        // 내 리뷰 조회
+        List<MyReviewDTO> myReviewDTOList = reviewService.findAllByUserIndex(authedUser.getUserIndex());
+
+        try {
+
+            mypageListsDTO.setMyRestaurantListDTOList(myRestaurantListDTOList);
+            mypageListsDTO.setMyReviewDTOList(myReviewDTOList);
+
+            return ResponseEntity.ok(mypageListsDTO);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 }
 

@@ -5,6 +5,7 @@ import com.example.mechuli.domain.UserDAO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,4 +21,7 @@ public interface UserRepository extends JpaRepository<UserDAO, Long> {
     Optional<UserDAO> findByUserId(String userId);
 
 
+    List<UserDAO> findByNicknameNot(String nickname);
+
+    List<UserDAO> findByNicknameContainingAndNicknameNot(String subNickname, String userNickName);
 }

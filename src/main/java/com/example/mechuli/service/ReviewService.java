@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.Review;
 import com.example.mechuli.domain.UserDAO;
+import com.example.mechuli.dto.MyReviewDTO;
 import com.example.mechuli.dto.ReviewDTO;
 import com.example.mechuli.repository.ReviewRepository;
 import com.example.mechuli.repository.UserRepository;
@@ -173,4 +174,41 @@ public class ReviewService {
         // 리뷰 삭제
         reviewRepository.delete(review);
     }
+
+    public List<MyReviewDTO> findAllByUserIndex(Long userIndex) {
+        UserDAO userDAO = UserDAO.builder()
+                .userIndex(userIndex).build();
+        List<Review> reviewList = reviewRepository.findAllByUserIndex(userDAO);
+        List<MyReviewDTO> myReviewDTOList = new ArrayList<>();
+        for (Review review : reviewList) {
+            MyReviewDTO myReviewDTO = new MyReviewDTO(review);
+            myReviewDTOList.add(myReviewDTO);
+        }
+
+        return myReviewDTOList;
+    }
+
+    //    public List<String> getReviewImages(Review review) throws IOException {
+//        // JSON 문자열을 다시 List<String> 형식으로 변환
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        return objectMapper.readValue(review.getReviewImg(), new TypeReference<List<String>>() {});
+//    }
+//    public void saveReview(ReviewDTO dto){
+//        reviewRepository.save(Review.builder()
+//                        .reviewId(dto.getReviewId())
+//                        .content(dto.getContent())
+//                        .restaurant(dto.getRestaurant())
+//                        .userIndex(dto.getUserIndex())
+//                        .reviewImg(dto.getReviewImg())
+//                .build());
+//    }
+
+    // 유저 리뷰 조회
+//    public List<Review> findByUserIndex(Long userIndex){
+//        return reviewRepository.findByUserIndex(userIndex);
+//    }
+    // 매장 리뷰 조회
+//    public List<Review> findByRestaurantId(Long restaurantId){
+//        return reviewRepository.findByRestaurantId(restaurantId);
+//    }
 }
