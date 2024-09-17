@@ -80,16 +80,3 @@ footer {
     content: '✗';
     color: red;
 }
-
-/*#content {*/
-/*    display: block !important;*/
-/*    width: 100%;*/
-/*    overflow-y: auto;*/
-/*}*/
-
-/*header .search{*/
-/*    position: sticky;*/
-/*    min-width: 670px !important;*/
-/*    max-width: 670px !important;*/
-/*    margin:3px  !important;*/
-/*}

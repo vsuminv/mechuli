@@ -1,14 +1,20 @@
 <div th:fragment="nav">
-<div class="h-44">
-            <div class="w-1/5 h-1/2 mx-auto text-center">
-            <img class="w-4/6 h-full m-auto shadow-md rounded-full" th:src="@{/img/face.png}">
-            <div class="text-yellow-600 mt-6">{$수미니}</div>
-            </div>
+    <div class="h-44">
+        <div class="w-1/5 h-1/2 mx-auto text-center">
+            <img class="w-4/6 h-full m-auto shadow-md rounded-full" th:src="@{/img/face.png}" alt="Profile Picture">
+            <span th:text="${session.nickname} + ' 님'"></span>
+            <h1 class="p-4 w-full h-10"></h1>
         </div>
-
-        <div class="flex mx-auto w-5/6">
-            <button class="flex-1 py-2 px-4 bg-yellow-500 text-yellow-800 rounded-l-lg">계정 정보</button>
-            <button class="flex-1 py-2 px-4 bg-yellow-200 text-yellow-800">맛집 리스트</button>
-            <button class="flex-1 py-2 px-4 bg-yellow-200 text-yellow-900 rounded-r-lg">친구</button>
-        </div>
+    </div>
+    <div class="flex mx-auto w-5/6">
+        <button id="myState_btn" name="myState_btn"
+                th:classappend="${#strings.equals(activeTab, 'myState')} ? 'bg-yellow-500' : 'bg-yellow-200'"
+                class="flex-1 py-2 px-4 text-yellow-800 rounded-l-lg">개인정보</button>
+        <button id="myStoreList_btn" name="myStoreList_btn"
+                th:classappend="${#strings.equals(activeTab, 'myStoreList')} ? 'bg-yellow-500' : 'bg-yellow-200'"
+                class="flex-1 py-2 px-4 text-yellow-800">맛집리스트</button>
+        <button id="mySub_btn" name="mySub_btn"
+                th:classappend="${#strings.equals(activeTab, 'mySub')} ? 'bg-yellow-500' : 'bg-yellow-200'"
+                class="flex-1 py-2 px-4 text-yellow-900 rounded-r-lg">구독</button>
+    </div>
 </div>

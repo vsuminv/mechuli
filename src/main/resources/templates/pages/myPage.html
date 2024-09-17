@@ -1,16 +1,62 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/pages/basicPage}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{/pages/basicPage}">
 <th:block layout:fragment="script">
-    <script type="text/javascript" th:src="@{/js/joinPage.js}"></script>
+    <script defer type="text/javascript" th:src="@{/js/myPage.js}"></script>
+    <script>
+        $(document).ready(function() {
+            function showFragment(fragmentId) {
+                // 모든 프래그먼트 숨기기
+                $("#myState, #myStoreList, #mySub").hide();
+                // 선택된 프래그먼트 페이드인
+                $(fragmentId).fadeIn();
+
+            }
+
+            function updateButtonStyles(clickedButton) {
+                // 모든 버튼 스타일 초기화
+                $("#myState_btn, #myStoreList_btn, #mySub_btn").removeClass("bg-yellow-500").addClass("bg-yellow-200");
+                // 클릭된 버튼 스타일 변경
+                $(clickedButton).removeClass("bg-yellow-200").addClass("bg-yellow-500");
+            }
+
+
+            showFragment("#myState");
+            updateButtonStyles("#myState");
+
+            // 버튼 클릭 이벤트
+            $("#myStateFragment").click(function() {
+                showFragment("#myStateFragment");
+                updateButtonStyles(this);
+            });
+
+            $("#myStoreListFragment").click(function() {
+                showFragment("#myStoreListFragment");
+                updateButtonStyles(this);
+            });
+
+            $("#mySubFragment").click(function() {
+                showFragment("#mySubFragment");
+                updateButtonStyles(this);
+            });
+        });
+    </script>
 </th:block>
 <main layout:fragment="main">
-
     <div class="w-full h-full text-yellow-700">
         <div th:replace="~{/../component/nav :: nav}"></div>
-        
+
         <div id="content" class="w-4/5 mx-auto h-full">
-<!--            <div id="myTaste" th:replace="~{contents/my/myTaste :: myTaste}"></div>-->
-            <div id="myStoreList" th:replace="~{contents/my/myStoreList :: myStoreList}"> </div>
-<!--            <div id="myParty" th:replace="~{contents/my/myParty :: myParty}"></div>-->
+            <div id="myStateFragment" th:fragment="myStateFragment">
+                <th:block th:replace="~{contents/my/myState :: myState}"></th:block>
+            </div>
+            <div id="myStoreListFragment" th:fragment="myStoreListFragment" style="display: none;">
+                <th:block th:replace="~{contents/my/myStoreList :: myStoreList}"></th:block>
+            </div>
+            <div id="mySubFragment" th:fragment="mySubFragment" style="display: none;">
+                <th:block th:replace="~{contents/my/mySub :: mySub}"></th:block>
+            </div>
         </div>
     </div>
 </main>
+</html>

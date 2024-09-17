@@ -34,8 +34,9 @@ public class SecurityConfig {
                 .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/js/**", "/home", "/auth/**", "/api/**", "/css/**", "/img/**", "/image/**", "/tailwinds.css", "/thymeleaf/**", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/ajax/**").permitAll()
                                 .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                                .requestMatchers("/joinPage","/wellcomePage","/join").permitAll()
+                                .requestMatchers("/joinPage/**","/","/join").permitAll()
 //                                .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
 //                .requestMatchers("/joinPage","/wellcomePage").permitAll()
 //                                .requestMatchers(hasRole(USER))
@@ -57,7 +58,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/")
                         .invalidateHttpSession(true));
         return http.build();
     }

@@ -1,126 +1,201 @@
-function userIdCheck() {
-    const userId = $(`#userId`).val();
-    if (userId === "") {
-        alert("아이디를 정확히 입력해주세요.");
-        console.log("들어온값" + userId);
-        $("#userId").focus();
-        return false;
+$(document).ready(function() {
+    let userIdChecked = false;
+    let nicknameChecked = false;
+    let selectedCategories = [];
+    let currentStep = 1;
+    function updateNextButton() {
+        const allFieldsFilled = $("#userId").val() && $("#userPw").val() && $("#userPw2").val() && $("#nickname").val();
+        const passwordMatch = $("#userPw").val() === $("#userPw2").val();
+        const isValid = userIdChecked && nicknameChecked && allFieldsFilled && passwordMatch;
+
+        $("#next_btn").prop("disabled", !isValid);
     }
-    $.ajax({
-        url: "/ajaxCheckId",
-        type: "POST",
-        data: userId,
-        contentType: "text/plain",
-        success: function (result) {
-            console.log(result);
-            if (result === 0) {
-                if (confirm("해당 아이디는 사용 가능합니다. \n 사용하시겠습니까?")) {
-                    userIdOverlapCheck = 1;
-                    $("#userId").attr("readonly", true);
-                    $("#userid_check").attr("disabled", true);
-                    $("#userid_check").css("display", "none");
-                    $("#resetUserId").attr("disabled", false);
-                    $("#resetUserId").css("display", "inline-block");
-                }
-            } else if (result === 1) {
-                alert("이미 사용중인 아이디입니다.");
-                $("#userId").focus();
-            } else {
-                alert("result 값 못찾음");
-            }
-        },
-        error: function (request, status, error) {
-            alert("요청값" + request + "상태:" + request.status + "\n" + "에러" + error);
-        }
-    });
-}
 
-function nickNameCheck() {
-    const nickname = $(`#nickname`).val();
-    if (nickname === "") {
-        alert("닉네임을 정확히 입력해주세요.");
-        $("#nickname").focus();
-        return false;
+    function validateForm() {
+        const allFieldCheck = $("#userId").val() && $("#userPw").val() && $("#userPw2").val() && $("#nickname").val();
+        const userPwMatch = $("#userPw").val() === $("#userPw2").val();
+        // const userPwCondition = $("#userPw").val();
+
+        let errorMessages = [];
+        if (!allFieldCheck) errorMessages.push("모든 필드를 입력해주세요.");
+        // if (!userPwCondition) errorMessages.push("비밀번호가 조건에 맞추주세요");
+        if (!userPwMatch) errorMessages.push("비밀번호가 일치하지 않습니다.");
+        if (!userIdChecked) errorMessages.push("아이디 중복 체크를 완료해주세요.");
+        if (!nicknameChecked) errorMessages.push("닉네임 중복 체크를 완료해주세요.");
+
+        return errorMessages;
     }
-    $.ajax({
-        type: "POST",
-        url: "/ajaxCheckNickname",
-        data: nickname,
-        contentType: "text/plain",
-        success: function (result) {
-            console.log(result);
-            if (result === 0) {
-                if (confirm("해당 닉네임은 사용 가능합니다. \n 사용하시겠습니까?")) {
-                    nicknameOverlapCheck = 1;
-                    $("#nickname").attr("readonly", true);
-                    $("#nickname_check").attr("disabled", true);
-                    $("#nickname_check").css("display", "none");
-                    $("#resetNickname").attr("disabled", false);
-                    $("#resetNickname").css("display", "inline-block");
-                }
-            } else if (result === 1) {
-                alert("이미 사용중인 닉넴입니다.");
-                $("#nickname").focus();
-            } else {
-                alert("result 값 못찾음");
-            }
-        },
-        error: function (request, status, error) {
-            alert("요청값" + request + "상태:" + request.status + "\n" + "에러" + error);
-        }
-    });
-}
 
-function checkAll() {
-    if (userIdOverlapCheck === 1 && nicknameOverlapCheck === 1) {
-        console.log("통과");
-        return true;
-    } else {
-        alert("아이디, 닉네임 중복체크 미완료");
-        return false;
-    }
-}
-
-function join(){
-    // if (!checkAll()) {
-    //     return false;
-    // }
-    let userId = $('#userId').val();
-    let userPw = $('#userPw').val();
-    let userPw2 = $('#userPw2').val();
-    let nickname = $('#nickname').val();
-
-
-    // if (pw !== pw2) {
-    //     alert("비밀번호가 일치하지 않습니다.");
-    //     $('#pw2').focus();
-    //     return false;
+    // function checkDuplicate(type) {
+    //     const value = $(`#${type}`).val();
+    //     if (!value) {
+    //         updateValidationState(type, false, `${type === 'userId' ? '아이디' : '닉네임'}를 입력해주세요.`);
+    //         return;
+    //     }
+    //
+    //     $.post('/ajaxCheckNickname', {  value: value }, function(response) {
+    //         if (response === 0) {
+    //             updateValidationState(type, true, `사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+    //             type === 'userId' ? userIdChecked = true : nicknameChecked = true;
+    //         } else {
+    //             updateValidationState(type, false, `이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+    //             type === 'userId' ? userIdChecked = false : nicknameChecked = false;
+    //         }
+    //         updateNextButton();
+    //     });
+    //     $.post('/ajaxCheckId', { type: type, value: value }, function(response) {
+    //         if (response === 0) {
+    //             updateValidationState(type, true, `사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+    //             type === 'userId' ? userIdChecked = true : nicknameChecked = true;
+    //         } else {
+    //             updateValidationState(type, false, `이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+    //             type === 'userId' ? userIdChecked = false : nicknameChecked = false;
+    //         }
+    //         updateNextButton();
+    //     });
     // }
 
-    const userData = {
-        userId :  $('#userId').val(),
-        userPw : $('#userPw').val(),
-        userPw2 : $('#userPw2').val(),
-        nickname : $('#nickname').val(),
-    };
-    $.ajax({
-        url: "/join",
-        type: "POST",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(userData),
-        success: function(response) {
-            if (response === "success") {
-                alert("join 됨.");
-                window.location.href = "/login"; // 로그인 페이지로 이동
-                console.log(userData);
+    function updateValidationState(type, isValid, message) {
+        const $input = $(`#${type}`);
+        const $checkButton = $(`#${type}_check`);
+        const $icon = $input.siblings('.validation-icon');
+        const $message = $(`#${type}Message`);
+
+        $checkButton.fadeOut(100, function() {
+            $icon.removeClass('text-red-500 text-green-500')
+                .addClass(isValid ? 'text-green-500' : 'text-red-500')
+                .html(isValid ? '&#10004;' : '&#10008;');
+
+            $message.removeClass('text-red-500 text-green-500 hidden')
+                .addClass(isValid ? 'text-green-300 text-sm' : 'text-red-400 text-sm')
+                .text(message)
+                .fadeIn(300);
+        });
+    }
+
+    $('#userId_check').click(() => checkDuplicate('userId'));
+    $('#nickname_check').click(() => checkDuplicate('nickname'));
+
+    $("#userId, #nickname, #userPw, #userPw2").on('input', function() {
+        const type = $(this).attr('id');
+        if (type === 'userId' || type === 'nickname') {
+            const $checkButton = $(`#${type}_check`);
+            const $icon = $(this).siblings('.validation-icon');
+            const $message = $(`#${type}Message`);
+
+            $message.fadeOut(300, function() {
+                $icon.removeClass('text-red-500 text-green-500').html('');
+                $checkButton.fadeIn(300);
+            });
+
+            type === 'userId' ? userIdChecked = false : nicknameChecked = false;
+        }
+        updateNextButton();
+    });
+
+    $("#back_btn").click(function() {
+        $(".form-container > div").css("transform", "translateX(0)");
+        $("#step-indicator .m-auto").text("1 / 2");
+        $("#next_btn").text("다음").removeClass("bg-yellow-500 hover:bg-yellow-600").addClass("bg-yellow-200 hover:bg-yellow-500");
+        $(this).addClass("hidden");
+        currentStep = 1;
+    });
+    $("#next_btn").click(function() {
+        if (currentStep === 1) {
+            const errorMessages = validateForm();
+            if (errorMessages.length === 0) {
+                $(".form-container > div").css("transform", "translateX(-50%)");
+                $("#step-indicator .m-auto").text("2 / 2");
+                $(this).text("회원가입").removeClass("bg-yellow-500 hover:bg-yellow-600").addClass("bg-yellow-200 hover:bg-yellow-500");
+                $("#back_btn").removeClass("hidden");
+                currentStep = 2;
             } else {
-                alert("join fail");
+                $("#nextButtonMessage").html(errorMessages.join("<br>")).removeClass("hidden");
             }
-        },
-        error: function(xhr, status, error) {
-            alert("failfailfailfailfail");
-            console.log(userData);
-            console.error("Error: " + status + " " + error);
+        } else {
+            // 회원가입 제출 로직
+            if (selectedCategories.length >= 3) {
+                $("#joinForm").submit();
+            } else {
+                alert("최소 3개의 카테고리를 선택해주세요.");
+            }
         }
     });
-}
+
+
+    // 카테고리 선택 로직
+    // $(".category-btn").click(function() {
+    //     var categoryId = $(this).data("category-id");
+    //     var categoryName = $(this).text();
+    //
+    //     if ($(this).hasClass("selected")) {
+    //         $(this).removeClass("selected bg-gray-200").addClass("bg-yellow-200");
+    //         selectedCategories = selectedCategories.filter(c => c.id !== categoryId);
+    //     } else {
+    //         $(this).removeClass("bg-yellow-200").addClass("selected bg-gray-200");
+    //         selectedCategories.push({id: categoryId, name: categoryName});
+    //     }
+    //
+    //     updateSelectedCategories();
+    // });
+    $(".category-btn").click(function() {
+        const categoryId = $(this).data("category-id");
+        const categoryName = $(this).text();
+
+        if ($(this).hasClass("selected")) {
+            $(this).removeClass("selected bg-yellow-500").addClass("bg-yellow-200");
+            selectedCategories = selectedCategories.filter(c => c.id !== categoryId);
+        } else {
+            if (selectedCategories.length >= 5) {
+                alert("최대 5개의 카테고리만 선택할 수 있습니다.");
+                return;
+            }
+            $(this).addClass("selected bg-yellow-500").removeClass("bg-yellow-200");
+            selectedCategories.push({id: categoryId, name: categoryName});
+        }
+
+        updateSelectedCategories();
+    });
+    function updateSelectedCategories() {
+        const $selectedCategory = $("#selected_category");
+        const $hiddenInputs = $("#hidden_category_inputs");
+        $selectedCategory.empty();
+        $hiddenInputs.empty();
+        selectedCategories.forEach(function(category, index) {
+            $selectedCategory.append(`<div class="bg-yellow-300 font-bold py-1 px-2 rounded">${category.name}</div>`);
+            $hiddenInputs.append(`<input type="hidden" name="categoryIds[${index}]" value="${category.id}">`);
+        });
+    }
+
+    // 폼 제출
+    $("#joinForm").submit(function(e) {
+        e.preventDefault();
+        if (selectedCategories.length < 3) {
+            alert("최소 3개의 카테고리를 선택해주세요.");
+            return;
+        }
+        var formData = new FormData(this);
+        selectedCategories.forEach(function(category) {
+            formData.append('categoryIds[]', category.id);
+        });
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    console.log(response.message);
+                    window.location.href = "/";
+                } else {
+                    console.log(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                var response = JSON.parse(xhr.responseText);
+                console.log(response.message || "회원가입. 서버랑 통신오류남 ");
+            }
+        });
+    });
+});
