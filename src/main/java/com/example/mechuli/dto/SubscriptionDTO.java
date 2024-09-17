@@ -20,13 +20,18 @@ public class SubscriptionDTO {
 
     private String userName;
 
+    private boolean subscribeState; // 구독 상태
 
+    private boolean userState;  // 현재 사용자인지 여부 설정
 
     private List<String> restaurantNames;
 
-    public SubscriptionDTO(Subscription subscription) {
+    public SubscriptionDTO(Subscription subscription, boolean subscribeState, boolean isCurrentUser) {
         this.subscriptId = subscription.getSubscriptId();
-        this.userIndex = subscription.getSubscriber().getUserIndex();         this.userName = subscription.getSubscriber().getNickname();
+        this.userIndex = subscription.getSubscriber().getUserIndex();
+        this.userName = subscription.getSubscriber().getNickname();
+        this.subscribeState = subscribeState;
+        this.userState = isCurrentUser;
 
         // 구독자의 맛집 리스트 출력
         this.restaurantNames = subscription.getSubscriber()
@@ -35,4 +40,6 @@ public class SubscriptionDTO {
                 .map(myRestaurant -> myRestaurant.getRestaurantList().getName())
                 .collect(Collectors.toList());
     }
+
+
 }

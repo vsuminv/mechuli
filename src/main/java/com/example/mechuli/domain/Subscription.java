@@ -22,7 +22,10 @@ public class Subscription {
     private UserDAO userId;
 
 
+    // 내가 구독한 사람
     @ManyToOne
-    @JoinColumn(name = "subscriber", referencedColumnName = "user_index")
+    @JoinColumn(name = "subscriber_id", referencedColumnName = "user_index")
     private UserDAO subscriber;
+
+
 }
