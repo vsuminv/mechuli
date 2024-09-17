@@ -42,7 +42,7 @@ public class ReviewController {
     }
 
     // 리뷰 수정
-    @PutMapping("/reviews")
+    @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,
                                              @RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
                                              @RequestPart(value = "files", required = false) List<MultipartFile> files,

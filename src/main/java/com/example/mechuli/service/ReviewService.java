@@ -120,7 +120,6 @@ public class ReviewService {
         // 리뷰 수정
         existingReview.setContent(reviewDTO.getContent());
         existingReview.setRating(reviewDTO.getRating());
-        existingReview.setUpdateDate(LocalDateTime.now());
 
         // 이미지 파일이 있으면 처리
         if (files != null && !files.isEmpty()) {
