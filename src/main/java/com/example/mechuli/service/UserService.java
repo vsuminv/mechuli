@@ -167,5 +167,14 @@ public class UserService implements UserDetailsService {
         return amazonS3.getUrl(BUCKET_NAME, fileName).toString();
     }
 
+
+    public boolean verifyPassword(Long userIndex, String passwordToVerify) {
+        UserDAO user = userRepository.findByUserIndex(userIndex)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 현재 비밀번호 검증
+        return bCryptPasswordEncoder.matches(passwordToVerify, user.getPassword());
+    }
+
 }
 

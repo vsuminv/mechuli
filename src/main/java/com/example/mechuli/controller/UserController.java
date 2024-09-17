@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -174,6 +175,27 @@ public class UserController {
         }
     }
 
+    // 비밀번호 재확인 ajax
+    @RequestMapping(value = "/ajax/checkPwd", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Integer> ajaxCheckPwd(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String userPwd) {
+
+        if (authedUser == null) {
+            System.out.println("User is not authenticated.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        int result = -1;
+
+        boolean isPasswordValid = userService.verifyPassword(authedUser.getUserIndex(), userPwd);
+
+        if (isPasswordValid) { result = 1; }    // 비밀번호 일치 시 1 리턴
+        else { result = 0; }    // 비밀번호 불일치 시 0 리턴
+
+        return ResponseEntity.ok(result);
+    }
+
+    // 탈퇴 (Withdraw)
 
 }
 
