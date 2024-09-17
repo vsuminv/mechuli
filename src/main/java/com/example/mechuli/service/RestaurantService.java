@@ -6,11 +6,13 @@ import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.MenuDTO;
 import com.example.mechuli.dto.MyRestaurantListDTO;
+import com.example.mechuli.dto.MypageListsDTO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.repository.MenuRepository;
 import com.example.mechuli.repository.MyRestaurantListRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -125,7 +127,23 @@ public class RestaurantService {
         myRestaurantListRepository.save(myRestaurantList);
     }
 
+    @Transactional
     public void deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(Long restaurantId, Long userIndex) {
         myRestaurantListRepository.deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, userIndex);
+    }
+
+    // 내가 찜한 맛집리스트 조회
+    public List<MyRestaurantListDTO> findAllByUserDAO_userIndex(Long userIndex) {
+
+        List<MyRestaurantList> myRestaurantListList = myRestaurantListRepository.findAllByUserDAO_UserIndex(userIndex);
+        List<MyRestaurantListDTO> myRestaurantListDTOList = new ArrayList<>();
+        for(MyRestaurantList mr : myRestaurantListList) {
+            MyRestaurantListDTO mrDto = new MyRestaurantListDTO(mr);
+            myRestaurantListDTOList.add(mrDto);
+
+            System.out.println(mrDto);
+        }
+
+        return myRestaurantListDTOList;
     }
 }

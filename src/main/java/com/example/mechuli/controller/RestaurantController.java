@@ -11,6 +11,8 @@ import com.example.mechuli.service.RestaurantService;
 import com.example.mechuli.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -90,6 +92,11 @@ public class RestaurantController {
     @RequestMapping(value = "/ajax/CheckMyRestaurant", method = RequestMethod.POST)
     @ResponseBody
     public int ajaxCheckMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+//        if (authedUser == null) {
+//            System.out.println("User is not authenticated.");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+
         int result = -1;
         boolean isExist;
         try {
@@ -108,14 +115,18 @@ public class RestaurantController {
     // 내 식당 찜하기 / 해제 ajax
     @RequestMapping(value = "/ajax/DoMyRestaurant", method = RequestMethod.POST)
     @ResponseBody
-    public int ajaxDoMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
-        int result = -1;
+    public ResponseEntity<Integer> ajaxDoMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+        int result;
+        if (authedUser == null) {
+            System.out.println("User is not authenticated.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         boolean isExist;
         try {
             isExist = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
         } catch (Exception e) {
             System.out.println("restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex가 정상작동하지 않았습니다.");
-            return result;  // ajax 실행 중 에러 발생 시 -1 리턴
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         // 이미 값이 들어 있다면(찜 상태라면 삭제)
         if (isExist) {
@@ -127,6 +138,6 @@ public class RestaurantController {
             restaurantService.save(Long.parseLong(restaurantId), authedUser.getUserIndex());
             result = 1;
         }
-        return result;
+        return ResponseEntity.ok(result);
     }
 }
