@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasRole;
@@ -23,7 +24,7 @@ import static org.springframework.security.authorization.AuthorityReactiveAuthor
 public class SecurityConfig {
 
     @Bean
-    public BCryptPasswordEncoder encodePWD(){
+    public BCryptPasswordEncoder encodePWD() {
         return new BCryptPasswordEncoder();
     }
 
@@ -34,8 +35,8 @@ public class SecurityConfig {
                 .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                                .requestMatchers("/joinPage","/wellcomePage","/join").permitAll()
+                                .requestMatchers("/js/**", "/home", "/auth/**", "/api/**", "/css/**", "/img/**", "/image/**", "/tailwinds.css", "/thymeleaf/**", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                                .requestMatchers("/joinPage", "/wellcomePage", "/join").permitAll()
 //                                .requestMatchers("/js/**","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
 //                .requestMatchers("/joinPage","/wellcomePage").permitAll()
 //                                .requestMatchers(hasRole(USER))
@@ -56,9 +57,11 @@ public class SecurityConfig {
                                 .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true));
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/home")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
         return http.build();
     }
 
@@ -78,4 +81,5 @@ public class SecurityConfig {
 //
 //        return new ProviderManager(authProvider);
 //    }
+
 }
