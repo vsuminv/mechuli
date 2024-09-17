@@ -1,5 +1,12 @@
 <div class="right" th:fragment="right" xmlns:sec="http://www.w3.org/1999/xhtml">
 
+    <button sec:authorize="isAuthenticated()" type="button" onclick="location.href='/logout'" class="mx-auto mt-8 bg-red-200 hover:bg-red-300 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+          <span class="flex  items-center font-bolder boarder text-yellow-600 ">
+        로그 아웃
+          </span>
+        <span class="text-yellow-700 font-bolder"> </span>
+    </button>
+    <h1 sec:authorize="isAuthenticated()">로그인은 했는데 권한이 없을때 보이는 버튼 </h1>
 
     <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/loginPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
           <span class="flex  items-center font-bolder boarder text-yellow-600 ">
@@ -14,7 +21,6 @@
           </span>
         <span class="text-yellow-700 font-bolder"> </span>
     </button>
-
     <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/joinPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
           <span class="flex  items-center font-bolder boarder text-yellow-600 ">
         회원가입 페이지

@@ -24,4 +24,6 @@ public interface UserRepository extends JpaRepository<UserDAO, Long> {
     List<UserDAO> findByNicknameNot(String nickname);
 
     List<UserDAO> findByNicknameContainingAndNicknameNot(String subNickname, String userNickName);
+
+    Optional<UserDAO> findByUserIndex(Long userIndex);
 }

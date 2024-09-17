@@ -31,11 +31,12 @@ public class SecurityConfig {
 //                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
                                 .requestMatchers("/joinPage/**","/","/myPage/**").permitAll()
                                 .anyRequest().authenticated()
+
                 )
                 .formLogin(login -> login
                                 .loginPage("/loginPage")
                                 .loginProcessingUrl("/login") // action
-                                .defaultSuccessUrl("/home", true)
+                                .defaultSuccessUrl("/", true)
                                 .usernameParameter("userId")
                                 .passwordParameter("userPw")
                                 .failureUrl("/error/error500")

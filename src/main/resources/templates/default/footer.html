@@ -3,8 +3,8 @@
     <div class="grid grid-cols-3 h-full bg-yellow-200 w-full">
         <div class="grid-col-1 m-auto">
 
-            <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/loginPage'">로그인</button>
-            <button sec:authorize="hasRole('USER')" type="button" onclick="location.href='/logout'">로그아웃</button>
+            <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/loginPage'">login</button>
+            <button sec:authorize="hasRole('USER')" type="button" onclick="location.href='/logout'">logout</button>
 
         </div>
         <div class="grid-col-2">
@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="grid-col-3 m-auto">
-            <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/loginPage'">가입</button>
+            <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/joinPage'">join</button>
             <button sec:authorize="hasRole('USER')" type="button" onclick="location.href='/myPage'">myPage</button>
         </div>
     </div>
