@@ -41,8 +41,22 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
+    // 수정할 리뷰 조회
+    @GetMapping("/reviews/{reviewId}")
+    public ResponseEntity<ReviewDTO> getReviewById(@PathVariable Long reviewId,
+                                                   @AuthenticationPrincipal UserDAO authUser) {
+        if(authUser == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        ReviewDTO reviewDTO = reviewService.getReviewById(reviewId);
+        if (reviewDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(reviewDTO);
+    }
+
     // 리뷰 수정
-    @PutMapping("/reviews")
+    @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<Void> updateReview(@PathVariable Long reviewId,
                                              @RequestPart(name = "reviewDto") ReviewDTO reviewDTO,
                                              @RequestPart(value = "files", required = false) List<MultipartFile> files,
@@ -77,12 +91,27 @@ public class ReviewController {
 
     // 리뷰 삭제
     @DeleteMapping("/reviews/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId) {
-        try {
-            reviewService.deleteReview(reviewId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId,
+                                             @AuthenticationPrincipal UserDAO authUser) {
+        // 로그인 유저가 없는 경우 401 Unauthorized 반환
+        if (authUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 리뷰 조회
+        ReviewDTO reviewDTO = reviewService.getReviewById(reviewId);
+
+        // 리뷰 작성자와 로그인한 유저가 일치하는지 확인
+        if (reviewDTO.getUserIndex().equals(authUser.getUserIndex())) {
+            try {
+                reviewService.deleteReview(reviewId); // 리뷰 삭제
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 성공적으로 삭제된 경우 204 No Content 반환
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 리뷰를 찾을 수 없는 경우 404 Not Found 반환
+            }
+        } else {
+            // 유저가 일치하지 않는 경우 403 Forbidden 반환
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
 }
