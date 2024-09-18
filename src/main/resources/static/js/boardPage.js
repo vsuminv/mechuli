@@ -257,10 +257,23 @@ let boardPage = {
             rowElement.setAttribute('id',`review-${review.reviewId}`);
             rowElement.classList.add('relative', 'flex');
 
+            let reviewImageUrl = review.reviewImg;
+
+            // 만약 reviewImg가 JSON 배열 형태로 넘어온다면 이를 파싱
+            if (typeof reviewImageUrl === "string" && reviewImageUrl.startsWith('[')) {
+                try {
+                    const parsedImages = JSON.parse(reviewImageUrl);
+                    reviewImageUrl = Array.isArray(parsedImages) && parsedImages.length > 0 ? parsedImages[0] : '/images/default-profile.png';
+                } catch (e) {
+                    console.error('Error parsing image URL:', e);
+                    reviewImageUrl = '/images/default-profile.png';  // 기본 이미지 설정
+                }
+            }
+
             rowElement.innerHTML = `
-                <td class="bg-gray-300 w-32 h-32 border border-gray-400">
-                    <img id="user_photo" src="${review.userPhoto || '/images/default-profile.png'}" alt="프로필 사진">
-                </td>
+            <td class="bg-gray-300 w-32 h-32 border border-gray-400">
+                <img id="user_photo" src="${reviewImageUrl}" alt="프로필 사진">
+            </td>
                 <td class="relative w-32 h-8 border border-gray-400">
                     <h1 id="user_nickname">${review.nickname || '익명'}</h1>
                 </td>
