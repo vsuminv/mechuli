@@ -93,6 +93,18 @@ const reviewPage = {
             reviewData.append('reviewDto', new Blob([JSON.stringify(reviewDto)], { type: 'application/json' }));
             reviewData.append('restaurantId', this.restaurantId);
 
+            // 여러 개의 파일 입력 필드에서 파일 추가
+            const fileUpload1 = $('#file-upload1')[0]?.files[0];
+            const fileUpload2 = $('#file-upload2')[0]?.files[0];
+
+            if (fileUpload1) {
+                reviewData.append('files', fileUpload1);  // 첫 번째 파일 추가
+            }
+
+            if (fileUpload2) {
+                reviewData.append('files', fileUpload2);  // 두 번째 파일 추가
+            }
+
             $.ajax({
                 url: '/reviews',
                 method: 'POST',
@@ -171,12 +183,14 @@ const reviewPage = {
 
         // 만약 기존 태그가 없다면 새로 추가
         const rowElement = document.createElement('tr');
-        rowElement.setAttribute('id', `review-${review.reviewId}`);  // 리뷰 ID를 사용해 행 ID 설정
+        rowElement.setAttribute('id', `review-${Array.isArray(review.reviewImg) ? review.reviewImg[0] :review.reviewId}`);  // 리뷰 ID를 사용해 행 ID 설정
         rowElement.classList.add('relative', 'flex');
+
+        const reviewImage = review.reviewImg ? JSON.parse(review.reviewImg)[0] : '/images/default-profile.png';
 
         rowElement.innerHTML = `
             <td class="bg-gray-300 w-32 h-32 border border-gray-400">
-                <img id="user_photo" src="${review.userPhoto || '/images/default-profile.png'}" alt="프로필 사진">
+                <img id="user_photo" src="${reviewImage}}" alt="프로필 사진">
             </td>
             <td class="relative w-32 h-8 border border-gray-400">
                 <h1 id="user_nickname">${review.nickname || '익명'}</h1>
@@ -245,6 +259,16 @@ const reviewPage = {
         this.charCountElement.innerText = `${charCount} / ${this.maxLength} 글자`;
     }
 };
+
+function parseReviewImage(imageString) {
+    if (imageString.startsWith("[") && imageString.endsWith("]")) {
+        return imageString.substring(2, imageString.length - 2);  // 앞뒤 [""] 제거
+    }
+    return imageString;
+}
+
+const cleanedImageUrl = parseReviewImage(review.reviewImg);
+console.log('Cleaned Image URL:', cleanedImageUrl);
 
 // 페이지 초기화
 reviewPage.init();

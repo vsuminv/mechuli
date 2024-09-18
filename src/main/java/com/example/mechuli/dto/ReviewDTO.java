@@ -30,6 +30,12 @@ public class ReviewDTO {
         this.updateDate = review.getUpdateDate();
         this.userIndex = review.getUserIndex().getUserIndex();
         this.reviewImg = review.getReviewImg();
+//        String imageUrl = review.getReviewImg();
+//        if (imageUrl != null && imageUrl.startsWith("[\"") && imageUrl.endsWith("\"]")) {
+//            this.reviewImg = imageUrl.substring(2, imageUrl.length() - 2);  // 배열 기호 제거
+//        } else {
+//            this.reviewImg = imageUrl;
+//        }
     }
 
     public ReviewDTO(Review review, String nickname) {
