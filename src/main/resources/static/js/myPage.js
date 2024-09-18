@@ -1,164 +1,327 @@
-let get ={
-    getInit : function () {
-        const buttons = document.querySelectorAll('button[data-show-table]');
-        document.addEventListener("DOMContentLoaded", this.urlCheck);
+// back에 authedUser 설정 임시방편
+let authed_test = {
+    userIndex: 1,
+    userId: "c",
+    userPw: "c",
+    userName: "han"
+};
+const MyPage = {
+    init() {
+        this.my_page();
+        this.my_events();
 
-    }
-}
+        this.my_StoreList_Review();
 
-let post ={
-    postInit: function () {
+        this.my_Contents("#myStateFragment");
+        this.my_btn_style("#myState_btn");
 
-        $("#my_account").on("click", function () {
-            this.myAccount();
+    },
+
+    my_page() {
+
+        this.$myStateFragment = $("#myStateFragment");
+        this.$myStoreListFragment = $("#myStoreListFragment");
+        this.$mySubFragment = $("#mySubFragment");
+
+        this.$myStateBtn = $("#myState_btn");
+        this.$myStoreListBtn = $("#myStoreList_btn");
+        this.$mySubBtn = $("#mySub_btn");
+
+        this.$updateUserBtn = $("#updateUserBtn");
+        this.$confirmPasswordModal = $("#confirmPasswordModal");
+        this.$confirmPasswordForm = $("#confirmPasswordForm");
+        this.$cancelConfirmBtn = $("#cancelConfirmBtn");
+        this.$saveUserInfoBtn = $("#saveUserInfoBtn");
+        this.$cancelUpdateBtn = $("#cancelUpdateBtn");
+
+        this.$storeListContainer = $("#storeListContainer");
+        this.$reviewContainer = $("#reviewContainer");
+
+        this.$prevBtn = $("#prevBtn");
+        this.$nextBtn = $("#nextBtn");
+        this.$prevReviewBtn = $("#prevReviewBtn");
+        this.$nextReviewBtn = $("#nextReviewBtn");
+
+        this.$my_search = $("#onMySearch");
+        this.$my_friend_list = $("#my_friend_list");
+
+    },
+
+    my_events() {
+        this.$myStateBtn.on("click", this.onMyStateBtnClick.bind(this));
+        this.$myStoreListBtn.on("click", this.onMyStoreListBtnClick.bind(this));
+        this.$mySubBtn.on("click", this.onMySubBtnClick.bind(this));
+        this.$updateUserBtn.on("click", this.onUpdateUserBtnClick.bind(this));
+        this.$confirmPasswordForm.on("submit", this.onConfirmPasswordFormSubmit.bind(this));
+        this.$cancelConfirmBtn.on("click", this.onCancelConfirmBtnClick.bind(this));
+        this.$saveUserInfoBtn.on("click", this.onSaveUserInfoBtnClick.bind(this));
+        this.$cancelUpdateBtn.on("click", this.onCancelUpdateBtnClick.bind(this));
+        this.$prevBtn.on("click", this.onPrevBtnClick.bind(this));
+        this.$nextBtn.on("click", this.onNextBtnClick.bind(this));
+        this.$prevReviewBtn.on("click", this.onPrevReviewBtnClick.bind(this));
+        this.$nextReviewBtn.on("click", this.onNextReviewBtnClick.bind(this));
+        this.$my_search.on("input", this.onMySearch.bind(this));
+    },
+
+    my_StoreList_Review() {
+        $.ajax({
+            url: url_api_myPage_myLists,
+            type: "POST",
+            contentType: "application/json",
+            success: (data) => {
+                MyPage.renderStoreList(data.myRestaurantListDTOList);
+                MyPage.renderReviews(data.myReviewDTOList);
+                console.log('서버 응답:', data);
+                console.log('서버 응답 :', data.myRestaurantListDTOList.length);
+            },
+            error: (xhr, status, error) => {
+                console.error('error:', error);
+                console.log('서버 응답:', xhr.responseText);
+            }
         });
-        $("#my_restaurant").on("click", function () {
-            this.myRestaurant();
+    },
+
+    renderStoreList(storeList) {
+        this.$storeListContainer.empty();
+        storeList.forEach(store => {
+            console.log("storeList 가져는 왔는지 확인" + store);
+            const $storeItem = $("<div>").addClass("flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden");
+            const $starBtn = $("<button>").text("star").addClass("z-99 absolute mx-20");
+            const $storeImg = $("<img>").attr("src", store.imagePath).attr("alt", store.name).addClass("w-full h-full object-cover");
+
+            $storeItem.append($starBtn, $storeImg);
+            this.$storeListContainer.append($storeItem);
         });
-        $("#my_friend").on("click", function () {
-            this.myFriend();
+    },
+
+    renderReviews(reviews) {
+        this.$reviewContainer.empty();
+        reviews.forEach(review => {
+            const $reviewItem = $("<div>").addClass("flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-md p-4");
+            const $reviewText = $("<p>").text(review).addClass("text-sm");
+
+            $reviewItem.append($reviewText);
+            this.$reviewContainer.append($reviewItem);
         });
     },
 
-
-    myAccount: function () {
-
+    onMyStateBtnClick() {
+        this.my_Contents("#myStateFragment");
+        this.my_btn_style(this.$myStateBtn);
     },
-    myRestaurant: function () {
 
+    onMyStoreListBtnClick() {
+        this.my_Contents("#myStoreListFragment");
+        this.my_btn_style(this.$myStoreListBtn);
+        this.my_StoreList_Review();
+        $.ajax({
+            url: url_api_myPage_myLists,
+            type: "POST",
+            contentType: content_type,
+            success: function (data) {
+                // 받은 데이터를 사용하여 맛집 리스트와 리뷰를 렌더링
+                MyPage.renderStoreList(data.myRestaurantListDTOList);
+                MyPage.renderReviews(data.myReviewDTOList);
+                console.log("/api/myPage/myLists, 요청 결과" + data)
+            },
+            error: function (xhr, status, error) {
+                console.error("내 맛집 리스트와 리뷰를 가져오는데 실패했습니다:", error);
+                console.log("/api/myPage/myLists, 요청 결과" + data.myRestaurantListDTOList)
+            }
+        });
     },
-    myFriend: function () {
 
+    // onMyStoreListBtnClick() {
+    //     this.my_Contents("#myStoreListFragment");
+    //     this.my_btn_style(this.$myStoreListBtn);
+    //     this.my_StoreList_Review();
+    // },
+    onMySubBtnClick() {
+        this.my_Contents("#mySubFragment");
+        this.my_btn_style(this.$mySubBtn);
+        this.my_friends_fetch();
     },
-    urlCheck: function (){
-        let url = window.location.pathname;
-        let id = "buttons"+url.replace("/","").split("/")[0];
-        let currentNavBtn = document.getElementById(id);
-        currentNavBtn.classList.add("special_nav_btn");
-    }
+    my_friends_fetch() {
+        $.ajax({
+            url: url_subscriptions_subscriberList,
+            type: "GET",
+            contentType: content_type,
+            success: function (response) {
+                MyPage.renderFriends(response);
+                console.log(" 친구 리스트 패치 들옴? length = "+ response.length)
+                console.log(" 친구 들온거  " )
+            },
+            error: function (xhr, status, error) {
+                console.error("구독자 목록을 가져오는데 실패했습니다:", error);
+            }
+        });
+    },
+    renderFriends(response) {
+        this.$my_friend_list.empty();
+        response.forEach(friend => {
+            const $friendItem = $("<li>").addClass("flex items-center space-x-3 bg-white p-1 rounded-lg shadow");
+            const $friendInitial = $("<div>").addClass("w-12 h-12 bg-yellow-200 rounded-full flex items-center justify-center")
+                .append($("<span>").addClass("text-xl font-bold text-yellow-800").text(friend.name.charAt(0)));
+            const $friendName = $("<span>").addClass("text-lg text-gray-800").text(friend.name);
+
+            $friendItem.append($friendInitial, $friendName);
+            this.$my_friend_list.append($friendItem);
+        });
+    },
+    onMySearch() {
+        const nickname = this.$my_search.val();
+        $.ajax({
+            url: url_subscriptions_search,
+            type: "GET",
+            data: { nickname: nickname },
+            contentType: content_type,
+            success: function (response) {
+                MyPage.renderFriends(response);
+                console.log("들온거 "+ response)
+                console.log("검색 성공 확인" + MyPage.renderFriends(response))
+            },
+            error: function (xhr, status, error) {
+                console.error("onFriendSearch error :", error);
+            }
+        });
+    },
+    my_Contents(selector) {
+        this.$myStateFragment.fadeOut(100);
+        this.$myStoreListFragment.fadeOut(100);
+        this.$mySubFragment.fadeOut(100);
+        $(selector).fadeIn();
+    },
+
+    my_btn_style($clickedButton) {
+        this.$myStateBtn.removeClass("bg-yellow-500").addClass("bg-yellow-200");
+        this.$myStoreListBtn.removeClass("bg-yellow-500").addClass("bg-yellow-200");
+        this.$mySubBtn.removeClass("bg-yellow-500").addClass("bg-yellow-200");
+        $clickedButton.removeClass("bg-yellow-200").addClass("bg-yellow-500");
+    },
+
+    onUpdateUserBtnClick() {
+        this.$confirmPasswordModal.removeClass("hidden");
+    },
+
+    onConfirmPasswordFormSubmit(e) {
+        e.preventDefault();
+
+        const currentPassword = $("#currentPassword").val();
+
+        $.ajax({
+            url: url_ajax_checkPwd,
+            type: "POST",
+            // data: JSON.stringify({ currentPassword: currentPassword }),
+            data: JSON.stringify({
+                authedUser: authed_test,
+                userPwd: currentPassword
+            }),
+            contentType: content_type,
+            success: function (result) {
+                if (result) {
+                    MyPage.$confirmPasswordModal.addClass("hidden");
+                    MyPage.showUpdateUserForm();
+                } else {
+                    alert("비밀번호가 일치하지 않습니다.");
+                }
+            },
+            error: function (xhr, status, error) {
+                alert("비밀번호 확인 중 오류가 발생했습니다.");
+                console.error(error.responseText);
+            }
+        });
+    },
+
+    showUpdateUserForm() {
+        this.$myStateFragment.find("input, select").prop("readonly", false);
+        this.$updateUserBtn.hide();
+        this.$saveUserInfoBtn.show();
+        this.$cancelUpdateBtn.show();
+    },
+
+    hideUpdateUserForm() {
+        this.$myStateFragment.find("input, select").prop("readonly", true);
+        this.$updateUserBtn.show();
+        this.$saveUserInfoBtn.hide();
+        this.$cancelUpdateBtn.hide();
+    },
+
+    onSaveUserInfoBtnClick() {
+        const formData = new FormData();
+        // formData.append("file", $("#userImg")[0].files[0]);
+        formData.append("userPw", $("#newPassword").val());
+        // formData.append("categoryIds", selectedCategories.map(category => category.id));
+
+        $.ajax({
+            url: url_updateUpdate,
+            type: "PUT",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                alert("회원 정보가 성공적으로 수정되었습니다.");
+                console.log("업데이트 성공" + response);
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert("회원 정보 수정 중 오류가 발생했습니다.");
+                console.error(error);
+                console.log("업데이트 실패" + response);
+            }
+        });
+    },
+
+    onCancelConfirmBtnClick() {
+        this.$confirmPasswordModal.addClass("hidden");
+    },
+
+    onCancelUpdateBtnClick() {
+        this.hideUpdateUserForm();
+    },
+
+    onPrevBtnClick() {
+        const itemWidth = 144; // 32 + 4(mr-4) for store list
+        const currentPosition = parseInt(this.$storeListContainer.css("transform").split(",")[4]);
+        const newPosition = currentPosition + itemWidth;
+
+        if (newPosition <= 0) {
+            this.$storeListContainer.css("transform", `translateX(${newPosition}px)`);
+        }
+    },
+
+    onNextBtnClick() {
+        const itemWidth = 144; // 32 + 4(mr-4) for store list
+        const currentPosition = parseInt(this.$storeListContainer.css("transform").split(",")[4]);
+        const maxPosition = -(this.$storeListContainer[0].scrollWidth - this.$storeListContainer.width());
+        const newPosition = currentPosition - itemWidth;
+
+        if (newPosition >= maxPosition) {
+            this.$storeListContainer.css("transform", `translateX(${newPosition}px)`);
+        }
+    },
+
+    onPrevReviewBtnClick() {
+        const itemWidth = 272; // 64 + 4(mr-4) for reviews
+        const currentPosition = parseInt(this.$reviewContainer.css("transform").split(",")[4]);
+        const newPosition = currentPosition + itemWidth;
+
+        if (newPosition <= 0) {
+            this.$reviewContainer.css("transform", `translateX(${newPosition}px)`);
+        }
+    },
+
+    onNextReviewBtnClick() {
+        const itemWidth = 272; // 64 + 4(mr-4) for reviews
+        const currentPosition = parseInt(this.$reviewContainer.css("transform").split(",")[4]);
+        const maxPosition = -(this.$reviewContainer[0].scrollWidth - this.$reviewContainer.width());
+        const newPosition = currentPosition - itemWidth;
+
+        if (newPosition >= maxPosition) {
+            this.$reviewContainer.css("transform", `translateX(${newPosition}px)`);
+        }
+    },
 };
 
-get.getInit();
-post.postInit();
-
-
-
-const buttons = document.querySelectorAll('button[data-show-table]');
-const tables = document.querySelectorAll('main table');
-// const modal = document.getElementById('modal');
-const addReviewButton = document.querySelector('#addReviewButton');
-const cancelButton = modal.querySelector('button:first-of-type');
-
-// 초기 상태에서 첫 번째 버튼을 노란색으로 유지
-let activeButton = document.querySelector('button[data-show-table="menuTable"]');
-
-
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const myAccountBtn = document.getElementById('myAccountBtn');
-    const myStoreListBtn = document.getElementById('myStoreListBtn');
-    const myPartyBtn = document.getElementById('myPartyBtn');
-    const contentDiv = document.getElementById('content');
-
-    const buttons = [myAccountBtn, myStoreListBtn, myPartyBtn];
-
-    function setActiveButton(activeButton) {
-        buttons.forEach(button => {
-            button.classList.remove('bg-yellow-500');
-            button.classList.add('bg-yellow-200');
-        });
-        activeButton.classList.remove('bg-yellow-200');
-        activeButton.classList.add('bg-yellow-500');
-    }
-
-    function loadContent(url) {
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                contentDiv.innerHTML = html;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                contentDiv.innerHTML = '<p>콘텐츠를 불러오는 데 실패했습니다.</p>';
-            })
-            .finally(() => {
-                // 데이터 로드 성공 여부와 관계없이 캐러셀 설정
-                setupCarousel('carousel');
-                setupCarousel('review-carousel');
-            });
-    }
-
-    myAccountBtn.addEventListener('click', function() {
-        loadContent('/contents/my/myTaste', '내 취향');
-        setActiveButton(myAccountBtn);
-    });
-
-    myStoreListBtn.addEventListener('click', function() {
-        loadContent('/contents/my/myStoreList', '내 맛집 리스트');
-        setActiveButton(myStoreListBtn);
-    });
-
-    myPartyBtn.addEventListener('click', function() {
-        loadContent('/contents/my/myParty', '내 친구');
-        setActiveButton(myPartyBtn);
-    });
-
-    // 초기 로드
-    // myAccountBtn.click();
-    // myStoreListBtn.click();
-    // myPartyBtn.click();
+$(document).ready(function () {
+    MyPage.init();
 });
-
-function setupCarousel(carouselId) {
-    const carousel = document.getElementById(carouselId);
-    if (!carousel) return; // 캐러셀이 없으면 함수 종료
-
-    const content = carousel.querySelector('.flex');
-    const prevBtn = carousel.querySelector('button:first-of-type');
-    const nextBtn = carousel.querySelector('button:last-of-type');
-    let position = 0;
-    const itemWidth = carouselId === 'carousel' ? 144 : 272; // 32 + 4(mr-4) for store list, 64 + 4(mr-4) for reviews
-
-    nextBtn.addEventListener('click', () => {
-        const maxPosition = content.scrollWidth - carousel.clientWidth;
-        if (position > -maxPosition) {
-            position -= itemWidth;
-            position = Math.max(position, -maxPosition);
-            content.style.transform = `translateX(${position}px)`;
-        }
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if (position < 0) {
-            position += itemWidth;
-            position = Math.min(position, 0);
-            content.style.transform = `translateX(${position}px)`;
-        }
-    });
-
-    // 터치 스와이프 지원
-    let startX;
-    let isDragging = false;
-
-    content.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].pageX - position;
-    });
-
-    content.addEventListener('touchmove', (e) => {
-        if (isDragging) {
-            e.preventDefault();
-            const x = e.touches[0].pageX - startX;
-            const maxPosition = -(content.scrollWidth - carousel.clientWidth);
-            position = Math.max(Math.min(x, 0), maxPosition);
-            content.style.transform = `translateX(${position}px)`;
-        }
-    });
-
-    content.addEventListener('touchend', () => {
-        isDragging = false;
-        const itemPosition = Math.round(position / itemWidth) * itemWidth;
-        position = Math.max(Math.min(itemPosition, 0), -(content.scrollWidth - carousel.clientWidth));
-        content.style.transform = `translateX(${position}px)`;
-    });
-}

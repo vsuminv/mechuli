@@ -1,47 +1,64 @@
-<div class="right" th:fragment="right">
+<div class="right" th:fragment="right" xmlns:sec="http://www.w3.org/1999/xhtml">
 
-<button type="button" onclick="location.href='/loginPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+    <button sec:authorize="isAuthenticated()" type="button" onclick="location.href='/logout'" class="mx-auto mt-8 bg-red-200 hover:bg-red-300 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+          <span class="flex  items-center font-bolder boarder text-yellow-600 ">
+        로그 아웃
+          </span>
+        <span class="text-yellow-700 font-bolder"> </span>
+    </button>
+    <h1 sec:authorize="isAuthenticated()">권한에 관계없이 로그인 인증만하면 보이는 버튼 </h1>
+    <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/loginPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
           <span class="flex  items-center font-bolder boarder text-yellow-600 ">
               로그인 페이지
           </span>
-    <span class="text-green-700 font-bolder"> 완성 </span>
-        </button>
-    <button type="button" onclick="location.href='/joinPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+        <span class="text-green-700 font-bolder"> 완성 </span>
+    </button>
+    <button sec:authorize="isAuthenticated()" type="button" onclick="location.href='/logout'" class="mx-auto mt-8 bg-red-200 hover:bg-red-300 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+          <span class="flex  items-center font-bolder boarder text-yellow-600 ">
+       로그인 안해도 보이는 로그아웃
+          </span>
+        <span class="text-yellow-700 font-bolder"> </span>
+    </button>
+    <button sec:authorize="hasRole('USER')" type="button" onclick="location.href='/logout'" class="mx-auto mt-8 bg-red-200 hover:bg-red-300 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+          <span class="flex  items-center font-bolder boarder text-yellow-600 ">
+        로그 아웃
+          </span>
+        <span class="text-yellow-700 font-bolder"> </span>
+    </button>
+    <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/joinPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
           <span class="flex  items-center font-bolder boarder text-yellow-600 ">
         회원가입 페이지
           </span>
         <span class="text-pink-700 font-bolder"> 진행중.. </span>
-        </button>
-    <button type="button" onclick="location.href='/boardPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+    </button>
+    <button sec:authorize="hasRole('USER')" type="button" onclick="location.href='/boardPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
           <span class="flex  items-center font-bolder boarder text-yellow-600 ">
         게시판 페이지
           </span>
         <span class="text-pink-700 font-bolder"> 진행중.. </span>
-        </button>
-    <button type="button" onclick="location.href='/myPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+    </button>
+    <button sec:authorize="hasRole('USER')" type="button" onclick="location.href='/myPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
           <span class="flex items-center font-bolder boarder text-yellow-600 ">
         마이 페이지
           </span>
         <span class="text-green-700 font-bolder"> 완성 </span>
     </button>
 
-    <button type="button" onclick="location.href='/home'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+    <button sec:authorize="hasRole('USER')" type="button" onclick="location.href='/mainPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
           <span class="flex  items-center font-bolder boarder text-yellow-600 ">
         로그인 후 메인
           </span>
         <span class="text-yellow-700 font-bolder"> 개발 전 </span>
-        </button>
-    <!--    <button type="button" onclick="location.href='/mainPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">-->
-    <!--          <span class="flex  items-center font-bolder boarder text-yellow-600 ">-->
-    <!--        로그인 전 메인-->
-    <!--          </span>-->
-    <!--        <span class="text-yellow-700 font-bolder"> 진행 중... </span>-->
-    <!--    </button>-->
-<button type="button" onclick="location.href='/logout'" class="mx-auto mt-8 bg-red-200 hover:bg-red-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
+    </button>
+    <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/mainPage'" class="mx-auto mt-8 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-4 rounded-full shadow-md uppercase tracking-wider">
           <span class="flex  items-center font-bolder boarder text-yellow-600 ">
-        로그 아웃
+        로그인 전 메인
           </span>
-        <span class="text-yellow-700 font-bolder"> </span>
+        <span class="text-yellow-700 font-bolder"> 진행 중... </span>
     </button>
 
+    <div class="w-[100%] h-[50vw]">
+        <h1 class="mt-52" sec:authorize="isAnonymous()" >로그인하면 보이는 버튼들</h1>
+        <h1 class="mt-52" sec:authorize="hasRole('USER')" >로그아웃하면 보이는 버튼들</h1>
+    </div>
 </div>

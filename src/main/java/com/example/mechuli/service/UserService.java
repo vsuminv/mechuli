@@ -174,8 +174,6 @@ public class UserService implements UserDetailsService {
         // S3의 이미지 URL 생성
         return amazonS3.getUrl(BUCKET_NAME, fileName).toString();
     }
-
-
     public boolean verifyPassword(Long userIndex, String passwordToVerify) {
         UserDAO user = userRepository.findByUserIndex(userIndex)
                 .orElseThrow(() -> new RuntimeException("User not found"));

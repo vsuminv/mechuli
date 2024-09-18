@@ -7,6 +7,7 @@ import com.example.mechuli.service.RestaurantCategoryService;
 import com.example.mechuli.service.RestaurantService;
 import com.example.mechuli.service.ReviewService;
 import com.example.mechuli.service.UserService;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -35,10 +36,6 @@ public class UserController {
     @Autowired
     private final RestaurantService restaurantService;
     @Autowired
-    private final RestaurantCategoryService restaurantCategoryService;
-
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
     private ReviewService reviewService;
 
     @GetMapping("/csrf-token")
@@ -47,23 +44,6 @@ public class UserController {
         System.out.println(csrfToken);
         return csrfToken;
     }
-//    @PostMapping("/join")
-//    public ResponseEntity<String> userJoin(@Valid UserDTO dto, BindingResult bindingResult) {
-//        // 카테고리 값 가져오기
-//        if (dto.getCategoryIds() == null || dto.getCategoryIds().size() < 3 || dto.getCategoryIds().size() > 5) {
-//            bindingResult.rejectValue("restaurantCategories", "error.userDto", "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
-//            return ResponseEntity.badRequest().body("카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
-//        }
-//
-//        try {
-//            userService.save(dto);
-//            return ResponseEntity.ok("회원가입이 완료되었습니다.");
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().body("회원가입 중 오류가 발생했습니다: " + e.getMessage());
-//        }
-//    }
-
-
     @RequestMapping(value = "/ajaxCheckId", method = RequestMethod.POST)
     @ResponseBody
     public int ajaxCheckId(@RequestBody String userId) {
@@ -106,7 +86,6 @@ public class UserController {
             System.out.println("User is not authenticated.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
         System.out.println("Authenticated User: " + authedUser.getUserId());
 
         List<RestaurantDTO> randomCategories = userService.getRandomCategoriesForUser(authedUser.getUserId());
@@ -198,4 +177,6 @@ public class UserController {
     // 탈퇴 (Withdraw)
 
 }
+
+
 

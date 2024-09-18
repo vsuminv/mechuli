@@ -1,66 +1,89 @@
-<div th:fragment="joinForm">
+<div th:fragment="joinForm" class="text-yellow-700 w-full">
+    <form id="joinForm" class="text-yellow-700 w-full" th:action="@{join}" method="post">
+        <div class="form-container relative overflow-hidden h-[500px]">
+            <div class="flex transition-transform duration-500 ease-in-out w-[200%]">
+                <div id="step1" class="w-1/2 px-4">
+                    <div class="mt-4">
+                        <label for="userId" class="sr-only"></label>
+                        <span class="ml-2 text-lg">아이디</span>
+                        <input type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="userId_check"
+                               value="중복 체크">
+                        <span id="userIdMessage" class="text-sm mt-1 hidden"></span>
+                        <div class="relative">
+                            <input id="userId" name="userId" type="text"
+                                   class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
+                                   placeholder="4자 이상 입력하세요" th:value="${userId}">
+                            <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label for="userPw" class="sr-only"></label>
+                        <span class="ml-2 text-lg">비밀번호</span>
+                        <div class="relative">
+                            <input id="userPw" name="userPw" type="password"
+                                   class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
+                                   placeholder="8자 이상 입력하세요" th:value="${userPw}">
+                            <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label for="userPw2" class="sr-only"></label>
+                        <span class="ml-2 text-lg">비밀번호 확인</span>
+                        <div class="relative">
+                            <input id="userPw2" name="password2" type="password"
+                                   class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
+                                   placeholder="비밀번호를 다시 입력하세요">
+                            <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label for="nickname" class="sr-only"></label>
+                        <span class="ml-2 text-lg">닉네임</span>
+                        <input type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="nickname_check"
+                               value="중복 체크">
+                        <span id="nicknameMessage" class="text-sm mt-1"></span>
+                        <div class="relative">
+                            <input id="nickname" name="nickname" type="text"
+                                   class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
+                                   placeholder="2자 이상 입력하세요" th:value="${nickname}">
+                            <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
+                        </div>
+                    </div>
+                </div>
 
-<!--<form id="joinForm" class="text-yellow-700 w-full" th:action="@{/join}" method="post" th:object="${userData}" onsubmit="return checkAll();">-->
-<form id="joinForm" class="text-yellow-700 w-full" th:action="@{/join}" method="post" th:object="${userData}"
-      onsubmit="return checkAll();">
-             <div class="mt-4">
-        <label th:for="userId" class="sr-only"></label><span class="ml-2">아이디</span>
-        <div class="relative">
-            <input id="userId" name="userId" type="text"
-                   class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                   placeholder="4자 이상 입력하세요" th:value="${userId}">
-            <button type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="userid_check"
-                    onclick="userIdCheck()">중복 체크</button>
-            <input class="btn btn-outline-success btn-sm reType" type="button" id="resetUserId" onclick="reUsername()"
-                   disabled value="다시입력"/>
-            <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
+                <div id="step2" class="w-1/2 h-full px-4">
+                    <h2 class="text-xl font-bold mb-4">취향 선택</h2>
+                    <div id="categoryList" class="grid grid-cols-5 gap-2 h-1/2 mt-4">
+
+
+                        <button th:each="category : ${categories}"
+                                type="button"
+                                class="category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200"
+                                th:data-category-id="${category.categoryId}"
+                                th:text="${category.categoryName}">
+                        </button>
+                        <!--                      categoryList 리스폰 공간 -->
+
+                    </div>
+                    <div id="hidden_category_inputs"></div>
+                </div>
+            </div>
         </div>
-    </div>
-            <div class="mt-4">
-                <label th:for="userPw" class="sr-only"></label><span class="ml-2">비밀번호</span>
-                <div class="relative">
-                    <input id="userPw" name="userPw" type="password"
-                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                           placeholder="8자 이상 입력하세요" th:value="${userPw}">
-                    <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
-                </div>
-            </div>
-            <div class="mt-4">
-                <label th:for="userPw2" class="sr-only"></label><span class="ml-2">비밀번호 확인</span>
-                <div class="relative">
-                    <input id="userPw2" name="password2" type="password"
-                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                           placeholder="비밀번호를 다시 입력하세요">
-                    <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
-                </div>
-            </div>
-            <div class="mt-4">
-                <label th:for="nickname" class="sr-only"></label><span class="ml-2">닉네임</span>
-                <div class="relative">
-                    <input id="nickname" name="nickname" type="text"
-                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                           placeholder="2자 이상 입력하세요" th:value="${nickname}">
-                     <button type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="nickname_check"
-                             onclick="nickNameCheck()">중복 체크</button>
-                    <input class="btn btn-outline-success btn-sm reType" type="button" id="resetNickname"
-                           onclick="reNickname()" disabled value="다시입력"/>
-                    <div class="validation-icon absolute right-3 top-1/2 transform -tanslate-y-1/2"></div>
-                </div>
-            </div>
-    <!--            <div class="mt-4">-->
-    <!--                <label for="address" class="sr-only">주소</label><span class="ml-2">주소</span>-->
-    <!--                <div class="relative">-->
-    <!--                    <input id="address" name="address" type="text" autocomplete="address" required-->
-    <!--                           class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"-->
-    <!--                           placeholder="주소를 입력하세요">-->
-    <!--                    <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>-->
-    <!--                </div>-->
-    <!--            </div>-->
-            <div class="w-fll flex mt-6"><div class="m-auto"> 1 / 2 </div> </div>
-            <div class="w-full flex">
-                <input id="join" type="submit"
-                       class="mx-auto mt-4 bg-yellow-200 hover:bg-yellow-500 text-black font-bold py-4 px-7 rounded-full shadow-md uppercase tracking-wider">
-                    <span class="flex items-center font-bolder boarder text-yellow-600">다음</span>
-            </div>
-        </form>
+        <div id="step-indicator" class="w-full flex -mt-14">
+            <div class="m-auto">1 / 2</div>
+        </div>
+        <div class="w-full flex flex-col items-center">
+            <button type="button" id="next_btn"
+                    class="hidden mx-auto mt-4 hover:bg-yellow-200 font-bold py-4 px-7 rounded-full shadow-md uppercase tracking-wider">
+                <span class="flex items-center font-bolder">다음</span>
+            </button>
+            <button type="button" id="back_btn"
+                    class=" mx-auto mt-4 bg-yellow-600 hover:bg-yellow-700  font-bold py-2 px-4 rounded hidden">
+                이전
+            </button>
+            <div id="nextButtonMessage" class="text-red-500 text-sm mt-2 hidden"></div>
+        </div>
+    </form>
 </div>
+
+
