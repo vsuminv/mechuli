@@ -1,7 +1,5 @@
 package com.example.mechuli.service;
 
-import com.example.mechuli.domain.MyRestaurantList;
-import com.example.mechuli.domain.Review;
 import com.example.mechuli.domain.Subscription;
 import com.example.mechuli.domain.UserDAO;
 import com.example.mechuli.dto.*;
@@ -10,9 +8,7 @@ import com.example.mechuli.repository.ReviewRepository;
 import com.example.mechuli.repository.SubscriptionRepository;
 import com.example.mechuli.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +18,6 @@ public class SubscriptionService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private SubscriptionRepository subscriptionRepository;
     @Autowired

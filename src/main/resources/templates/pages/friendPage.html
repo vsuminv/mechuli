@@ -3,18 +3,18 @@
     <script defer type="text/javascript" th:src="@{/js/myPage.js}"></script>
 </th:block>
 <main role="main" layout:fragment="main">
-    <div id="myPageContainer" class="text-sm w-full h-full text-yellow-700 overflow-hidden">
+    <div class="w-full h-full text-yellow-700">
         <div th:replace="~{/../component/nav :: nav}"></div>
 
         <div id="content" class="w-4/5 mx-auto h-full">
             <div id="my_state_fragment">
-                <th:block th:replace="~{contents/my/myState :: myState}"></th:block>
+                <th:block th:replace="~{contents/my/friendState :: friendState}"></th:block>
             </div>
             <div id="my_store_list_fragment" class="hidden">
-                <th:block th:replace="~{contents/my/myStoreList :: myStoreList}"></th:block>
+                <th:block th:replace="~{contents/my/friendStoreList :: friendStoreList}"></th:block>
             </div>
-            <div id="my_sub_fragment" class="text-sm hidden overflow-auto">
-                <th:block th:replace="~{contents/my/mySub :: mySub}"></th:block>
+            <div id="my_sub_fragment" class="hidden">
+                <th:block th:replace="~{contents/my/friendSub :: friendSub}"></th:block>
             </div>
         </div>
     </div>
