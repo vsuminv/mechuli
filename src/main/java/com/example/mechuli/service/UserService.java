@@ -160,9 +160,17 @@ public class UserService implements UserDetailsService {
     public String uploadImage(MultipartFile file) throws IOException {
         String fileName = "images/" + file.getOriginalFilename();
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.getSize());
+        metadata.setContentLength(file.getInputStream().available());
+
+        // Content-Type 설정
+        String contentType = file.getContentType();
+        if (contentType != null) {
+            metadata.setContentType(contentType);
+        }
+
         // S3에 이미지 업로드
         amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, fileName, file.getInputStream(), metadata));
+
         // S3의 이미지 URL 생성
         return amazonS3.getUrl(BUCKET_NAME, fileName).toString();
     }
