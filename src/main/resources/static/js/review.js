@@ -150,7 +150,7 @@ const reviewPage = {
 
         if (fileUpload2) {
             reviewData.append('files', fileUpload2);  // 두 번째 파일 추가
-        } 
+        }
 
         $.ajax({
             url: '/reviews',
@@ -160,8 +160,10 @@ const reviewPage = {
             data: reviewData,
             success: function(response) {
                 alert('리뷰가 성공적으로 등록되었습니다.');
-                this.addReviewToPage(response);  // 새 리뷰 UI에 추가
                 this.hideModal();
+
+                // 최신 리뷰 목록을 가져와 렌더링
+                boardPage.fetchReviews(); // boardPage의 fetchReviews 함수 호출
             }.bind(this),  // bind를 통해 콜백 내부의 `this`를 reviewPage로 고정
             error: function(xhr) {
                 alert('리뷰 등록 중 오류가 발생했습니다.');
@@ -188,6 +190,8 @@ const reviewPage = {
                 alert('리뷰가 성공적으로 수정되었습니다.');
                 this.updateReviewOnPage(response);  // 수정된 리뷰 UI에 반영
                 this.hideModal();
+                // 최신 리뷰 목록을 가져와 렌더링
+                boardPage.fetchReviews(); // boardPage의 fetchReviews 함수 호출
                 this.isEditMode = false;
                 this.editReviewId = null;
             },
