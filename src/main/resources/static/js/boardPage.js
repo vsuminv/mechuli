@@ -247,12 +247,35 @@ let boardPage = {
     renderReviews: function(reviews) {
         const reviewTable = document.getElementById('reviewTable');
 
+        // 기존 리뷰 목록 초기화
+        reviewTable.innerHTML = '';
+
         if (!reviews || reviews.length === 0) {
             reviewTable.innerHTML = '<tr id="review-${review.reviewId}"><td colspan="5" class="text-center">리뷰가 없습니다.</td></tr>';
             return;
         }
 
         reviews.forEach(review => {
+            // 리뷰 객체의 모든 정보를 콘솔에 출력
+            console.log('Review Data:', review);
+
+            // reviewImg를 JSON 파싱하여 배열로 변환
+            let reviewImages = [];
+            if (review.reviewImg) {
+                try {
+                    reviewImages = JSON.parse(review.reviewImg); // JSON 문자열을 배열로 변환
+                } catch (e) {
+                    console.error('Error parsing review images:', e);
+                }
+            }
+
+            // reviewImages 배열을 콘솔에 출력
+            console.log('Parsed reviewImages:', reviewImages);
+
+            // reviewImages의 첫 번째 원소를 콘솔에 출력
+            const firstImage = reviewImages.length > 0 ? reviewImages[0] : '';
+            console.log('First image:', firstImage);
+
             const rowElement = document.createElement('tr');
             rowElement.setAttribute('id',`review-${review.reviewId}`);
             rowElement.classList.add('relative', 'flex');
@@ -271,9 +294,11 @@ let boardPage = {
             }
 
             rowElement.innerHTML = `
-            <td class="bg-gray-300 w-32 h-32 border border-gray-400">
-                <img id="user_photo" src="${reviewImageUrl}" alt="프로필 사진">
-            </td>
+
+                <td class="w-32 h-32 border border-gray-400 ${firstImage ? '' : 'bg-gray-300'}">
+                    ${firstImage ? `<img class="w-32 h-32" id="user_photo" src="${firstImage}" alt="">` : ''}
+                </td>
+
                 <td class="relative w-32 h-8 border border-gray-400">
                     <h1 id="user_nickname">${review.nickname || '익명'}</h1>
                 </td>
