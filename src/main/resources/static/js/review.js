@@ -161,7 +161,6 @@ const reviewPage = {
             success: function(response) {
                 alert('리뷰가 성공적으로 등록되었습니다.');
                 this.hideModal();
-
                 // 최신 리뷰 목록을 가져와 렌더링
                 boardPage.fetchReviews(); // boardPage의 fetchReviews 함수 호출
             }.bind(this),  // bind를 통해 콜백 내부의 `this`를 reviewPage로 고정
@@ -218,6 +217,13 @@ const reviewPage = {
 
     showModal: function () {
         this.updateModalWithRestaurantName();
+
+        // 새 리뷰 작성 모드인 경우, textarea와 선택한 별점을 초기화
+        if (!this.isEditMode) {
+            this.review.value = ''; // textarea 초기화
+            this.charCountElement.textContent = '0 / ' + this.maxLength + ' 글자'; // 글자 수 초기화
+        }
+
         this.modal.classList.remove('hidden');
     },
 
