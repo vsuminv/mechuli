@@ -269,6 +269,10 @@ let boardPage = {
                 }
             }
 
+            // 리뷰를 최신순으로 정렬 (createDate 기준)
+            reviews.sort((a, b) => new Date(b.createDate) - new Date(a.createDate));
+
+
             // reviewImages 배열을 콘솔에 출력
             console.log('Parsed reviewImages:', reviewImages);
 
