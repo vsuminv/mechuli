@@ -72,7 +72,7 @@ public class ReviewService {
     // 리뷰 생성
     public void save(UserDAO authUser, ReviewDTO reviewDTO, Long restaurantId, List<MultipartFile> files) throws IOException {
         // 이미지의 유무 판단
-        if (files == null || files.isEmpty()) {
+        if (files.isEmpty()) {
             System.out.println("No image provided");
             reviewDTO.setReviewImg(null);
 
