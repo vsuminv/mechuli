@@ -1,9 +1,9 @@
 // back에 authedUser 설정 임시방편
 let authed_test = {
-    userIndex: 1,
-    userId: "c",
-    userPw: "c",
-    userName: "han"
+    userIndex: 14,
+    userId: "test1111",
+    userPw: "testbb",
+    userName: "하이용17"
 };
 const MyPage = {
     init() {
@@ -15,10 +15,13 @@ const MyPage = {
         this.my_Contents("#myStateFragment");
         this.my_btn_style("#myState_btn");
 
+        this.response_my_user_data();
+        this.response_my_store_list_data();
+        this.response_my_sub_data();
+
     },
 
     my_page() {
-
         this.$myStateFragment = $("#myStateFragment");
         this.$myStoreListFragment = $("#myStoreListFragment");
         this.$mySubFragment = $("#mySubFragment");
@@ -63,6 +66,49 @@ const MyPage = {
         this.$my_search.on("input", this.onMySearch.bind(this));
     },
 
+    async response_my_user_data() {
+        try {
+            const response = await $.ajax({
+                url: url_api_myPage_myLists,
+                type: 'GET',
+                dataType: 'json'
+            });
+            console.log('서버 응답:', response);
+            this.renderCategories(response);
+        } catch (error) {
+            console.error('구독 데이터 실패:', error);
+        }
+    },
+
+    async response_my_store_list_data() {
+        try {
+            const response = await $.ajax({
+                url: url_subscribe,
+                type: 'GET',
+                dataType: 'json'
+            });
+            console.log('서버 응답:', response);
+            this.renderCategories(response);
+        } catch (error) {
+            console.error('구독 데이터 실패:', error);
+        }
+    },
+    async response_my_sub_data() {
+        try {
+            const response = await $.ajax({
+                url: url_subscribe,
+                type: 'GET',
+                dataType: 'json'
+            });
+            console.log('서버 응답:', response);
+            this.renderCategories(response);
+        } catch (error) {
+            console.error('구독 데이터 실패:', error);
+        }
+    },
+
+
+
     my_StoreList_Review() {
         $.ajax({
             url: url_api_myPage_myLists,
@@ -104,12 +150,10 @@ const MyPage = {
             this.$reviewContainer.append($reviewItem);
         });
     },
-
     onMyStateBtnClick() {
         this.my_Contents("#myStateFragment");
         this.my_btn_style(this.$myStateBtn);
     },
-
     onMyStoreListBtnClick() {
         this.my_Contents("#myStoreListFragment");
         this.my_btn_style(this.$myStoreListBtn);
@@ -196,7 +240,7 @@ const MyPage = {
         this.$myStateBtn.removeClass("bg-yellow-500").addClass("bg-yellow-200");
         this.$myStoreListBtn.removeClass("bg-yellow-500").addClass("bg-yellow-200");
         this.$mySubBtn.removeClass("bg-yellow-500").addClass("bg-yellow-200");
-        $clickedButton.removeClass("bg-yellow-200").addClass("bg-yellow-500");
+        // $clickedButton.removeClass("bg-yellow-200").addClass("bg-yellow-500");
     },
 
     onUpdateUserBtnClick() {
@@ -248,9 +292,9 @@ const MyPage = {
 
     onSaveUserInfoBtnClick() {
         const formData = new FormData();
-        // formData.append("file", $("#userImg")[0].files[0]);
+        formData.append("file", $("#userImg")[0].files[0]);
         formData.append("userPw", $("#newPassword").val());
-        // formData.append("categoryIds", selectedCategories.map(category => category.id));
+        formData.append("categoryIds", selectedCategories.map(category => category.id));
 
         $.ajax({
             url: url_updateUpdate,
