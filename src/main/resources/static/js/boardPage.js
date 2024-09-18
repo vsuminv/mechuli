@@ -251,66 +251,78 @@ let boardPage = {
         reviewTable.innerHTML = '';
 
         if (!reviews || reviews.length === 0) {
-            reviewTable.innerHTML = '<tr id="review-${review.reviewId}"><td colspan="5" class="text-center">리뷰가 없습니다.</td></tr>';
+            reviewTable.innerHTML = '<tr><td colspan="5" class="text-center">리뷰가 없습니다.</td></tr>';
             return;
         }
 
-        reviews.forEach(review => {
-            // 리뷰 객체의 모든 정보를 콘솔에 출력
-            console.log('Review Data:', review);
+        // 먼저 사용자 리뷰 데이터를 가져옵니다.
+        $.ajax({
+            url: '/api/u_reviews',
+            method: 'GET',
+            dataType: 'json',
+            success: (userReviews) => {
+                const userReviewIds = userReviews.map(userReview => userReview.reviewId); // 사용자 리뷰 ID 목록
 
-            // reviewImg를 JSON 파싱하여 배열로 변환
-            let reviewImages = [];
-            if (review.reviewImg) {
-                try {
-                    reviewImages = JSON.parse(review.reviewImg); // JSON 문자열을 배열로 변환
-                } catch (e) {
-                    console.error('Error parsing review images:', e);
-                }
+                reviews.forEach(review => {
+                    // 리뷰 객체의 모든 정보를 콘솔에 출력
+                    //console.log('Review Data:', review);
+
+                    // reviewImg를 JSON 파싱하여 배열로 변환
+                    let reviewImages = [];
+                    if (review.reviewImg) {
+                        try {
+                            reviewImages = JSON.parse(review.reviewImg); // JSON 문자열을 배열로 변환
+                        } catch (e) {
+                            console.error('Error parsing review images:', e);
+                        }
+                    }
+
+                    // reviewImages 배열을 콘솔에 출력
+                    //console.log('Parsed reviewImages:', reviewImages);
+
+                    // reviewImages의 첫 번째 원소를 콘솔에 출력
+                    const firstImage = reviewImages.length > 0 ? reviewImages[0] : '';
+                    //console.log('First image:', firstImage);
+
+                    const rowElement = document.createElement('tr');
+                    rowElement.setAttribute('id',`review-${review.reviewId}`);
+                    rowElement.classList.add('relative', 'flex');
+
+                    // 사용자가 작성한 리뷰와 일치하는 경우에만 수정/삭제 버튼 표시
+                    const isUserReview = userReviewIds.includes(review.reviewId);
+
+                    rowElement.innerHTML = `
+                        <td class="w-32 h-32 border border-gray-400 ${firstImage ? '' : 'bg-gray-300'}">
+                            ${firstImage ? `<img class="w-32 h-32" id="user_photo" src="${firstImage}" alt="">` : ''}
+                        </td>
+                        <td class="relative w-32 h-8 border border-gray-400">
+                            <h1 id="user_nickname">${review.nickname || '익명'}</h1>
+                        </td>
+                        <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                            <h1 id="upload_date">${new Date(review.createDate).toLocaleDateString()}</h1>
+                        </td>
+                        <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                            ${isUserReview ? `
+                            <div id="mod_del_button" class="flex justify-end">
+                                <button class="edit-button" data-review-id="${review.reviewId}">수정</button>
+                                &nbsp;&nbsp;
+                                <button class="delete-button" data-review-id="${review.reviewId}">삭제</button>
+                            </div>
+                            ` : ''}
+                        </td>
+                        <td class="absolute w-96 h-24 top-8 left-32 bg-red-200">
+                            <p id="comment">${review.content || '내용 없음'}</p>
+                        </td>
+                    `;
+
+                    reviewTable.appendChild(rowElement); // 테이블에 행을 추가
+                });
+
+                reviewTable.classList.remove('hidden'); // 테이블을 보이게 설정
+            },
+            error: (xhr, status, error) => {
+                console.error('Error fetching user reviews:', error);
             }
-
-            // reviewImages 배열을 콘솔에 출력
-            console.log('Parsed reviewImages:', reviewImages);
-
-            // reviewImages의 첫 번째 원소를 콘솔에 출력
-            const firstImage = reviewImages.length > 0 ? reviewImages[0] : '';
-            console.log('First image:', firstImage);
-
-            const rowElement = document.createElement('tr');
-            rowElement.setAttribute('id',`review-${review.reviewId}`);
-            rowElement.classList.add('relative', 'flex');
-
-            rowElement.innerHTML = `
-                <td class="w-32 h-32 border border-gray-400 ${firstImage ? '' : 'bg-gray-300'}">
-                    ${firstImage ? `<img class="w-32 h-32" id="user_photo" src="${firstImage}" alt="">` : ''}
-                </td>
-                <td class="relative w-32 h-8 border border-gray-400">
-                    <h1 id="user_nickname">${review.nickname || '익명'}</h1>
-                </td>
-                <td class="w-32 h-8 bg-blue-200 border border-blue-400">
-                    <h1 id="upload_date">${new Date(review.createDate).toLocaleDateString()}</h1>
-                </td>
-                <td class="w-32 h-8 bg-blue-200 border border-blue-400">
-                    <div id="mod_del_button" class="flex justify-end">
-                        <button class="edit-button" data-review-id="${review.reviewId}">수정</button>
-                        &nbsp;&nbsp;
-                        <button class="delete-button" data-review-id="${review.reviewId}">삭제</button>
-                    </div>
-                </td>
-                <td class="absolute w-96 h-24 top-8 left-32 bg-red-200">
-                    <p id="comment">${review.content || '내용 없음'}</p>
-                </td>
-            `;
-
-            reviewTable.appendChild(rowElement); // 테이블에 행을 추가
-        });
-
-        reviewTable.classList.remove('hidden'); // 테이블을 보이게 설정
-    },
-
-    setEventListeners: function () {
-        this.buttons.forEach(button => {
-            button.addEventListener('click', (event) => this.handleButtonClick(event));
         });
     },
 
@@ -324,16 +336,17 @@ let boardPage = {
         const button = event.currentTarget;
         const tableId = button.getAttribute('data-show-table');
 
-        if (this.activeButton) {
-            this.activeButton.classList.remove('bg-[#fef445]');
-            this.activeButton.classList.add('bg-[#e6e6e6]');
-        }
+        // 모든 버튼을 회색으로 변경
+        this.buttons.forEach(btn => {
+            btn.classList.remove('bg-[#fef445]');  // 노란색 제거
+            btn.classList.add('bg-[#e6e6e6]');  // 회색 추가
+        });
 
-        button.classList.remove('bg-[#e6e6e6]');
-        button.classList.add('bg-[#fef445]');
-        this.activeButton = button;
+        // 클릭된 버튼만 노란색으로 변경
+        button.classList.remove('bg-[#e6e6e6]');  // 회색 제거
+        button.classList.add('bg-[#fef445]');  // 노란색 추가
 
-        this.showTable(tableId);
+        this.showTable(tableId);  // 선택한 테이블만 보여줌
     },
 
     showTable: function (tableId) {
