@@ -9,6 +9,7 @@ import com.example.mechuli.service.ReviewService;
 import com.example.mechuli.service.UserService;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -173,6 +174,15 @@ public class UserController {
 
         return ResponseEntity.ok(result);
     }
+
+    // 로그인 유무 확인용
+    @GetMapping("/api/check-session")
+    public ResponseEntity<Boolean> checkSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        boolean isLoggedIn = (session != null);
+        return ResponseEntity.ok(isLoggedIn);
+    }
+
 
     // 탈퇴 (Withdraw)
 
