@@ -1,12 +1,13 @@
 <div th:fragment="joinForm" class="text-yellow-700 w-full">
-    <form id="joinForm" class="text-yellow-700 w-full" th:action="@{/joinPage/join}" method="post">
+    <form id="joinForm" class="text-yellow-700 w-full" th:action="@{join}" method="post">
         <div class="form-container relative overflow-hidden h-[500px]">
             <div class="flex transition-transform duration-500 ease-in-out w-[200%]">
                 <div id="step1" class="w-1/2 px-4">
                     <div class="mt-4">
                         <label for="userId" class="sr-only"></label>
                         <span class="ml-2 text-lg">아이디</span>
-                        <input type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="userId_check" value="중복 체크">
+                        <input type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="userId_check"
+                               value="중복 체크">
                         <span id="userIdMessage" class="text-sm mt-1 hidden"></span>
                         <div class="relative">
                             <input id="userId" name="userId" type="text"
@@ -38,7 +39,8 @@
                     <div class="mt-4">
                         <label for="nickname" class="sr-only"></label>
                         <span class="ml-2 text-lg">닉네임</span>
-                        <input type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="nickname_check" value="중복 체크">
+                        <input type="button" class="btn btn-outline-primary btn-sm idCheck mx-1" id="nickname_check"
+                               value="중복 체크">
                         <span id="nicknameMessage" class="text-sm mt-1"></span>
                         <div class="relative">
                             <input id="nickname" name="nickname" type="text"
@@ -52,12 +54,16 @@
                 <div id="step2" class="w-1/2 h-full px-4">
                     <h2 class="text-xl font-bold mb-4">취향 선택</h2>
                     <div id="categoryList" class="grid grid-cols-5 gap-2 h-1/2 mt-4">
+
+
                         <button th:each="category : ${categories}"
                                 type="button"
-                                class="category-btn bg-yellow-200 hover:bg-yellow-500 font-bold py-1 px-2 rounded-full"
+                                class="category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200"
                                 th:data-category-id="${category.categoryId}"
                                 th:text="${category.categoryName}">
                         </button>
+                        <!--                      categoryList 리스폰 공간 -->
+
                     </div>
                     <div id="hidden_category_inputs"></div>
                 </div>
@@ -68,13 +74,16 @@
         </div>
         <div class="w-full flex flex-col items-center">
             <button type="button" id="next_btn"
-                    class="mx-auto mt-4 bg-blue hover:bg-yellow-500 font-bold py-4 px-7 rounded-full shadow-md uppercase tracking-wider">
+                    class="hidden mx-auto mt-4 hover:bg-yellow-200 font-bold py-4 px-7 rounded-full shadow-md uppercase tracking-wider">
                 <span class="flex items-center font-bolder">다음</span>
             </button>
-            <button type="button" id="back_btn" class="mx-auto mt-4 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded hidden">
+            <button type="button" id="back_btn"
+                    class=" mx-auto mt-4 bg-yellow-600 hover:bg-yellow-700  font-bold py-2 px-4 rounded hidden">
                 이전
             </button>
             <div id="nextButtonMessage" class="text-red-500 text-sm mt-2 hidden"></div>
         </div>
     </form>
 </div>
+
+

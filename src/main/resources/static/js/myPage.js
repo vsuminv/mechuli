@@ -1,3 +1,10 @@
+// back에 authedUser 설정 임시방편
+let authed_test = {
+    userIndex: 1,
+    userId: "c",
+    userPw: "c",
+    userName: "han"
+};
 const MyPage = {
     init() {
         this.my_page();
@@ -198,13 +205,7 @@ const MyPage = {
 
     onConfirmPasswordFormSubmit(e) {
         e.preventDefault();
-        // back에 authedUser 설정 임시방편
-        const authed_test = {
-            userIndex: 1,
-            userId: "c",
-            userPw: "c",
-            userName: "han"
-        };
+
         const currentPassword = $("#currentPassword").val();
 
         $.ajax({
