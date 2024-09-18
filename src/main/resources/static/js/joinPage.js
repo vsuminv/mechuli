@@ -5,9 +5,6 @@ const JoinPage = {
         this.updateNextButton();
         this.response_category_data();
 
-
-
-
     },
 
     joinPage() {
@@ -307,7 +304,7 @@ const JoinPage = {
             categoryIds: $('.category-btn.selected').map(function() {
                 return $(this).data('category-id');
             }).get(),
-            role: 'USER' //권한 억지로 넣음 보안상 하면 안될듯. 해봤는데 되지도 않음.
+            role: 'USER' //권한 억지로 넣음. 보안상 하면 안될듯. 해봤는데 어차피 반영 안됨.
         };
 
         try {
@@ -318,7 +315,6 @@ const JoinPage = {
                 data: JSON.stringify(userData)
             });
             console.log('회원가입 성공. 들어온거.', response );
-            alert('회원가입 성공. 들어온거.', response )
             window.location.href = "/";
         } catch (error) {
             console.error('회원가입 실패.', error);
