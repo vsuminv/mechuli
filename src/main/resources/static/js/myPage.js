@@ -181,24 +181,26 @@ const MyPage = {
         this.$friend_list.empty();
         $noFriends.addClass('hidden');
 
-        // 친구 아이템 템플릿을 생성
-        const $template = $('<li class="friend-item flex items-center justify-between bg-white p-4 rounded-lg shadow mb-2 hidden">' +
-            '<div class="flex items-center space-x-3">' +
-            '<div class="profile w-8 h-8 bg-yellow-200 rounded-full flex items-center justify-center overflow-hidden">' +
-            '<img class="w-full h-full object-cover" src="" alt="">' +
-            '<span class="initial text-xl font-bold text-yellow-800"></span>' +
-            '</div>' +
-            '<span class="nickname text-sm font-semibold"></span>' +
-            '</div>' +
-            '<button class="friend_info_btn bg-red-50 hover:bg-yellow-100 font-bold py-1 px-1 rounded text-xs">정보보기</button>' +
-            '</li>');
+
 
         // 친구 목록이 비어 있음을 확인
         if (Array.isArray(data) && data.length > 0) {
             data.forEach(subscriber => {
+                // 친구 아이템 템플릿을 생성
+                const $template = $('<li class="friend-item flex items-center justify-between bg-white p-4 rounded-lg shadow mb-2 hidden">' +
+                    '<div class="flex items-center space-x-3">' +
+                    '<div class="profile w-8 h-8 bg-yellow-200 rounded-full flex items-center justify-center overflow-hidden">' +
+                    '<img class="w-full h-full object-cover" src="" alt="">' +
+                    '<span class="initial text-xl font-bold text-yellow-800"></span>' +
+                    '</div>' +
+                    '<span class="nickname text-sm font-semibold"></span>' +
+                    '</div>' +
+                    '<button class="friend_info_btn bg-red-50 hover:bg-yellow-100 font-bold py-1 px-1 rounded text-xs">정보보기</button>' +
+                    '</li>');
+
                 const $item = $template.clone().removeClass('hidden');
 
-                const formattedNickname = subscriber.nickname.charAt(0).toUpperCase() + subscriber.nickname.slice(1);
+                const formattedNickname = subscriber.nickName.charAt(0).toUpperCase() + subscriber.nickName.slice(1);
                 $item.find('.nickname').text(formattedNickname);
 
                 if (subscriber.userImg) {
@@ -285,7 +287,7 @@ const MyPage = {
                 console.log("서버에서 응답 받지 못했습니다.")
                 return;
             }
-            // console.log(response);
+            console.log(response);
             // this.render_my_sub(response);
             ajaxResponse = response;
         } catch (error) {
