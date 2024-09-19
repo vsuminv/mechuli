@@ -247,6 +247,14 @@ let boardPage = {
     renderReviews: function(reviews) {
         const reviewTable = document.getElementById('reviewTable');
 
+        const formatDate = (dateString) => {
+            const date = new Date(dateString);
+            const yy = String(date.getFullYear()).slice(-2); // 연도의 마지막 두 자리
+            const mm = String(date.getMonth() + 1).padStart(2, '0'); // 월 (1부터 시작)
+            const dd = String(date.getDate()).padStart(2, '0'); // 일
+            return `${yy}-${mm}-${dd}`;
+        };
+
         // 기존 리뷰 목록 초기화
         reviewTable.innerHTML = '';
 
@@ -263,6 +271,9 @@ let boardPage = {
             success: (userReviews) => {
                 const userReviewIds = userReviews.map(userReview => userReview.reviewId); // 사용자 리뷰 ID 목록
 
+                // 리뷰를 최신순으로 정렬 (createDate 기준)
+                reviews.sort((a, b) => new Date(b.updateDate) - new Date(a.updateDate));
+
                 reviews.forEach(review => {
                     // 리뷰 객체의 모든 정보를 콘솔에 출력
                     //console.log('Review Data:', review);
@@ -276,8 +287,7 @@ let boardPage = {
                             console.error('Error parsing review images:', e);
                         }
                     }
-                    // 리뷰를 최신순으로 정렬 (createDate 기준)
-                    reviews.sort((a, b) => new Date(b.updateDate) - new Date(a.updateDate));
+
 
                     // reviewImages 배열을 콘솔에 출력
                     //console.log('Parsed reviewImages:', reviewImages);
@@ -288,22 +298,20 @@ let boardPage = {
 
                     const rowElement = document.createElement('tr');
                     rowElement.setAttribute('id',`review-${review.reviewId}`);
-                    rowElement.classList.add('relative', 'flex');
+                    rowElement.classList.add('relative', 'flex', 'mb-8');
 
                     // 사용자가 작성한 리뷰와 일치하는 경우에만 수정/삭제 버튼 표시
                     const isUserReview = userReviewIds.includes(review.reviewId);
 
                     rowElement.innerHTML = `
-                        <td class="w-32 h-32 border border-gray-400 ${firstImage ? '' : 'bg-gray-300'}">
-                            ${firstImage ? `<img class="w-32 h-32" id="user_photo" src="${firstImage}" alt="">` : ''}
+                        <td class="w-32 h-32 rounded-2xl mr-4 ${firstImage ? '' : 'bg-gray-300'}">
+                            ${firstImage ? `<img class="w-32 h-32 rounded-2xl" id="user_photo" src="${firstImage}" alt="">` : ''}
                         </td>
-                        <td class="relative w-32 h-8 border border-gray-400">
-                            <h1 id="user_nickname">${review.nickname || '익명'}</h1>
+                        <td class="relative w-64 h-8 flex items-center space-x-2">
+                            <h1 id="user_nickname" class="whitespace-nowrap text-2xl">${review.nickname || '익명'}</h1>
+                            <h1 id="upload_date" class="text-gray-500 italic">${formatDate(review.updateDate)}</h1>
                         </td>
-                        <td class="w-32 h-8 bg-blue-200 border border-blue-400">
-                            <h1 id="upload_date">${new Date(review.updateDate).toLocaleDateString()}</h1>
-                        </td>
-                        <td class="w-32 h-8 bg-blue-200 border border-blue-400">
+                        <td class="w-32 h-8">
                             ${isUserReview ? `
                             <div id="mod_del_button" class="flex justify-end">
                                 <button class="edit-button" data-review-id="${review.reviewId}">수정</button>
@@ -312,10 +320,17 @@ let boardPage = {
                             </div>
                             ` : ''}
                         </td>
-                        <td class="absolute w-96 h-24 top-8 left-32 bg-red-200">
-                            <p id="comment">${review.content || '내용 없음'}</p>
+                        <td class="relative w-96 p-4 min-h-[6rem] h-auto mt-8 ml-[-24rem]">
+                            <p id="comment" class="whitespace-pre-wrap break-words">${review.content || '내용 없음'}</p>
                         </td>
                     `;
+
+                    // 댓글 내용의 높이를 동적으로 계산하여 다음 댓글 위치 조정
+                    const commentElement = rowElement.querySelector('#comment');
+                    const commentHeight = commentElement.offsetHeight; // 현재 댓글의 높이 계산
+
+                    // 다음 댓글의 top 값을 동적으로 조정
+                    rowElement.style.top = `${commentHeight + 16}px`; // 적절한 간격 (16px) 추가
 
                     reviewTable.appendChild(rowElement); // 테이블에 행을 추가
                 });
