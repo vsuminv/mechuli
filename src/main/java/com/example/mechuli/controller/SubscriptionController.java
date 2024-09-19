@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class SubscriptionController {
     @GetMapping("/search")
     public List<SubscriberSearchDTO> searchUsers(
             @AuthenticationPrincipal UserDAO currentUser,
-            @RequestParam String nickname) {
+            @RequestParam("nickname") String nickname) {
         return subscriptionService.searchUsers(currentUser, nickname);
     }
 
@@ -56,9 +57,14 @@ public class SubscriptionController {
 
     //특정 구독자 정보 조회
     @GetMapping("/subscriber/{subscriberId}")
-    public ResponseEntity<SubscriberDetailDTO> getSubscriberDetail(@AuthenticationPrincipal UserDAO currentUser,@PathVariable Long subscriberId) {
+//    public ResponseEntity<SubscriberDetailDTO> getSubscriberDetail(@AuthenticationPrincipal UserDAO currentUser,@PathVariable Long subscriberId) {
+//        SubscriberDetailDTO detail = subscriptionService.getSubscriberSelect(subscriberId);
+//        return ResponseEntity.ok(detail);
+//    }
+    public String getSubscriberDetail(@AuthenticationPrincipal UserDAO currentUser, @PathVariable Long subscriberId, Model model) {
         SubscriberDetailDTO detail = subscriptionService.getSubscriberSelect(subscriberId);
-        return ResponseEntity.ok(detail);
+        model.addAttribute("subscriberDetail", detail);
+        return "subscriberDetail"; // 타임리프 템플릿 파일명
     }
 
     // 구독 취소

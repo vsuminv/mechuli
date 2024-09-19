@@ -58,7 +58,7 @@ public class UserDAO implements UserDetails {
     private Date updateDate;
 
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private Boolean isDeleted = false;
 
     @ManyToMany
     @JoinTable(

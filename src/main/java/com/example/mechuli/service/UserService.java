@@ -93,7 +93,8 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
         UserDAO user = currentUser.get();
-        if (user.isDeleted()) {
+        boolean isUserDeleted = user.getIsDeleted();
+        if (isUserDeleted) {
             throw new UsernameNotFoundException("This account has been deactivated.");
         }
         // UserDAO가 이미 UserDetails를 구현하므로 User 객체로 변환할 필요 없음
@@ -103,7 +104,7 @@ public class UserService implements UserDetailsService {
     public void deactivateUser(Long userIndex) {
         UserDAO user = userRepository.findByUserIndex(userIndex)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setDeleted(true);
+        user.setIsDeleted(true);
         userRepository.save(user);
     }
 

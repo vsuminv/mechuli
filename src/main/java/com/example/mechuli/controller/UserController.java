@@ -73,6 +73,7 @@ public class UserController {
 
         try {
             userService.save(dto);
+            
             return ResponseEntity.ok("회원가입이 완료되었습니다.");
         } catch (RuntimeException e) {
             e.printStackTrace(); // 디버깅을 위해 예외를 출력합니다.
