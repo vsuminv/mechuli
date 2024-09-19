@@ -185,6 +185,16 @@ public class UserController {
 
 
     // 탈퇴 (Withdraw)
+    @PostMapping("/auth/deactivate")
+    public ResponseEntity<String> deactivateUser(@AuthenticationPrincipal UserDAO authedUser) {
+        if (authedUser == null) {
+            System.out.println("User is not authenticated.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        userService.deactivateUser(authedUser.getUserIndex());
+        return ResponseEntity.ok("User has been deactivated.");
+    }
 
 }
 
