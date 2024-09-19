@@ -139,36 +139,45 @@ const MyPage = {
             this.$selected_categories_container.append($category_txt);
         });
     },
+
+    // 처음에 데이터를 불러올 때, 리뷰 리스트와 맛집 리스트를 저장
     render_my_store_list(data) {
-        console.log("my store List에  넣을 데이터. 전부 가져온거", data);
-        console.log('myRestaurantListDTOList 통쨰로', data.myRestaurantListDTOList);
-        console.log('myReviewDTOList 가져옴?', data.myReviewDTOList.length);
+        this.myRestaurantListDTOList = data.myRestaurantListDTOList;  // 맛집 리스트 저장
+        this.myReviewDTOList = data.myReviewDTOList;  // 리뷰 리스트 저장
+        console.log("my store List에 넣을 데이터. 전부 가져온거", data);
+        console.log('myRestaurantListDTOList 통째로', this.myRestaurantListDTOList);
+        console.log('myReviewDTOList 가져옴?', this.myReviewDTOList);
+
+        // 맛집 리스트 렌더링
+        this.render_store_list();
+
+        // 리뷰 리스트 렌더링
+        this.render_review_list();
+    },
+
+    // 맛집 리스트만 렌더링하는 함수
+    render_store_list() {
         this.$store_list_container.empty();
-        data.myRestaurantListDTOList.forEach(store => {
-            // 새로운 컨테이너 생성
+        this.myRestaurantListDTOList.forEach(store => {
             const $store_wrapper = $("<div>").addClass("flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden");
-
-            // 이미지와 제목을 포함하는 아이템
             const $store_item = $("<div>").addClass("relative w-full h-full bg-gray-200");
-
-            const $star_btn = $("<button>").text("★").addClass("z-10 absolute top-0 right-0 m-2 text-2xl text-yellow-500").attr("id", "myPageStar");
-            const $store_img = $("<img>").attr("src", store.restaurantImg || "/img/된찌.png").attr("alt", store.name).addClass("w-full h-full object-cover");
-
-            // 이미지 하단에 오버레이로 나오는 가게 이름
+            const $star_btn = $("<button>").text("★").addClass("z-10 absolute top-0 right-0 m-2 text-yellow-500")
+                .attr("id", "myPageStar-" + store.restaurant_id)
+                .on("click", () => this.handleStarClick(store.restaurant_id));  // 클릭 이벤트 등록
+            const $store_img = $("<img>").attr("src", store.restaurantImg || "/img/된찌.png").attr("alt", store.restaurantName).addClass("w-full h-full object-cover");
             const $store_title = $("<h2>").text(store.restaurantName || "가게 이름 없음")
                 .addClass("absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 text-lg font-bold p-1");
 
-            // $store_item에 버튼과 이미지, 제목 추가
             $store_item.append($star_btn, $store_img, $store_title);
-
-            // 최종적으로 $store_wrapper에 $store_item 추가
             $store_wrapper.append($store_item);
-
-            // $store_list_container에 $store_wrapper 추가
             this.$store_list_container.append($store_wrapper);
         });
+    },
+
+    // 리뷰 리스트만 렌더링하는 함수
+    render_review_list() {
         this.$review_container.empty();
-        data.myReviewDTOList.forEach(review => {
+        this.myReviewDTOList.forEach(review => {
             const $review_item = $("<div>").addClass("flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-lg p-4");
             const $restaurant_name = $("<h2>").text(review.restaurantName || "가게 이름 없음").addClass("text-lg font-bold");
             $review_item.append($restaurant_name);
@@ -177,9 +186,36 @@ const MyPage = {
             $review_item.on("click", () => this.open_review_modal(review.restaurantId, review.restaurantName, review.content));
             this.$review_container.append($review_item);
         });
-        console.log("review_item 타입 확인용", data.myReviewDTOList); //<p>로 때려박으면 될 듯
+    },
 
-        this.init_carousel();
+    // 찜 해제 후에도 리뷰 리스트는 변경하지 않음
+    handleStarClick(restaurantId) {
+        const confirmUnfavorite = confirm("정말로 이 맛집을 찜 해제하시겠습니까?");
+        if (!confirmUnfavorite) return;
+
+        $.ajax({
+            url: `/api/ajax/DoMyRestaurant`,  // 찜/해제 API 엔드포인트
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ restaurant_id: restaurantId }),
+            success: (result) => {
+                if (result === 0) {
+                    alert("찜 해제가 완료되었습니다.");
+
+                    // UI에서 해당 가게를 실시간으로 삭제
+                    $(`#myPageStar-${restaurantId}`).closest(".w-32").remove();  // 해당 가게의 HTML 요소를 삭제
+
+                    // 찜 해제 성공 시 리스트에서 해당 가게 삭제
+                    this.myRestaurantListDTOList = this.myRestaurantListDTOList.filter(store => store.restaurantId !== restaurantId);
+                } else if (result === 1) {
+                    alert("찜이 추가되었습니다.");
+                }
+            },
+            error: (error) => {
+                console.error("찜/해제 실패:", error);
+                alert("서버 오류로 인해 요청이 실패했습니다.");
+            }
+        });
     },
 
     render_my_sub(data) {
