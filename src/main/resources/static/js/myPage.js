@@ -154,9 +154,11 @@ const MyPage = {
         this.$review_container.empty();
         data.myReviewDTOList.forEach(review => {
             const $review_item = $("<div>").addClass("flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-lg p-4");
+            const $restaurant_name = $("<h2>").text(review.restaurantName || "가게 이름 없음").addClass("text-lg font-bold");
+            $review_item.append($restaurant_name);
             const $review_text = $("<p>").text(review.content).addClass("text-sm");
             $review_item.append($review_text);
-            $review_item.on("click", () => this.open_review_modal(review.content));
+            $review_item.on("click", () => this.open_review_modal(review.restaurantName, review.content));
             this.$review_container.append($review_item);
         });
         console.log("review_item 타입 확인용", data.myReviewDTOList); //<p>로 때려박으면 될 듯
@@ -313,7 +315,8 @@ const MyPage = {
         this.my_btn_style(this.$my_sub_btn);
         this.response_my_sub();
     },
-    open_review_modal(content) {
+    open_review_modal(store_name,content) {
+        $("#review_modal h3").text(`${store_name}`)
         this.$review_modal_content.text(content);
         this.$review_modal.removeClass("hidden");
     },
