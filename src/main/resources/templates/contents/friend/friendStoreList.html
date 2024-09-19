@@ -1,0 +1,24 @@
+<div th:fragment="friendStoreList">
+    <div class="mt-6">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-yellow-600 mb-4">${null}님의 맛집 리스트</h2>
+            <div id="carousel" class="relative overflow-hidden">
+                <div id="store_list_container" class="flex transition-transform duration-300 ease-in-out">
+
+                </div>
+                <button id="prev_btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">❮</button>
+                <button id="next_btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">❯</button>
+            </div>
+        </div>
+        <div>
+            <h2 class="text-2xl font-bold text-yellow-600 mb-4">${null}님의 리뷰</h2>
+            <div id="review-carousel" class="relative overflow-hidden">
+                <div id="review_container" class="flex transition-transform duration-300 ease-in-out">
+
+                </div>
+                <button id="prev_review_btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">❮</button>
+                <button id="next_review_btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">❯</button>
+            </div>
+        </div>
+    </div>
+</div>

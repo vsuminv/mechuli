@@ -25,6 +25,25 @@ let mainPage = {
         // 초기 데이터 가져오기
 //        this.fetchInitRestaurants();
           this.fetchRandomRestaurants();
+
+        ////////////////////////////
+        // 페이지 로드 시 로그인 상태 확인 후 식당리스트 뿌리기
+        this.checkLoginStatus()
+            .then(isLoggedIn => {
+                if (isLoggedIn) {
+                    $(document).ready(() => {
+                        $(document).trigger('categorySelected');
+                    });
+                } else {
+                    $(document).ready(() => {
+                        $(document).trigger('allSelected');
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error checking login status:", error);
+            });
+        /////////////////////////////
     },
 
     fetchRandomRestaurants: function() {
@@ -311,6 +330,36 @@ let mainPage = {
         // 상세 페이지로 이동
         window.location.href = detailPageUrl;
     }
+
+    //////////////////////////////////////////////
+    ,
+    checkLoginStatus: function() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: '/api/check-session',
+                method: 'GET',
+                xhrFields: {
+                    withCredentials: true // 쿠키를 포함하여 요청
+                },
+                success: function(isLoggedIn) {
+                    if (isLoggedIn) {
+                        console.log("User is logged in.");
+                        resolve(true); // Promise를 해결
+                    } else {
+                        console.log("User is not logged in.");
+                        resolve(false); // Promise를 해결
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error checking login status:", error);
+                    alert("메인페이지에서 login 체크 도중 문제가 발생했습니다.");
+                    window.location.href = '/loginPage'; // 에러 페이지로 보내기
+                    reject(error); // Promise를 거부
+                }
+            });
+        });
+    }
+    //////////////////////////////////////////////
 };
 
 // 초기화

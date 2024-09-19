@@ -53,17 +53,14 @@
 
                 <div id="step2" class="w-1/2 h-full px-4">
                     <h2 class="text-xl font-bold mb-4">취향 선택</h2>
-                    <div id="categoryList" class="grid grid-cols-5 gap-2 h-1/2 mt-4">
-
-
+                    <div id="category_list" class="grid grid-cols-5 gap-2 h-1/2 mt-4">
                         <button th:each="category : ${categories}"
                                 type="button"
                                 class="category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200"
                                 th:data-category-id="${category.categoryId}"
                                 th:text="${category.categoryName}">
                         </button>
-                        <!--                      categoryList 리스폰 공간 -->
-
+<!--                        여기에 취향 리스폰시키ㅏ자-->
                     </div>
                     <div id="hidden_category_inputs"></div>
                 </div>
@@ -78,12 +75,10 @@
                 <span class="flex items-center font-bolder">다음</span>
             </button>
             <button type="button" id="back_btn"
-                    class=" mx-auto mt-4 bg-yellow-600 hover:bg-yellow-700  font-bold py-2 px-4 rounded hidden">
+                    class="mx-auto mt-4 bg-yellow-600 hover:bg-yellow-700 font-bold py-2 px-4 rounded hidden">
                 이전
             </button>
-            <div id="nextButtonMessage" class="text-red-500 text-sm mt-2 hidden"></div>
+            <div id="next_button_message" class="text-red-500 text-sm mt-2 hidden"></div>
         </div>
     </form>
 </div>
-
-

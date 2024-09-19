@@ -115,7 +115,8 @@ public class RestaurantController {
     // 내 식당 찜하기 / 해제 ajax
     @RequestMapping(value = "/ajax/DoMyRestaurant", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Integer> ajaxDoMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody String restaurantId) {
+    public ResponseEntity<Integer> ajaxDoMyRestaurant(@AuthenticationPrincipal UserDAO authedUser, @RequestBody RestaurantDTO restaurantDTOtId) {
+        Long restaurantId = restaurantDTOtId.getRestaurant_id();
         int result;
         if (authedUser == null) {
             System.out.println("User is not authenticated.");
@@ -123,7 +124,7 @@ public class RestaurantController {
         }
         boolean isExist;
         try {
-            isExist = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            isExist = restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, authedUser.getUserIndex());
         } catch (Exception e) {
             System.out.println("restaurantService.existsByRestaurantList_restaurantIdAndUserDAO_userIndex가 정상작동하지 않았습니다.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -131,11 +132,11 @@ public class RestaurantController {
         // 이미 값이 들어 있다면(찜 상태라면 삭제)
         if (isExist) {
             // delete
-            restaurantService.deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            restaurantService.deleteByRestaurantList_restaurantIdAndUserDAO_userIndex(restaurantId, authedUser.getUserIndex());
             result = 0;
         } else {    // 값이 존재하지 않는다면 insert (찜 생성)
             // insert
-            restaurantService.save(Long.parseLong(restaurantId), authedUser.getUserIndex());
+            restaurantService.save(restaurantId, authedUser.getUserIndex());
             result = 1;
         }
         return ResponseEntity.ok(result);

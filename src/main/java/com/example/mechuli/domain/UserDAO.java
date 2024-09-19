@@ -57,6 +57,9 @@ public class UserDAO implements UserDetails {
     @Column(name = "update_date", nullable = false)
     private Date updateDate;
 
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
+
     @ManyToMany
     @JoinTable(
             name = "user_restaurant_category_mapping",
@@ -120,7 +123,6 @@ public class UserDAO implements UserDetails {
     public boolean isEnabled(){
         return true; // 계정활성화 상태
     }
-
 
 
 }

@@ -3,6 +3,7 @@ package com.example.mechuli.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -17,7 +18,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/joinPage").setViewName("pages/joinPage");
         registry.addViewController("/loginPage").setViewName("pages/loginPage");
         registry.addViewController("/myPage").setViewName("pages/myPage");
+        registry.addViewController("/friendPage").setViewName("pages/friendPage");
         registry.addViewController("/boardPage").setViewName("pages/boardPage");
 
     }
+
 }

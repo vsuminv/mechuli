@@ -1,96 +1,47 @@
-<!--<div th:fragment="myStoreList">-->
-<!--    <div class="mt-6">-->
-<!--        <div class="mb-8">-->
-<!--            <h2 class="text-2xl font-bold text-yellow-600 mb-4">나의 맛집 리스트</h2>-->
-<!--            <div class="relative overflow-hidden" id="carousel">-->
-<!--                <div class="flex transition-transform duration-300 ease-in-out">-->
-
-<!--&lt;!&ndash;                    <div th:each="item : ${storeList}" class="flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <div class="z-99">star</div>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <img th:src="${storeList.imagePath}" th:alt="${storeList.name}" class="w-full h-full object-cover">&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--                    &lt;!&ndash;임시&ndash;&gt;-->
-<!--                    <div class="flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden">-->
-<!--                        <div class="z-99 absolute mx-20"><button>star</button></div>-->
-<!--                        <img src="/img/face.png" alt="storeList.name" class="w-full h-full object-cover">-->
-<!--                    </div>-->
-<!--                    <div class="flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden">-->
-<!--                        <div class="z-99 absolute mx-20"><button>star</button></div>-->
-<!--                        <img src="/img/face.png" alt="storeList.name" class="w-full h-full object-cover">-->
-<!--                    </div>-->
-<!--                    <div class="flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden">-->
-<!--                        <div class="z-99 absolute mx-20"><button>star</button></div>-->
-<!--                        <img src="/img/face.png" alt="storeList.name" class="w-full h-full object-cover">-->
-<!--                    </div>-->
-<!--                    <div class="flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden">-->
-<!--                        <div class="z-99 absolute mx-20"><button>s</button></div>-->
-<!--                        <img src="/img/face.png" alt="storeList.name" class="w-full h-full object-cover">-->
-<!--                    </div>-->
-<!--                    <div class="flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden">-->
-<!--                        <div class="z-99 absolute mx-20"><button>s</button></div>-->
-<!--                        <img src="/img/face.png" alt="storeList.name" class="w-full h-full object-cover">-->
-<!--                    </div>-->
-<!--                    <div class="flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden">-->
-<!--                        <div class="z-99 absolute mx-20"><button>s</button></div>-->
-<!--                        <img src="/img/face.png" alt="storeList.name" class="w-full h-full object-cover">-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash;임시&ndash;&gt;-->
-<!--                </div>-->
-
-<!--                <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">&#10094;</button>-->
-<!--                <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">&#10095;</button>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <div>-->
-<!--            <h2 class="text-2xl font-bold text-yellow-600 mb-4">내가 쓴 리뷰</h2>-->
-<!--            <div class="relative overflow-hidden" id="review-carousel">-->
-<!--&lt;!&ndash;                <div th:each="review : ${reviews}" class="flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-md p-4">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <p class="text-sm" th:text="${review}"></p>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                임시&ndash;&gt;-->
-<!--                <div class="flex transition-transform duration-300 ease-in-out">-->
-<!--                    <div class="flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-md p-4">-->
-<!--                        <p class="text-sm">org.springframework.security.config.annotarChainProxy.do</p>-->
-<!--                    </div>-->
-<!--                    <div class="flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-md p-4">-->
-<!--                        <p class="text-sm">oFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.</p>-->
-<!--                    </div>-->
-<!--                    <div class="flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-md p-4">-->
-<!--                        <p class="text-sm">oFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.</p>-->
-<!--                    </div>-->
-<!--                    <div class="flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-md p-4">-->
-<!--                        <p class="text-sm">oFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash;                임시&ndash;&gt;-->
-<!--                <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">&#10094;</button>-->
-<!--                <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">&#10095;</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 <div th:fragment="myStoreList">
-    <div class="mt-6">
+    <div class="mt-6 shadow-md">
         <div class="mb-8">
-            <h2 class="text-2xl font-bold text-yellow-600 mb-4">나의 맛집 리스트</h2>
-            <div id="carousel" class="relative overflow-hidden">
-                <div id="storeListContainer" class="flex transition-transform duration-300 ease-in-out">
-                    <!-- 맛집 리스트가 여기에 동적으로 추가됩니다 -->
+            <h2 id="my_store_list" class="text-2xl  font-bold text-yellow-600 mb-4">나의 맛집 리스트</h2>
+            <div id="carousel" class="relative ml-4 overflow-hidden">
+                <div id="store_list_container" class="flex transition-transform duration-300 ease-in-out">
+                    맛집 사진
                 </div>
-                <button id="prevBtn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">❮</button>
-                <button id="nextBtn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">❯</button>
+                <button id="prev_btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">❮</button>
+                <button id="next_btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">❯</button>
             </div>
         </div>
+
         <div>
-            <h2 class="text-2xl font-bold text-yellow-600 mb-4">내가 쓴 리뷰</h2>
-            <div id="review-carousel" class="relative overflow-hidden">
-                <div id="reviewContainer" class="flex transition-transform duration-300 ease-in-out">
-                    <!-- 리뷰가 여기에 동적으로 추가됩니다 -->
+            <h2 id="my_review" class="text-2xl font-bold text-yellow-600 mb-4">내가 쓴 리뷰</h2>
+            <div id="review-carousel" class="ml-4 relative overflow-hidden">
+                <div id="review_container" class="flex transition-transform duration-300 ease-in-out">
+                    리뷰글
                 </div>
-                <button id="prevReviewBtn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">❮</button>
-                <button id="nextReviewBtn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">❯</button>
+                <button id="prev_review_btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">❮</button>
+                <button id="next_review_btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">❯</button>
             </div>
         </div>
     </div>
+
+    <div id="review_modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+        <div class="relative top-1/3 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100">
+                    <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mt-2">'{nll}':</h3>
+                <div class="mt-2 px-7 py-3">
+                    <p id="review_modal_content" class="text-sm text-gray-500"></p>
+                </div>
+                <div class="items-center px-4 py-3">
+                    <button id="close_review_modal" class="bg-red-50 px-4 py-2  text-base font-medium rounded-md w-full shadow-sm hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-300">
+                        닫기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

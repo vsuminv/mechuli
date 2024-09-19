@@ -80,3 +80,6 @@ footer {
     content: '✗';
     color: red;
 }
+#store_list_container, #review_container {
+    transition: transform 0.3s ease-in-out;
+}
