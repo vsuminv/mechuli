@@ -83,6 +83,7 @@ let boardPage = {
             success: (data) => {
                 console.log('Restaurant Detail:', data);
                 this.renderRestaurantDetail(data);
+                this.updateSubscriptionButton(data.isSubscribed);
             },
             error: (xhr, status, error) => {
                 console.error('Error fetching restaurant detail:', error);
@@ -118,7 +119,8 @@ let boardPage = {
             dataType: 'json',
             success: (data) => {
                 this.renderRestaurantMeta(data);
-                this.fetchMenuList(); 
+                this.fetchMenuList();
+                this.updateSubscriptionButton(data.isSubscribed); // 초기 구독상태
             },
             error: (xhr, status, error) => {
                 console.error('Error fetching board page data:', error);
@@ -174,25 +176,60 @@ let boardPage = {
         const subscribeButton = document.getElementById('subscribe'); // ★ 버튼 요소 가져오기
         // ★ 버튼 클릭 시 색상을 변경하는 이벤트 리스너 추가
         if (subscribeButton) {
+
             subscribeButton.addEventListener('click', () => this.toggleStarColor());
         }
     },
-
-    toggleStarColor: function () {
-        const subscribeButton = document.getElementById('subscribe'); // ★ 버튼 요소 가져오기
-        if (subscribeButton) {
-            // 버튼의 색상이 이미 채워져 있는지 확인
-            if (subscribeButton.classList.contains('text-[#ffdd33]')) {
-                // 색상이 채워져 있다면, 원래 색상으로 변경
-                subscribeButton.classList.remove('text-[#ffdd33]');
-                subscribeButton.classList.add('text-[#e5e5e5]');
-            } else {
-                // 색상이 채워져 있지 않다면, 색상을 채움
-                subscribeButton.classList.remove('text-[#e5e5e5]');
-                subscribeButton.classList.add('text-[#ffdd33]');
+     updateSubscriptionButton: function (isSubscribed) {
+            const subscribeButton = document.getElementById('subscribe'); // ★ 버튼 요소 가져오기
+            if (subscribeButton) {
+                if (isSubscribed) {
+                    subscribeButton.classList.add('text-[#ffdd33]');
+                    subscribeButton.classList.remove('text-[#e5e5e5]');
+                } else {
+                    subscribeButton.classList.add('text-[#e5e5e5]');
+                    subscribeButton.classList.remove('text-[#ffdd33]');
+                }
             }
-        }
-    },
+        },
+
+        toggleStarColor: function () {
+            $.ajax({
+                url: '/api/ajax/DoMyRestaurant',
+                method: 'POST',
+                contentType: 'application/json',
+//
+                data: JSON.stringify({ restaurant_id: this.restaurantId }),
+//
+                success: (result) => {
+                    this.updateSubscriptionButton(result === 1);
+                },
+                error: (xhr, status, error) => {
+                    console.error('Error toggling subscription:',  xhr.responseText || error);
+                }
+            });
+        },
+//         function getRestaurantId() {
+//                // 페이지에서 식당 ID를 얻어오는 로직을 추가해야 합니다.
+//                // 예를 들어, 식당 ID가 페이지의 data 속성에 있을 수 있습니다.
+//                return document.getElementById('restaurantId').dataset.id; // 예시로 식당 ID를 data 속성에서 가져오는 경우
+//         }
+
+//    toggleStarColor: function () {
+//        const subscribeButton = document.getElementById('subscribe'); // ★ 버튼 요소 가져오기
+//        if (subscribeButton) {
+//            // 버튼의 색상이 이미 채워져 있는지 확인
+//            if (subscribeButton.classList.contains('text-[#ffdd33]')) {
+//                // 색상이 채워져 있다면, 원래 색상으로 변경
+//                subscribeButton.classList.remove('text-[#ffdd33]');
+//                subscribeButton.classList.add('text-[#e5e5e5]');
+//            } else {
+//                // 색상이 채워져 있지 않다면, 색상을 채움
+//                subscribeButton.classList.remove('text-[#e5e5e5]');
+//                subscribeButton.classList.add('text-[#ffdd33]');
+//            }
+//        }
+//    },
 
     copyToClipboard: function (text) {
         // 클립보드에 텍스트를 복사하는 기능
@@ -333,7 +370,7 @@ let boardPage = {
             button.addEventListener('click', (event) => this.handleButtonClick(event));
         });
     },
-    
+
     handleButtonClick: function (event) {
         const button = event.currentTarget;
         const tableId = button.getAttribute('data-show-table');
