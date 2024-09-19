@@ -1,117 +1,127 @@
 const join_page = {
     init() {
-        this.join_page();
-        this.join_events();
-        this.update_next_button();
-        this.response_category_data();
+        this.userIdChecked = false;
+        this.nicknameChecked = false;
+        this.selectedCategories = [];
+        this.currentStep = 1;
+        this.cacheDOM();
+        this.bind_events();
+        this.loadCategories();
+        this.updateNextButton();
     },
 
-    join_page() {
-        this.user_id_checked = false;
-        this.nickname_checked = false;
-        this.selected_categories = 0;
-        this.current_step = 1;
-
+    cacheDOM() {
         this.$userId = $("#userId");
         this.$userPw = $("#userPw");
         this.$userPw2 = $("#userPw2");
         this.$nickname = $("#nickname");
         this.$nextBtn = $("#next_btn");
         this.$backBtn = $("#back_btn");
-        this.$step_indicator = $("#step-indicator .m-auto");
-        this.$nextButtonMessage = $("#next_button_message");
+        this.$stepIndicator = $("#step-indicator span");
+        this.$categoryList = $("#category_list");
         this.$selectedCategory = $("#selected_category");
-        this.$hiddenInputs = $("#hidden_category_inputs");
+        this.$hiddenCategoryInputs = $("#hidden_category_inputs");
         this.$joinForm = $("#joinForm");
-        this.$category_list = $("#category_list");
+        this.$nextButtonMessage = $("#next_button_message");
 
-        this.$userPwIcon = this.$userPw.siblings('.validation-icon');
-        this.$userPw2Icon = this.$userPw2.siblings('.validation-icon');
-        this.$userPw.on('input', this.onPasswordInput.bind(this));
-        this.$userPw2.on('input', this.onPasswordConfirmInput.bind(this));
     },
-    join_events() {
-        $('#userId_check').on('click', () => this.check_duplicate('userId'));
-        $('#nickname_check').on('click', () => this.check_duplicate('nickname'));
 
-        this.$userId.on('input', () => this.onInputChange('userId'));
-        this.$nickname.on('input', () => this.onInputChange('nickname'));
-        this.$userPw.on('input', this.onPasswordInput.bind(this));
-        this.$userPw2.on('input', this.onPasswordConfirmInput.bind(this));
-
-        this.$backBtn.on('click', this.onBackBtnClick.bind(this));
-        this.$nextBtn.on('click', this.onNextBtnClick.bind(this));
-
-        this.$category_list.on('click', '.category-btn', this.onCategoryBtnClick.bind(this));
-        this.$joinForm.on('submit', this.onJoinFormSubmit.bind(this));
+    bind_events() {
+        $('#userId_check').click(() => this.check_duplicate('userId'));
+        $('#nickname_check').click(() => this.check_duplicate('nickname'));
+        this.$userId.on('input', () => this.handleInputChange('userId'));
+        this.$nickname.on('input', () => this.handleInputChange('nickname'));
+        this.$userPw.on('input', this.handlePasswordInput.bind(this));
+        this.$userPw2.on('input', this.handlePasswordConfirmInput.bind(this));
+        this.$backBtn.click(this.handleBackBtn.bind(this));
+        this.$nextBtn.click(this.handleNextBtn.bind(this));
+        this.$categoryList.on('click', '.category-btn', this.handleCategoryClick.bind(this));
+        this.$joinForm.submit(this.handleFormSubmit.bind(this));
     },
-    async response_category_data() {
+    async loadCategories() {
         try {
             const response = await $.ajax({
-                url: url_api_category,
+                url: '/api/category',
                 type: 'GET',
                 dataType: 'json'
             });
-            console.log('서버 응답:', response);
-            this.render_categories(response);
+            console.log('카테고리 데이터:', response);  // 받아온 데이터 로깅
+            this.renderCategories(response);
         } catch (error) {
-            console.error('카테고리 가져오기 오류:', error);
-            alert('카테고리를 불러오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
+            console.error('카테고리 로딩 실패:', error);
         }
     },
-    update_next_button() {
-        const all_fields_filled = this.$userId.val() && this.$userPw.val() && this.$userPw2.val() && this.$nickname.val();
-        const password_match = this.$userPw.val() === this.$userPw2.val() && this.$userPw.val().length >= 2;
-        let is_valid = this.user_id_checked && this.nickname_checked && all_fields_filled && password_match;
-
-        if (this.current_step === 2) {
-            is_valid = this.selected_categories >= 3;
+    renderCategories(categories) {
+        this.$categoryList.empty();
+        if (Object.keys(categories).length === 0) {
+            console.log('카테고리 데이터가 비어있습니다.');
+            this.$categoryList.append('<p>카테고리를 불러올 수 없습니다.</p>');
+            return;
         }
-
-        this.$nextBtn.prop("disabled", !is_valid);
-        if (is_valid) {
-            this.$nextBtn.removeClass("hidden bg-yellow-300").addClass("bg-yellow-200 hover:bg-yellow-400");
-        } else {
-            this.$nextBtn.removeClass("bg-yellow-200 hover:bg-yellow-400").addClass("bg-yellow-300");
-        }
-    },
-
-    render_categories(categories) {
-        this.$category_list.empty();
-
-        Object.entries(categories).forEach(([category_name, restaurants]) => {
-            const $category_btn = $('<button>')
+        Object.entries(categories).forEach(([category, restaurants]) => {
+            const $btn = $('<button>')
+                .addClass('category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full m-1')
                 .attr('type', 'button')
-                .addClass('category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200')
-                .attr('data-category-id', category_name)
-                .text(category_name);
-
-            console.log('카테고리 렌더링:', category_name);
-            this.$category_list.append($category_btn);
+                .attr('data-category-id', category)
+                .text(category);
+            this.$categoryList.append($btn);
         });
+        console.log('카테고리 버튼 생성 완료');  // 버튼 생성 완료 로깅
     },
+    updateNextButton() {
+        const allFieldsFilled = this.$userId.val() && this.$userPw.val() && this.$userPw2.val() && this.$nickname.val();
+        const passwordMatch = this.$userPw.val() === this.$userPw2.val();
+        const isValid = this.userIdChecked && this.nicknameChecked && allFieldsFilled && passwordMatch;
 
-    validate_form() {
-        const user_pw_match = this.$userPw.val() === this.$userPw2.val();
-        let error_messages = [];
-
-        if (!user_pw_match) error_messages.push("비밀번호가 일치하지 않습니다.");
-        if (!this.user_id_checked) error_messages.push("아이디 중복 체크를 완료해주세요.");
-        if (!this.nickname_checked) error_messages.push("닉네임 중복 체크를 완료해주세요.");
-
-        return error_messages;
-    },
-
-    async check_duplicate(type) {
+        this.$nextBtn.prop("disabled", !isValid);
+        if (isValid) {
+            this.$nextBtn.removeClass("bg-yellow-300").addClass("bg-yellow-500 hover:bg-yellow-600");
+        } else {
+            this.$nextBtn.removeClass("bg-yellow-500 hover:bg-yellow-600").addClass("bg-yellow-300");
+        }
+    }, async check_duplicate(type) {
+        const $input = this[`$${type}`];
         const $checkButton = $(`#${type}_check`);
         $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
-        const value = this[`$${type}`].val();
+        const value = $input.val();
         if (!value) {
             this.update_validation_state(type, false, `${type === 'userId' ? '아이디' : '닉네임'}를 입력해주세요.`);
             $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
             return;
         }
-
+        const url = type === 'userId' ? '/ajaxCheckId' : '/ajaxCheckNickname';
+        try {
+            const response = await $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'text/plain',
+                data: value
+            });
+            if (response === 0) {
+                this.update_validation_state(type, true, `사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+                type === 'userId' ? this.userIdChecked = true : this.nicknameChecked = true;
+            } else {
+                this.update_validation_state(type, false, `이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
+                type === 'userId' ? this.userIdChecked = false : this.nicknameChecked = false;
+            }
+            this.updateNextButton();
+        } catch (error) {
+            console.error('중복 체크 실패:', error);
+            this.update_validation_state(type, false, '중복 체크 중 오류가 발생했습니다. 다시 시도해주세요.');
+        } finally {
+            $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+        }
+    },
+    // 비번 유효성 검사 현재 1
+    async check_duplicate(type) {
+        const $checkButton = $(`#${type}_check`);
+        $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
+        const value = $(`#${type}`).val();
+        if (!value) {
+            this.update_validation_state(type, false, `${type === 'userId' ? '아이디' : '닉네임'}를 입력해주세요.`);
+            $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+            return;
+        }
         const url = type === 'userId' ? url_ajaxCheckId : url_ajaxCheckNickname;
         try {
             const response = await $.ajax({
@@ -123,12 +133,12 @@ const join_page = {
             console.log(`${type === 'userId' ? '아이디' : '닉네임'} 중복 결과:`, response);
             if (response === 0) {
                 this.update_validation_state(type, true, `사용 가능한 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
-                type === 'userId' ? this.user_id_checked = true : this.nickname_checked = true;
+                type === 'userId' ? this.userIdChecked = true : this.nicknameChecked = true;
             } else if (response === 1) {
                 this.update_validation_state(type, false, `이미 사용 중인 ${type === 'userId' ? '아이디' : '닉네임'}입니다.`);
-                type === 'userId' ? this.user_id_checked = false : this.nickname_checked = false;
+                type === 'userId' ? this.userIdChecked = false : this.nicknameChecked = false;
             }
-            this.update_next_button();
+            this.updateNextButton();
         } catch (error) {
             console.error('중복 체크 실패:', error);
             this.update_validation_state(type, false, '중복 체크 중 오류가 발생했습니다. 다시 시도해주세요.');
@@ -136,179 +146,186 @@ const join_page = {
             $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
         }
     },
-
-    update_validation_state(type, is_valid, message) {
-        const $input = $(`#${type}`);
-        const $checkButton = $(`#${type}_check`);
+    update_validation_state(type, isValid, message) {
+        const $input = this[`$${type}`];
         const $icon = $input.siblings('.validation-icon');
         const $message = $(`#${type}Message`);
 
-        $checkButton.fadeOut(100, function() {
-            $icon.removeClass('text-red-500 text-green-500')
-                .addClass(is_valid ? 'text-green-500' : 'text-red-500')
-                .html(is_valid ? '&#10004;' : '&#10008;');
+        $icon.removeClass('text-red-500 text-green-500')
+            .addClass(isValid ? 'text-green-500' : 'text-red-500')
+            .html(isValid ? '&#10004;' : '&#10008;');
 
-            $message.removeClass('text-red-500 text-green-500 hidden')
-                .addClass(is_valid ? 'text-green-300 text-sm' : 'text-red-400 text-sm')
-                .text(message)
-                .fadeIn(200);
-        });
-
-        $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed').hide();
+        $message.removeClass('text-red-500 text-green-500 hidden')
+            .addClass(isValid ? 'text-green-300 text-sm' : 'text-red-400 text-sm')
+            .text(message)
+            .fadeIn(300);
     },
+    validateForm() {
+        const allFieldCheck = $("#userId").val() && $("#userPw").val() && $("#userPw2").val() && $("#nickname").val();
+        const userPwMatch = $("#userPw").val() === $("#userPw2").val();
 
-    onInputChange(type) {
+        let errorMessages = [];
+        if (!allFieldCheck) errorMessages.push("모든 필드를 입력해주세요.");
+        if (!userPwMatch) errorMessages.push("비밀번호가 일치하지 않습니다.");
+        if (!this.userIdChecked) errorMessages.push("아이디 중복 체크를 완료해주세요.");
+        if (!this.nicknameChecked) errorMessages.push("닉네임 중복 체크를 완료해주세요.");
+
+        return errorMessages;
+    },
+    handleInputChange(type) {
         const $input = this[`$${type}`];
-        const $checkButton = $(`#${type}_check`);
         const $icon = $input.siblings('.validation-icon');
         const $message = $(`#${type}Message`);
 
         $message.fadeOut(300);
         $icon.removeClass('text-red-500 text-green-500').html('');
-        $checkButton.fadeIn(300).prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
 
-        if (type === 'userId') {
-            this.user_id_checked = false;
-        } else {
-            this.nickname_checked = false;
-        }
-
-        this.update_next_button();
+        type === 'userId' ? this.userIdChecked = false : this.nicknameChecked = false;
+        this.updateNextButton();
     },
-
-    onPasswordInput() {
+    handlePasswordInput() {
         const password = this.$userPw.val();
-        if (password.length >= 2) {
-            this.$userPwIcon.removeClass('text-red-300 text-sm').addClass('text-green-300 text-sm').html('&#10004;');
-        } else {
-            this.$userPwIcon.removeClass('text-green-300 text-sm').addClass('text-red-300 text-sm').html('&#10008;');
-        }
-        this.onPasswordConfirmInput();
-        this.update_next_button();
-    },
+        const $icon = this.$userPw.siblings('.validation-icon');
 
-    onPasswordConfirmInput() {
+        if (password.length >= 1) {
+            $icon.removeClass('text-red-500').addClass('text-green-500').html('&#10004;');
+        } else {
+            $icon.removeClass('text-green-500').addClass('text-red-500').html('&#10008;');
+        }
+        this.handlePasswordConfirmInput();
+        this.updateNextButton();
+    },
+    handlePasswordConfirmInput() {
         const password = this.$userPw.val();
-        const confirm_password = this.$userPw2.val();
-        if (password === confirm_password && password.length >= 2) {
-            this.$userPw2Icon.removeClass('text-red-500').addClass('text-green-500').html('&#10004;');
-        } else {
-            this.$userPw2Icon.removeClass('text-green-500').addClass('text-red-500').html('&#10008;');
-        }
-        this.update_next_button();
-    },
+        const confirmPassword = this.$userPw2.val();
+        const $icon = this.$userPw2.siblings('.validation-icon');
 
-    onBackBtnClick() {
+        if (password === confirmPassword && password.length >= 8) {
+            $icon.removeClass('text-red-500').addClass('text-green-500').html('&#10004;');
+        } else {
+            $icon.removeClass('text-green-500').addClass('text-red-500').html('&#10008;');
+        }
+        this.updateNextButton();
+    },
+    handleBackBtn() {
         $(".form-container > div").css("transform", "translateX(0)");
-        this.$step_indicator.text("1 / 2");
-        this.$nextBtn.text("다음").removeClass("bg-yellow-500 hover:bg-yellow-600").addClass("bg-yellow-200 hover:bg-yellow-500");
+        this.$stepIndicator.text("1 / 2");
+        this.$nextBtn.text("다음");
         this.$backBtn.addClass("hidden");
-        this.current_step = 1;
-        this.update_next_button();
+        this.currentStep = 1;
+        this.updateNextButton();
     },
 
-
-    onNextBtnClick() {
-        if (this.current_step === 1) {
-            const error_messages = this.validate_form();
-            if (error_messages.length === 0) {
+    handleNextBtn() {
+        if (this.currentStep === 1) {
+            const errorMessages = this.validateForm();
+            if (errorMessages.length === 0) {
                 $(".form-container > div").css("transform", "translateX(-50%)");
-                this.$step_indicator.text("2 / 2");
-                this.$nextBtn.text("회원가입").removeClass("bg-yellow-500 hover:bg-yellow-600").addClass("bg-yellow-200 hover:bg-yellow-500");
+                this.$stepIndicator.text("2 / 2");
+                this.$nextBtn.text("회원가입");
                 this.$backBtn.removeClass("hidden");
-                this.current_step = 2;
+                this.currentStep = 2;
+                this.loadCategories();  // 카테고리 로딩을 여기로 이동
             } else {
-                this.$nextButtonMessage.html(error_messages.join("<br>")).removeClass("hidden");
+                this.$nextButtonMessage.html(errorMessages.join("<br>")).removeClass("hidden");
             }
         } else {
-            if (this.selected_categories >= 3) {
+            if (this.selectedCategories.length >= 3 && this.selectedCategories.length <= 5) {
                 this.$joinForm.submit();
             } else {
-                alert("최소 3개의 카테고리를 선택해주세요.");
+                alert("카테고리를 3개 이상 5개 이하로 선택해주세요.");
             }
         }
-        this.update_next_button();
     },
 
-    onCategoryBtnClick(event) {
-        event.preventDefault();
-        const $this = $(event.currentTarget);
-        const category_id = $this.data("category-id");
-        const category_name = $this.text();
+    handleCategoryClick(event) {
+        const $button = $(event.currentTarget);
+        const categoryId = $button.data("category-id");
+        const categoryName = $button.text();
 
-        console.log('클릭된 카테고리:', category_name, 'ID:', category_id);
-
-        if ($this.hasClass("selected")) {
-            $this.removeClass("selected bg-yellow-500").addClass("bg-yellow-200");
-            this.selected_categories--;
+        if ($button.hasClass("selected")) {
+            $button.removeClass("selected bg-yellow-500").addClass("bg-yellow-200");
+            this.selectedCategories = this.selectedCategories.filter(c => c.id !== categoryId);
         } else {
-            if (this.selected_categories >= 5) {
-                alert("최대 5개의 카테고리 선택할 수 있습니다.");
-                console.log('최대 선택 개수 도달');
+            if (this.selectedCategories.length >= 5) {
+                alert("최대 5개의 카테고리만 선택할 수 있습니다.");
                 return;
             }
-            $this.removeClass("bg-yellow-200").addClass("selected bg-yellow-500");
-            this.selected_categories++;
+            $button.removeClass("bg-yellow-200").addClass("selected bg-yellow-500");
+            this.selectedCategories.push({id: categoryId, name: categoryName});
         }
 
-        console.log('현재 선택된 카테고리 수:', this.selected_categories);
-
-        this.update_selected_categories();
-        this.update_next_button();
+        this.updateSelectedCategories();
     },
-
-    update_selected_categories() {
+    updateSelectedCategories() {
         this.$selectedCategory.empty();
-        this.$hiddenInputs.empty();
-
-        $('.category-btn.selected').each((index, button) => {
-            const $button = $(button);
-            const category_id = $button.data('category-id');
-            const category_name = $button.text();
-
-            const $category_tag = $(`<div class="bg-yellow-300 font-bold py-1 px-2 rounded inline-block m-1">${category_name}</div>`);
-            this.$selectedCategory.append($category_tag);
-            this.$hiddenInputs.append(`<input type="hidden" name="categoryIds[${index}]" value="${category_id}">`);
+        this.$hiddenCategoryInputs.empty();
+        this.selectedCategories.forEach((category, index) => {
+            this.$selectedCategory.append(`<span class="bg-yellow-300 font-bold py-1 px-2 rounded inline-block m-1">${category.name}</span>`);
+            this.$hiddenCategoryInputs.append(`<input type="hidden" name="categoryIds" value="${category.id}">`);
         });
-
-        const count_text = `${this.selected_categories}/5 선택됨`;
-        console.log("카테고리 담은거: " + count_text);
-        const $count_display = $(`<div class="text-sm text-gray-600 mt-2">${count_text}</div>`);
-        this.$selectedCategory.append($count_display);
-
-        this.update_next_button();
     },
-
-    async onJoinFormSubmit(e) {
-        e.preventDefault();
-        if (this.selected_categories < 3) {
-            alert("최소 3개의 취향을 선택해 주세요");
+    validateForm() {
+        let errorMessages = [];
+        if (!this.$userId.val()) errorMessages.push("아이디를 입력해주세요.");
+        if (!this.$userPw.val()) errorMessages.push("비밀번호를 입력해주세요.");
+        if (this.$userPw.val() !== this.$userPw2.val()) errorMessages.push("비밀번호가 일치하지 않습니다.");
+        if (!this.$nickname.val()) errorMessages.push("닉네임을 입력해주세요.");
+        if (!this.userIdChecked) errorMessages.push("아이디 중복 체크를 완료해주세요.");
+        if (!this.nicknameChecked) errorMessages.push("닉네임 중복 체크를 완료해주세요.");
+        return errorMessages;
+    },
+    handleFormSubmit(event) {
+        event.preventDefault();
+        if (this.selectedCategories.length < 3 || this.selectedCategories.length > 5) {
+            alert("카테고리를 3개 이상 5개 이하로 선택해주세요.");
             return;
         }
 
-        const user_data = {
+        // 폼 데이터를 JSON 형태로 생성
+        var formData = {
             userId: this.$userId.val(),
             userPw: this.$userPw.val(),
             nickname: this.$nickname.val(),
-            categoryIds: $('.category-btn.selected').map(function() {
-                return $(this).data('category-id');
-            }).get()
+            categoryIds: this.selectedCategories.map(function(category) {
+                return Number(category.id);
+            })
         };
-        try {
-            const response = $.ajax({
-                url: url_join,
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(user_data)
-            });
-            console.log('회원 가입 성공, 메인페이지로 유저정보 들고가기??', response);
-            window.location.href = "/";
-            console.log('회원 가입 성공:', response);
-        } catch (error) {
-            console.error('회원가입 실패:', error);
-            alert("회원가입 실패. 다시 시도해주세요.");
-        }
-    },
+
+
+
+        // AJAX를 사용하여 폼 데이터 전송
+        // $.ajax({
+        //     url: this.$joinForm.attr('action'),
+        //     type: 'POST',
+        //     data: formData,
+        //     processData: false,
+        //     contentType: false,
+        //     success: (response) => {
+        //         alert("회원가입이 완료되었습니다.");
+        //         console.log("성공?", response);
+        //         // window.location.href = "/";  // 메인 페이지로 리다이렉트
+        //     },
+        //     error: (xhr, status, error) => {
+        //         alert("회원가입 중 오류가 발생했습니다: " + xhr.responseText);
+        //     }
+        // });
+
+        $.ajax({
+            url: this.$joinForm.attr('action'),
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: (response) => {
+                alert("회원가입이 완료되었습니다.");
+                console.log("성공?", response);
+                // window.location.href = "/";  // 메인 페이지로 리다이렉트
+            },
+            error: (xhr, status, error) => {
+                alert("회원가입 중 오류가 발생했습니다: " + xhr.responseText);
+            }
+        });
+    }
 };
 
 $(function() {

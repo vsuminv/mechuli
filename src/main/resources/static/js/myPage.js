@@ -38,14 +38,13 @@ const MyPage = {
 
         this.$friend_list = $("#friendList");
         this.$friend_search = $("#friendSearch");
-        this.$friend_info_btn = $("#friend_info_btn");
         this.$no_friends = $("#noFriends");
 
         this.$review_modal = $("#review_modal");
         this.$review_modal_content = $("#review_modal_content");
         this.$close_review_modal = $("#close_review_modal");
 
-        this.$cancel_update_btn = $("#cancel_update_btn");
+        // this.$cancel_update_btn = $("#cancel_update_btn");
 
 
 
@@ -78,12 +77,11 @@ const MyPage = {
         this.$next_review_btn.on("click", () => this.move_carousel(this.$review_container, "next"));
 
         this.$friend_search.on("input", this.search_friends.bind(this));
-        this.$friend_info_btn.on("click",this.on_friend_info_btn_click.bind(this));
-
         this.$friend_list.on("click", ".friend_info_btn", (e) => {
-            const userIndex = $(e.target).closest('.friend-item').data('user-index');
-            this.go_to_friend_page(userIndex);
+            const subscriberId = $(e.target).closest('.friend-item').data('subscriberId');
+            this.redirect_my_sub_info(subscriberId);
         });
+
     },
 
     // myState 컨텐츠 요청.. 이거 가져오는거 맞나
@@ -108,7 +106,7 @@ const MyPage = {
                 url: url_api_myPage_myLists,
                 type: 'POST',
                 dataType: json,
-                contentType: 'application/json',
+                contentType: app_json,
                 data: JSON.stringify({}),
                 xhrFields: {withCredentials: true}
             });
@@ -186,7 +184,7 @@ const MyPage = {
         data.myRestaurantListDTOList.forEach(store => {
             const $store_item = $("<div>").addClass("flex-none  w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden");
             const $star_btn = $("<button>").text("★").addClass("z-10 absolute m-2 text-yellow-500");
-            const $store_img = $("<img>").attr("src", store.imagePath || "/img/된찌.png").attr("alt", store.name).addClass("w-full h-full object-cover");
+            const $store_img = $("<img>").attr("src", store.imageSrcset || "/img/된찌.png").attr("alt", store.name).addClass("w-full h-full object-cover");
             $store_item.append($star_btn, $store_img);
             this.$store_list_container.append($store_item);
         });
@@ -205,8 +203,8 @@ const MyPage = {
         const $friendList = $("#friendList");
         const $template = $friendList.find('.friend-item').first();
         const $noFriends = $("#noFriends");
-        this.$friend_list.empty();
-        this.$no_friends.addClass('hidden');
+        // this.$friend_list.empty();
+        // this.$no_friends.addClass('hidden');
 
         $friendList.find('.friend-item:not(:first)').remove();
         $noFriends.addClass('hidden');
@@ -214,11 +212,25 @@ const MyPage = {
         if (Array.isArray(data) && data.length > 0) {
             data.forEach(subscriber => {
                 const $item = $template.clone().removeClass('hidden');
+                $item.attr('data-subscriber-id', subscriber.userIndex);
                 const formattedNickname = subscriber.nickName.charAt(0).toUpperCase() + subscriber.nickName.slice(1);
                 $item.find('.nickname').text(formattedNickname);
-                $item.attr('data-user-index', subscriber.userIndex);
-                // $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.userIndex));
-                $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(userIndex));
+            //     if (subscriber.userImg) {
+            //         $item.find('img').attr('src', subscriber.userImg).attr('alt', formattedNickname).show();
+            //         $item.find('.initial').hide();
+            //     } else {
+            //         $item.find('img').hide();
+            //         $item.find('.initial').text(formattedNickname.charAt(0)).show();
+            //     }
+            //     $item.find('.nickname').text(subscriber.nickName);
+            //     $item.find('.friend_info_btn').on('click', (e) => {
+            //         e.preventDefault();
+            //
+            //     });
+            //     this.$friend_list.append($item);
+            //     $friendList.append($item);
+            //     this.redirect_my_sub_info(subscriber.userIndex);
+            // });
                 if (subscriber.userImg) {
                     $item.find('img').attr('src', subscriber.userImg).attr('alt', formattedNickname).show();
                     $item.find('.initial').hide();
@@ -226,22 +238,15 @@ const MyPage = {
                     $item.find('img').hide();
                     $item.find('.initial').text(formattedNickname.charAt(0)).show();
                 }
-                $item.find('.nickname').text(subscriber.nickName);
-                // $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.userIndex));
-                // $item.find('.friend_info_btn').on('click', () => this.on_friend_info_btn_click(subscriber.userIndex));
 
-                this.$friend_list.append($item);
                 $friendList.append($item);
             });
         } else {
             $noFriends.removeClass('hidden');
         }
     },
-    go_to_friend_page() {
-        // window.location.href = `/friendPage?subscriberId=${subscriberId}`;
-        window.location.href = `/friendPage/`;
-    },
-    // -parameters
+
+
     // render_my_friend_info(data) {
     //     // const $new_window = $("#subscriber_info");
     //     $detailModal.find(".subscriber-nickname").text(data.nickname);
@@ -315,26 +320,22 @@ const MyPage = {
         }
     },
 
-    // go_to_friend_page(userIndex) {
-    //     console.info(userIndex)
-    //     window.location.href = `${url_subscriber}${userIndex}`;
-    //
-    // },
 
-    async unsubscribe(subscriberId) {
-        try {
-            await $.ajax({
-                url: `${url_subscriptions_subscriber}${subscriberId}`,
-                type: 'DELETE',
-                xhrFields: {withCredentials: true}
-            });
-            console.info("구취 성공");
-            console.log("취소한거. id 잘 맞는지?", subscriberId)
-            this.response_my_sub();
-        } catch (error) {
-            console.error("구취 실패 사유", error)
-        }
-    },
+
+    // async unsubscribe(subscriberId) {
+    //     try {
+    //         await $.ajax({
+    //             url: `${url_subscriptions_subscriber}${subscriberId}`,
+    //             type: 'DELETE',
+    //             xhrFields: {withCredentials: true}
+    //         });
+    //         console.info("구취 성공");
+    //         console.log("취소한거. id 잘 맞는지?", subscriberId)
+    //         this.response_my_sub();
+    //     } catch (error) {
+    //         console.error("구취 실패 사유", error)
+    //     }
+    // },
 
     my_contents(selector) {
         this.$my_state_fragment.addClass("hidden");
@@ -372,14 +373,18 @@ const MyPage = {
         this.$review_modal_content.text(content);
         this.$review_modal.removeClass("hidden");
     },
-
     close_review_modal() {
         this.$review_modal.addClass("hidden");
     },
-    on_friend_info_btn_click(userIndex) {
-        console.info(userIndex)
-        window.location.href = `url_subscriber}${userIndex}`;
-        console.info("ddadssad"+userIndex)
+    // redirect_my_sub_info(subscriberId) {
+    //     window.location.href = `/subscriptions/subscriber/${subscriberId}`;
+    // },
+    redirect_my_sub_info(subscriberId) {
+        if (subscriberId) {
+            window.location.href = `/subscriptions/subscriber?subscriberId=${subscriberId}`;
+        } else {
+            console.error("subscriberId 확인",subscriberId);
+        }
     },
     // on_my_search() {
     //     const searchTerm = this.$my_search.val().toLowerCase();
@@ -388,6 +393,27 @@ const MyPage = {
     //         $(this).toggle(friendName.includes(searchTerm));
     //     });
     // },
+
+
+    redirect_my_sub_info(subscriberId) {
+        if (subscriberId) {
+            $.ajax({
+                url: `/subscriptions/subscriber/${subscriberId}`,
+                type: 'GET',
+                dataType: json,
+                success: (data) => {
+                    this.render_subscriber_detail(data);
+                },
+                error: (xhr, status, error) => {
+                    console.error("구독자 정보를 불러오는데 실패했습니다:", error);
+                    alert("구독자 정보를 불러오는데 실패했습니다.");
+                }
+            });
+        } else {
+            console.error("subscriberId 확인", subscriberId);
+        }
+    },
+
 };
 $(document).ready(function () {
     MyPage.init();

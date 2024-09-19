@@ -3,6 +3,7 @@ const FriendPage = {
         this.cache_dom();
         this.get_friend_info();
         this.bind_events();
+        this.render_friend_info();
     },
 
     cache_dom() {
@@ -50,6 +51,8 @@ const FriendPage = {
     },
 
     render_my_friend_info(data) {
+
+
         this.$friend_nickname.text(data.nickname);
         this.$friend_image.attr("src", data.userImg || "/img/face.png");
 

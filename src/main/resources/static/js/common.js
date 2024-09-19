@@ -1,7 +1,7 @@
 //UserController REST
 let url_ajaxCheckId = '/ajaxCheckId'; // post
 let url_ajaxCheckNickname = '/ajaxCheckNickname'; //post
-let url_join = '/join'; //post
+let url_join = 'join'; //post
 let url_randomCategory = '/randomCategory'; //Get
 let url_updateUpdate = '/updateUpdate'; //Put
 let url_api_myPage_myLists = '/api/myPage/myLists'; //Post
@@ -37,7 +37,7 @@ let any_v = (value) => value;
 let any_idx = (idx) => idx;
 //type
 
-let content_type = "'application/x-www-form-urlencoded'"
+let content_type = 'application/x-www-form-urlencoded';
 let app_json = 'application/json';
 let json = 'json';
 // repository
