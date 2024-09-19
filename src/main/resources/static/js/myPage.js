@@ -145,11 +145,27 @@ const MyPage = {
         console.log('myReviewDTOList 가져옴?', data.myReviewDTOList.length);
         this.$store_list_container.empty();
         data.myRestaurantListDTOList.forEach(store => {
-            const $store_item = $("<div>").addClass("flex-none  w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden");
-            const $star_btn = $("<button>").text("★").addClass("z-10 absolute m-2 text-yellow-500");
-            const $store_img = $("<img>").attr("src", store.imagePath || "/img/된찌.png").attr("alt", store.name).addClass("w-full h-full object-cover");
-            $store_item.append($star_btn, $store_img);
-            this.$store_list_container.append($store_item);
+            // 새로운 컨테이너 생성
+            const $store_wrapper = $("<div>").addClass("flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden");
+
+            // 이미지와 제목을 포함하는 아이템
+            const $store_item = $("<div>").addClass("relative w-full h-full bg-gray-200");
+
+            const $star_btn = $("<button>").text("★").addClass("z-10 absolute top-0 right-0 m-2 text-2xl text-yellow-500").attr("id", "myPageStar");
+            const $store_img = $("<img>").attr("src", store.restaurantImg || "/img/된찌.png").attr("alt", store.name).addClass("w-full h-full object-cover");
+
+            // 이미지 하단에 오버레이로 나오는 가게 이름
+            const $store_title = $("<h2>").text(store.restaurantName || "가게 이름 없음")
+                .addClass("absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 text-lg font-bold p-1");
+
+            // $store_item에 버튼과 이미지, 제목 추가
+            $store_item.append($star_btn, $store_img, $store_title);
+
+            // 최종적으로 $store_wrapper에 $store_item 추가
+            $store_wrapper.append($store_item);
+
+            // $store_list_container에 $store_wrapper 추가
+            this.$store_list_container.append($store_wrapper);
         });
         this.$review_container.empty();
         data.myReviewDTOList.forEach(review => {
