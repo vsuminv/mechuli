@@ -108,5 +108,14 @@ public class SubscriptionService {
         subscriptionRepository.delete(subscription);
 
     }
+
+    // 구독중인지 아닌지 boolean 값
+    public boolean checkIsSubscribed(UserDAO currentUser, Long subscriberId) {
+        UserDAO subscriber = userRepository.findById(subscriberId)
+                .orElseThrow(() -> new RuntimeException("구독자 정보가 없습니다."));
+
+        return subscriptionRepository.existsByUserIdAndSubscriber(currentUser, subscriber);
+    }
+
 }
 

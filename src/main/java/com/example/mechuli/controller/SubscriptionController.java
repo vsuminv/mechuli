@@ -50,27 +50,35 @@ public class SubscriptionController {
 
     // 내가 구독한 사용자 목록 조회
     @GetMapping("/subscriberList")
-    public ResponseEntity<List<SubscriberInfoDTO>>  getSubscribedUsers(@AuthenticationPrincipal UserDAO currentUser) {
+    public ResponseEntity<List<SubscriberInfoDTO>> getSubscribedUsers(@AuthenticationPrincipal UserDAO currentUser) {
         List<SubscriberInfoDTO> subscribers = subscriptionService.getSubscribedUsers(currentUser);
         return ResponseEntity.ok(subscribers);
     }
 
     //특정 구독자 정보 조회
     @GetMapping("/subscriber/{subscriberId}")
-    public ResponseEntity<SubscriberDetailDTO> getSubscriberDetail(@AuthenticationPrincipal UserDAO currentUser,@PathVariable Long subscriberId) {
+    public ResponseEntity<SubscriberDetailDTO> getSubscriberDetail(@AuthenticationPrincipal UserDAO currentUser, @PathVariable Long subscriberId) {
         SubscriberDetailDTO detail = subscriptionService.getSubscriberSelect(subscriberId);
         return ResponseEntity.ok(detail);
     }
 
     // 구독 취소
     @DeleteMapping("/subscriber/{subscriberId}")
-    public ResponseEntity<?> deleteSubscriber (@AuthenticationPrincipal UserDAO authedUser, @PathVariable Long subscriberId){
+    public ResponseEntity<?> deleteSubscriber(@AuthenticationPrincipal UserDAO authedUser, @PathVariable Long subscriberId) {
         try {
             subscriptionService.delete(authedUser, subscriberId);
             return ResponseEntity.ok("구독이 취소되었습니다.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("구독 취소 실패");
         }
+    }
+
+    // 구독중인지 아닌지 조회
+    @PostMapping("/checkSubscribing")
+    public ResponseEntity<Boolean> checkSubscribing(@AuthenticationPrincipal UserDAO authedUser, Long subscriberId) {
+
+        boolean isSubscribed = subscriptionService.checkIsSubscribed(authedUser, subscriberId);
+        return ResponseEntity.ok(isSubscribed);
     }
 
 }
