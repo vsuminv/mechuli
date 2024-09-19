@@ -7,6 +7,7 @@ import com.example.mechuli.repository.MyRestaurantListRepository;
 import com.example.mechuli.repository.ReviewRepository;
 import com.example.mechuli.repository.SubscriptionRepository;
 import com.example.mechuli.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,12 +98,13 @@ public class SubscriptionService {
 
     // 구독 취소
 
+    @Transactional
     public void delete(UserDAO authedUser, Long subscriberId) {
 
-        UserDAO subscriber = userRepository.findById(subscriberId)
+        UserDAO subscriber = userRepository.findByUserIndex(subscriberId)
                 .orElseThrow(() -> new RuntimeException("User Not found"));
 
-       Subscription subscription = subscriptionRepository.findByUserIdAndSubscriber(authedUser, subscriber)
+        Subscription subscription = subscriptionRepository.findByUserIdAndSubscriber(authedUser, subscriber)
                 .orElseThrow(() -> new RuntimeException("구독 정보가 없습니다."));
 
         subscriptionRepository.delete(subscription);
@@ -116,6 +118,4 @@ public class SubscriptionService {
 
         return subscriptionRepository.existsByUserIdAndSubscriber(currentUser, subscriber);
     }
-
 }
-

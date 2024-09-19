@@ -301,7 +301,6 @@ const MyPage = {
     go_to_friend_page(subscriberIndex) {
         console.info(subscriberIndex)
         window.location.href = `/friendPage?subscriberId=${subscriberIndex}`;
-    },
     // go_to_friend_page(userIndex) {
     //     console.info(userIndex)
     //     try {
@@ -314,7 +313,7 @@ const MyPage = {
     //     } catch (error) {
     //         console.error("친구 페이지로 이동 실패:", error);
     //     }
-    // },
+    },
 
     async unsubscribe(subscriberId) {
         try {

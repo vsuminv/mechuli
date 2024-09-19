@@ -9,9 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -23,7 +25,9 @@ public class SubscriptionController {
     private SubscriptionService subscriptionService;
 
     @PostMapping("/subscribe/{userId}")
-    public ResponseEntity<?> createSubscribe(@AuthenticationPrincipal UserDAO currentUser, @PathVariable Long userId) {
+    public ResponseEntity<?> createSubscribe(@AuthenticationPrincipal UserDAO currentUser, @PathVariable(name = "userId") Long userId) {
+        System.out.println(currentUser);
+        System.out.println(userId);
         try {
             // 구독상태메세지
             String message = subscriptionService.createSubscribe(currentUser, userId);
@@ -34,7 +38,7 @@ public class SubscriptionController {
             } else {
                 return ResponseEntity.ok(message);
             }
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("추가 실패: " + e.getMessage());
         }
     }
@@ -44,13 +48,12 @@ public class SubscriptionController {
     public List<SubscriberSearchDTO> searchUsers(
             @AuthenticationPrincipal UserDAO currentUser,
             @RequestParam("nickname") String nickname) {
-        System.out.println("사용자 검색 실행");
         return subscriptionService.searchUsers(currentUser, nickname);
     }
 
     // 내가 구독한 사용자 목록 조회
     @GetMapping("/subscriberList")
-    public ResponseEntity<List<SubscriberInfoDTO>> getSubscribedUsers(@AuthenticationPrincipal UserDAO currentUser) {
+    public ResponseEntity<List<SubscriberInfoDTO>>  getSubscribedUsers(@AuthenticationPrincipal UserDAO currentUser) {
         List<SubscriberInfoDTO> subscribers = subscriptionService.getSubscribedUsers(currentUser);
         return ResponseEntity.ok(subscribers);
     }
@@ -63,8 +66,8 @@ public class SubscriptionController {
     }
 
     // 구독 취소
-    @DeleteMapping("/subscriber/{subscriberId}")
-    public ResponseEntity<?> deleteSubscriber(@AuthenticationPrincipal UserDAO authedUser, @PathVariable Long subscriberId) {
+    @PostMapping("/unsubscribe/{subscriberId}")
+    public ResponseEntity<?> deleteSubscriber (@AuthenticationPrincipal UserDAO authedUser, @PathVariable(name = "subscriberId") Long subscriberId){
         try {
             subscriptionService.delete(authedUser, subscriberId);
             return ResponseEntity.ok("구독이 취소되었습니다.");
@@ -75,10 +78,9 @@ public class SubscriptionController {
 
     // 구독중인지 아닌지 조회
     @PostMapping("/checkSubscribing")
-    public ResponseEntity<Boolean> checkSubscribing(@AuthenticationPrincipal UserDAO authedUser, Long subscriberId) {
-
+    public ResponseEntity<Boolean> checkSubscribing(@AuthenticationPrincipal UserDAO authedUser, @RequestBody Map<String, Long> request) {
+        Long subscriberId = request.get("subscriberId");
         boolean isSubscribed = subscriptionService.checkIsSubscribed(authedUser, subscriberId);
         return ResponseEntity.ok(isSubscribed);
     }
-
 }
