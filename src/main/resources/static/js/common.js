@@ -11,6 +11,7 @@ let url_subscribe = '/subscribe/'; // Get {userId}
 //RestaurantController REST
 let url_api_all = '/api/all'; // get List<RestaurantDTO> restaurantAll(Model model)
 let url_api_category = '/api/category'; //get responseBody Map<String, List<RestaurantDTO>>
+let url_api_categoryAll='api/categoryAll';
 let url_api_boardPage = '/api/boardPage'; //Get Param
 let url_api_ajaxRestaurantMenu = '/api/ajaxRestaurantMenu'; // post
 let url_api_ajaxRestaurantDetail = '/api/ajaxRestaurantDetail'; //POST

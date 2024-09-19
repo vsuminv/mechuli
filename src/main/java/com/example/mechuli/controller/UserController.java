@@ -67,12 +67,14 @@ public class UserController {
 
         // 카테고리 값 가져오기
         if (dto.getCategoryIds() == null || dto.getCategoryIds().size() < 3 || dto.getCategoryIds().size() > 5) {
-            bindingResult.rejectValue("restaurantCategories", "error.userDto", "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
+//            bindingResult.rejectValue("restaurantCategories", "error.userDto", "카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
             return ResponseEntity.badRequest().body("카테고리를 최소 3개에서 최대 5개까지 선택해주세요.");
         }
 
         try {
+
             userService.save(dto);
+
             return ResponseEntity.ok("회원가입이 완료되었습니다.");
         } catch (RuntimeException e) {
             e.printStackTrace(); // 디버깅을 위해 예외를 출력합니다.
