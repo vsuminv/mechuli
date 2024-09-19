@@ -43,7 +43,8 @@ public class SubscriptionController {
     @GetMapping("/search")
     public List<SubscriberSearchDTO> searchUsers(
             @AuthenticationPrincipal UserDAO currentUser,
-            @RequestParam String nickname) {
+            @RequestParam("nickname") String nickname) {
+        System.out.println("사용자 검색 실행");
         return subscriptionService.searchUsers(currentUser, nickname);
     }
 

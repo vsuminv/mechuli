@@ -35,6 +35,7 @@ const MyPage = {
         this.$my_friend_list = $("#my_friend_list");
 
         this.$friend_search = $("#friendSearch");
+        console.log(this.$friend_search)
         this.$friend_list = $("#friendList");
         this.$no_friends = $("#noFriends");
 
@@ -71,7 +72,13 @@ const MyPage = {
         this.$next_store_btn.on("click", () => this.move_carousel(this.$store_list_container, "next"));
         this.$prev_review_btn.on("click", () => this.move_carousel(this.$review_container, "prev"));
         this.$next_review_btn.on("click", () => this.move_carousel(this.$review_container, "next"));
-        this.$friend_search.on("input", this.search_friends.bind(this));
+        // this.$friend_search.on("input", this.search_friends.bind(this));
+        // 엔터 키 이벤트 리스너
+        this.$friend_search.on("keydown", (event) => {
+            if (event.key === "Enter") {
+                this.search_friends();
+            }
+        });
 
     },
 
@@ -166,19 +173,32 @@ const MyPage = {
 
     render_my_sub(data) {
         const $friendList = $("#friendList");
-        const $template = $friendList.find('.friend-item').first();
         const $noFriends = $("#noFriends");
-        this.$friend_list.empty();
-        this.$no_friends.addClass('hidden');
 
-        $friendList.find('.friend-item:not(:first)').remove();
+        // 기존 친구 목록 비우기
+        this.$friend_list.empty();
         $noFriends.addClass('hidden');
 
+        // 친구 아이템 템플릿을 생성
+        const $template = $('<li class="friend-item flex items-center justify-between bg-white p-4 rounded-lg shadow mb-2 hidden">' +
+            '<div class="flex items-center space-x-3">' +
+            '<div class="profile w-8 h-8 bg-yellow-200 rounded-full flex items-center justify-center overflow-hidden">' +
+            '<img class="w-full h-full object-cover" src="" alt="">' +
+            '<span class="initial text-xl font-bold text-yellow-800"></span>' +
+            '</div>' +
+            '<span class="nickname text-sm font-semibold"></span>' +
+            '</div>' +
+            '<button class="friend_info_btn bg-red-50 hover:bg-yellow-100 font-bold py-1 px-1 rounded text-xs">정보보기</button>' +
+            '</li>');
+
+        // 친구 목록이 비어 있음을 확인
         if (Array.isArray(data) && data.length > 0) {
             data.forEach(subscriber => {
                 const $item = $template.clone().removeClass('hidden');
-                const formattedNickname = subscriber.nickName.charAt(0).toUpperCase() + subscriber.nickName.slice(1);
+
+                const formattedNickname = subscriber.nickname.charAt(0).toUpperCase() + subscriber.nickname.slice(1);
                 $item.find('.nickname').text(formattedNickname);
+
                 if (subscriber.userImg) {
                     $item.find('img').attr('src', subscriber.userImg).attr('alt', formattedNickname).show();
                     $item.find('.initial').hide();
@@ -186,15 +206,17 @@ const MyPage = {
                     $item.find('img').hide();
                     $item.find('.initial').text(formattedNickname.charAt(0)).show();
                 }
-                $item.find('.nickname').text(subscriber.nickName);
-                $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.userIndex));
+
+                $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.subscriberIndex));
                 this.$friend_list.append($item);
-                $friendList.append($item);
+                $friendList.append($item); // 목록에 추가
             });
         } else {
-            $noFriends.removeClass('hidden');
+            $noFriends.removeClass('hidden'); // 친구가 없으면 메시지 표시
         }
-    },
+    }
+
+    ,
     init_carousel() {
         this.$store_list_container.css("transform", "translateX(0)");
         this.$review_container.css("transform", "translateX(0)");
@@ -234,23 +256,51 @@ const MyPage = {
         }
     },
     async search_friends() {
-        const search_term = this.$friend_search.val();
+        // const search_term = this.$friend_search.val();
+        const search_term = this.$friend_search.val() || ""; // 기본값으로 빈 문자열 설정
+        let ajaxResponse = null;
+        // 검증 추가: 검색어가 비어 있는지 확인
+        if (search_term.trim() === "") {
+            console.log("검색어가 비어 있습니다.");
+            alert("검색어를 입력해 주세요."); // 사용자에게 알림
+            return; // 요청을 하지 않고 함수 종료
+        } else if(search_term === undefined) {
+            console.log("search_term이 undefined입니다.");
+            return; // 함수를 종료
+        }
+
         try {
             const response = await $.ajax({
-                url: `${url_subscriptions_subscriberList}?nickname=${search_term}`,
+                url: `${url_subscriptions_search}?nickname=${search_term}`,
                 type: 'GET',
-                dataType: json,
+                dataType: 'json',
                 xhrFields: { withCredentials: true }
             });
-            this.render_my_sub(response);
+
+            // 응답이 undefined인지 확인
+            if (response === undefined) {
+                // throw new Error("서버에서 응답을 받지 못했습니다."); // 강제로 에러 발생
+                console.log("서버에서 응답 받지 못했습니다.")
+                return;
+            }
+            // console.log(response);
+            // this.render_my_sub(response);
+            ajaxResponse = response;
         } catch (error) {
             console.error("친구 검색 실패:", error);
+            // 사용자에게 에러 메시지 표시
+            alert("친구 검색 중 문제가 발생했습니다.");
+            return;
         }
+        if(ajaxResponse!=null) {
+            this.render_my_sub(ajaxResponse);
+        }
+
     },
 
-    go_to_friend_page(userIndex) {
-        console.info(userIndex)
-        window.location.href = `${url_subscriber}?userIndex=${userIndex}`;
+    go_to_friend_page(subscriberIndex) {
+        console.info(subscriberIndex)
+        window.location.href = `/friendPage?subscriberId=${subscriberIndex}`;
     },
     // go_to_friend_page(userIndex) {
     //     console.info(userIndex)

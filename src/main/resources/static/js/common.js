@@ -27,7 +27,7 @@ let url_reviews_reviewId = '/reviews/'; //DEl {reviewId}
 let url_subscriptions_search = '/subscriptions/search'; //Get
 let url_subscriptions_subscriberList = '/subscriptions/subscriberList'; // @Get
 let url_subscriptions_subscriber = '/subscriptions/subscribe/'; // GET,DEL {userId}
-let url_subscriber = '/subscriptions/subscriber/'; // GET,DEL {subscriberId}
+let url_subscriber = '/subscriptions/subscriber'; // GET,DEL {subscriberId}
 
 // common value for request
 let any_k = (key) => key;
