@@ -9,6 +9,9 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -30,6 +33,7 @@ public class SecurityConfig {
                 .headers(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
+
 //                                .requestMatchers("/js/**", "/home", "/auth/**", "/api/**", "/css/**", "/img/**", "/image/**", "/tailwinds.css", "/thymeleaf/**", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/ajax/**").permitAll()
 //
 //                                .requestMatchers("/joinPage", "/wellcomePage", "/join").permitAll()
@@ -39,8 +43,13 @@ public class SecurityConfig {
 
 //                        .anyRequest().permitAll()
 
-                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/join").permitAll()
-                                .requestMatchers("/joinPage/**","/","/myPage/**").permitAll()
+//                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/join").permitAll()
+//                                .requestMatchers("/joinPage/**","/","/myPage/**").permitAll()
+//
+
+                                .requestMatchers("/js/**", "/home", "/auth/**", "/api/**", "/css/**", "/img/**", "/image/**", "/tailwinds.css", "/thymeleaf/**", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/ajax/**").permitAll()
+//                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
+                                .requestMatchers("/joinPage/**","/").permitAll()
 
                                 .anyRequest().authenticated()
 
@@ -69,6 +78,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(UserService userService) {
         DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
@@ -88,4 +98,22 @@ public class SecurityConfig {
 
 
 
+
+//    @Bean
+//    public Filter userSessionFilter() {
+//        return (request, response, chain) -> {
+//            HttpServletRequest httpRequest = (HttpServletRequest) request;
+//            HttpServletResponse httpResponse = (HttpServletResponse) response; //언젠가 쓰겠지
+//            HttpSession session = httpRequest.getSession();
+//
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+//                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//                session.setAttribute("nickname", userDetails.getUsername());
+//            }
+//
+//            chain.doFilter(request, response);
+//        };
+//    }
 }

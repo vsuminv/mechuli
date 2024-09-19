@@ -26,16 +26,18 @@ let url_reviews_reviewId = '/reviews/'; //DEl {reviewId}
 //SubscriptionController REST
 let url_subscriptions_search = '/subscriptions/search'; //Get
 let url_subscriptions_subscriberList = '/subscriptions/subscriberList'; // @Get
-let url_subscriptions_subscriber = '/subscriptions/subscriber/'; // GET,DEL {subscriberId}
+let url_subscriptions_subscriber = '/subscriptions/subscribe/'; // GET,DEL {userId}
+let url_subscriber = '/subscriptions/subscriber/'; // GET,DEL {subscriberId}
 
 // common value for request
 let any_k = (key) => key;
 let any_v = (value) => value;
 let any_idx = (idx) => idx;
-let get = "'GET'"
-let post = "'POST'"
-let content_type = "'application/x-www-form-urlencoded'"
+//type
 
+let content_type = "'application/x-www-form-urlencoded'"
+let app_json = 'application/json';
+let json = 'json';
 // repository
 let restaurant_repository = [];
 let category_repository = [];

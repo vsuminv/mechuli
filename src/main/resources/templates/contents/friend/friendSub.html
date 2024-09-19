@@ -1,0 +1,25 @@
+<div th:fragment="friendSub">
+    <div class="w-full h-full px-10 mx-auto shadow-md relative">
+        <div class="relative">
+            <input type="text" id="friendSearch" name="friendSearch" class="mt-6 w-full p-3 pl-10 rounded-full bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-300" placeholder="친구를 검색하세요">
+        </div>
+        <ul id="friendList" class="space-y-4 mt-4">
+<!-- 임시로 ul li로 함-->
+            <li class="friend-item hidden flex items-center justify-between bg-white p-4 rounded-lg shadow mb-2">
+                <div class="flex items-center space-x-3">
+                    <div class="profile w-12 h-12 bg-yellow-200 rounded-full flex items-center justify-center overflow-hidden">
+                        <img class="w-full h-full object-cover" src="" alt="">
+                        <span class="initial text-xl font-bold text-yellow-800"></span>
+                    </div>
+                    <span class="nickname text-lg font-semibold text-gray-800"></span>
+                </div>
+                <button class="friend_friend_info_btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded text-xs">정보보기</button>
+                    타고가기
+                </button>
+            </li>
+            <li id="noFriends" class="hidden text-center py-4 text-gray-500">
+                ${null}님이 구독 중인 사용자가 없습니다.
+            </li>
+        </ul>
+    </div>
+</div>
