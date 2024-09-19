@@ -12,7 +12,7 @@
                         <div class="relative">
                             <input id="userId" name="userId" type="text"
                                    class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                                   placeholder="4자 이상 입력하세요" th:value="${userId}">
+                                   placeholder="3자 이상 10자 이하로 입력하세요(공백, 특수문자시작x)" th:value="${userId}">
                             <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                         <div class="relative">
                             <input id="userPw" name="userPw" type="password"
                                    class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                                   placeholder="8자 이상 입력하세요" th:value="${userPw}">
+                                   placeholder="8자 이상 12자 이하로 입력하세요(공백x,문자,숫자,특수문자 포함해야합니다.)" th:value="${userPw}">
                             <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                         <div class="relative">
                             <input id="nickname" name="nickname" type="text"
                                    class="text-sm mt-1 shadow-md rounded-lg mx-auto w-full h-12 pl-3 pr-10 placeholder-opacity-40 placeholder-yellow-900 focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 focus:z-10 text-slim"
-                                   placeholder="2자 이상 입력하세요" th:value="${nickname}">
+                                   placeholder="3자 이상 10자 이하로 입력하세요(공백, 특수문자시작x)" th:value="${nickname}">
                             <span class="validation-icon absolute right-3 top-1/2 transform -translate-y-1/2"></span>
                         </div>
                     </div>

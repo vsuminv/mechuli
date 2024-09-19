@@ -59,9 +59,15 @@ const join_page = {
             alert('카테고리를 불러오는 데 실패했습니다. 페이지를 새로고침 해주세요.');
         }
     },
+
+    validatePassword(password) {
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,12}$/;
+        return passwordRegex.test(password);
+    },
+
     update_next_button() {
         const all_fields_filled = this.$userId.val() && this.$userPw.val() && this.$userPw2.val() && this.$nickname.val();
-        const password_match = this.$userPw.val() === this.$userPw2.val() && this.$userPw.val().length >= 2;
+        const password_match = this.$userPw.val() === this.$userPw2.val() && this.validatePassword(this.$userPw.val());
         let is_valid = this.user_id_checked && this.nickname_checked && all_fields_filled && password_match;
 
         if (this.current_step === 2) {
@@ -106,11 +112,24 @@ const join_page = {
         const $checkButton = $(`#${type}_check`);
         $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
         const value = this[`$${type}`].val();
-        if (!value) {
-            this.update_validation_state(type, false, `${type === 'userId' ? '아이디' : '닉네임'}를 입력해주세요.`);
-            $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
-            return;
+
+        // 유효성 검사 정규식
+        const idAndNicknameRegex = /^[a-zA-Z가-힣0-9][a-zA-Z가-힣0-9]{2,9}$/;
+
+        if (!idAndNicknameRegex.test(value)) {
+                this.update_validation_state(type, false, `${type === 'userId' ? '아이디' : '닉네임'}의 형식이 올바르지 않습니다.`);
+                $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+                return;
         }
+//        if (type === 'userId' || type === 'nickname') {
+//                if (!idAndNicknameRegex.test(value)) {
+//                    this.update_validation_state(type, false, `${type === 'userId' ? '아이디' : '닉네임'}의 형식이 올바르지 않습니다.`);
+//                    $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+//                    return;
+//                }
+//        }
+
+
 
         const url = type === 'userId' ? url_ajaxCheckId : url_ajaxCheckNickname;
         try {
@@ -143,18 +162,26 @@ const join_page = {
         const $icon = $input.siblings('.validation-icon');
         const $message = $(`#${type}Message`);
 
-        $checkButton.fadeOut(100, function() {
-            $icon.removeClass('text-red-500 text-green-500')
-                .addClass(is_valid ? 'text-green-500' : 'text-red-500')
-                .html(is_valid ? '&#10004;' : '&#10008;');
+//        $checkButton.fadeOut(100, function() {
+//            $icon.removeClass('text-red-500 text-green-500')
+//                .addClass(is_valid ? 'text-green-500' : 'text-red-500')
+//                .html(is_valid ? '&#10004;' : '&#10008;');
+//
+//            $message.removeClass('text-red-500 text-green-500 hidden')
+//                .addClass(is_valid ? 'text-green-300 text-sm' : 'text-red-400 text-sm')
+//                .text(message)
+//                .fadeIn(200);
+//        });
+//
+//        $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed').hide();
+           $icon.removeClass('text-red-500 text-green-500').addClass(is_valid ? 'text-green-500' : 'text-red-500');
+           $icon.html(is_valid ? '&#10004;' : '&#10008;');
 
-            $message.removeClass('text-red-500 text-green-500 hidden')
-                .addClass(is_valid ? 'text-green-300 text-sm' : 'text-red-400 text-sm')
-                .text(message)
-                .fadeIn(200);
-        });
+           $message.removeClass('text-red-500 text-green-500 hidden').addClass(is_valid ? 'text-green-300 text-sm' : 'text-red-400 text-sm').text(message);
+           $message.fadeIn(200);
 
-        $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed').hide();
+           $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed').hide();
+
     },
 
     onInputChange(type) {
@@ -165,37 +192,66 @@ const join_page = {
 
         $message.fadeOut(300);
         $icon.removeClass('text-red-500 text-green-500').html('');
-        $checkButton.fadeIn(300).prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+        $checkButton.fadeIn(300).prop('disabled', false).removeClass('opacity-50 cursor-not-allowed').show();
+//
+//        if (type === 'userId') {
+//            this.user_id_checked = false;
+//        } else {
+//            this.nickname_checked = false;
+//        }
 
-        if (type === 'userId') {
-            this.user_id_checked = false;
-        } else {
-            this.nickname_checked = false;
-        }
-
-        this.update_next_button();
+//        this.update_next_button();
     },
 
     onPasswordInput() {
-        const password = this.$userPw.val();
-        if (password.length >= 2) {
-            this.$userPwIcon.removeClass('text-red-300 text-sm').addClass('text-green-300 text-sm').html('&#10004;');
+       const password = this.$userPw.val();
+       console.log("Password input: ", password);
+//       const isValid = this.validatePassword(password);
+//       const password_matches = password === this.$userPw2.val();
+
+
+
+//    },
+
+//       if (this.validatePassword(password)) {
+//           this.$userPwIcon.removeClass('text-red-300 text-sm').addClass('text-green-300 text-sm').html('&#10004;');
+//       } else {
+//           this.$userPwIcon.removeClass('text-green-300 text-sm').addClass('text-red-300 text-sm').html('&#10008;');
+//       }
+//           this.onPasswordConfirmInput();
+//           this.update_next_button();
+        if (this.validatePassword(password)) {
+           this.$userPwIcon.removeClass('text-red-500').addClass('text-green-500').html('&#10004;');
         } else {
-            this.$userPwIcon.removeClass('text-green-300 text-sm').addClass('text-red-300 text-sm').html('&#10008;');
+           this.$userPwIcon.removeClass('text-green-500').addClass('text-red-500').html('&#10008;');
         }
-        this.onPasswordConfirmInput();
-        this.update_next_button();
+           this.update_next_button();
+
     },
 
     onPasswordConfirmInput() {
-        const password = this.$userPw.val();
-        const confirm_password = this.$userPw2.val();
-        if (password === confirm_password && password.length >= 2) {
+       const password = this.$userPw.val();
+       const passwordConfirm = this.$userPw2.val();
+//       const isMatch = password === passwordConfirm && this.validatePassword(password);
+
+//       if (password === confirm_password && this.validatePassword(password)) {
+//           this.$userPw2Icon.removeClass('text-red-500').addClass('text-green-500').html('&#10004;');
+//       } else {
+//           this.$userPw2Icon.removeClass('text-green-500').addClass('text-red-500').html('&#10008;');
+//       }
+//           this.update_next_button();
+//        if (isMatch) {
+//            this.$userPw2Icon.html('&#10004;').removeClass('text-red-500').addClass('text-green-500');
+//        } else {
+//            this.$userPw2Icon.html('&#10008;').removeClass('text-green-500').addClass('text-red-500');
+//        }
+        if (password === passwordConfirm && this.validatePassword(password)) {
             this.$userPw2Icon.removeClass('text-red-500').addClass('text-green-500').html('&#10004;');
         } else {
             this.$userPw2Icon.removeClass('text-green-500').addClass('text-red-500').html('&#10008;');
         }
         this.update_next_button();
+
     },
 
     onBackBtnClick() {
@@ -212,23 +268,26 @@ const join_page = {
         if (this.current_step === 1) {
             const error_messages = this.validate_form();
             if (error_messages.length === 0) {
+                // Move to the next step
                 $(".form-container > div").css("transform", "translateX(-50%)");
                 this.$step_indicator.text("2 / 2");
                 this.$nextBtn.text("회원가입").removeClass("bg-yellow-500 hover:bg-yellow-600").addClass("bg-yellow-200 hover:bg-yellow-500");
                 this.$backBtn.removeClass("hidden");
                 this.current_step = 2;
+                this.$nextButtonMessage.addClass("hidden"); // Hide error messages if no errors
             } else {
                 this.$nextButtonMessage.html(error_messages.join("<br>")).removeClass("hidden");
             }
-        } else {
+        } else if (this.current_step === 2) {
             if (this.selected_categories >= 3) {
-                this.$joinForm.submit();
+                this.$joinForm.submit(); // Submit the form
             } else {
                 alert("최소 3개의 카테고리를 선택해주세요.");
             }
         }
         this.update_next_button();
     },
+
 
     onCategoryBtnClick(event) {
         event.preventDefault();
@@ -314,3 +373,4 @@ const join_page = {
 $(function() {
     join_page.init();
 });
+
