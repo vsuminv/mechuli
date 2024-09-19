@@ -2,20 +2,68 @@
 <th:block layout:fragment="script">
     <script defer type="text/javascript" th:src="@{/js/myPage.js}"></script>
 </th:block>
-<main role="main" layout:fragment="main">
+<div role="main" layout:fragment="main">
     <div class="w-full h-full text-yellow-700">
-        <div th:replace="~{/../component/nav :: nav}"></div>
+        <div th:replace="~{/../component/nav :: nav}">
+        </div>
 
         <div id="content" class="w-4/5 mx-auto h-full">
-            <div id="my_state_fragment">
-                <th:block th:replace="~{contents/my/friendState :: friendState}"></th:block>
-            </div>
-            <div id="my_store_list_fragment" class="hidden">
-                <th:block th:replace="~{contents/my/friendStoreList :: friendStoreList}"></th:block>
-            </div>
-            <div id="my_sub_fragment" class="hidden">
-                <th:block th:replace="~{contents/my/friendSub :: friendSub}"></th:block>
+            <div id="friend_info_fragment">
+                <div class="mt-6 shadow-md">
+                    <div class="w-full h-full px-10 mx-auto relative">
+                        <h2 id="friend_nickname" class="text-2xl font-bold text-yellow-600 mb-4"></h2>
+                        <div class="flex items-center mb-6">
+                            <img id="friend_image" class="w-24 h-24 rounded-full mr-4" src="" alt="친구 프로필 사진">
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">선호하는 취향</h3>
+                                <div id="friend_categories" class="flex flex-wrap">
+                                    <!-- 카테고리들이 여기에 동적으로 추가됩니다 -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <h3 id="friend_store_list" class="text-xl font-bold text-yellow-600 mb-4">찜한 맛집 리스트</h3>
+                            <div class="relative ml-4 overflow-hidden">
+                                <div id="friend_store_container" class="flex transition-transform duration-300 ease-in-out">
+                                    <!-- 맛집 아이템들이 여기에 동적으로 추가됩니다 -->
+                                </div>
+                                <button id="prev_store_btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">❮</button>
+                                <button id="next_store_btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">❯</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 id="friend_review" class="text-xl font-bold text-yellow-600 mb-4">작성한 리뷰</h3>
+                            <div class="relative ml-4 overflow-hidden">
+                                <div id="friend_review_container" class="flex transition-transform duration-300 ease-in-out">
+                                    <!-- 리뷰 아이템들이 여기에 동적으로 추가됩니다 -->
+                                </div>
+                                <button id="prev_review_btn" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">❮</button>
+                                <button id="next_review_btn" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">❯</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</main>
+</div>
+
+<!--<main role="main" layout:fragment="main">-->
+<!--    <div class="w-full h-full text-yellow-700">-->
+<!--        <div th:replace="~{/../component/nav :: nav}"></div>-->
+
+<!--        <div id="content" class="w-4/5 mx-auto h-full">-->
+<!--            <div id="my_state_fragment">-->
+<!--                <th:block th:replace="~{contents/my/friendState :: friendState}"></th:block>-->
+<!--            </div>-->
+<!--            <div id="my_store_list_fragment" class="hidden">-->
+<!--                <th:block th:replace="~{contents/my/friendStoreList :: friendStoreList}"></th:block>-->
+<!--            </div>-->
+<!--            <div id="my_sub_fragment" class="hidden">-->
+<!--                <th:block th:replace="~{contents/my/friendSub :: friendSub}"></th:block>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</main>-->

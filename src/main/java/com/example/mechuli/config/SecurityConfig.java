@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/js/**", "/home", "/auth/**", "/api/**", "/css/**", "/img/**", "/image/**", "/tailwinds.css", "/thymeleaf/**", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/ajax/**").permitAll()
 //                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
-                                .requestMatchers("/joinPage/**","/").permitAll()
+                                .requestMatchers("/joinPage/**","/","/friendPage/**").permitAll()
                                 .anyRequest().authenticated()
 
                 )
@@ -57,21 +57,21 @@ public class SecurityConfig {
                         .invalidateHttpSession(true));
         return http.build();
     }
-//    @Bean
-//    public Filter userSessionFilter() {
-//        return (request, response, chain) -> {
-//            HttpServletRequest httpRequest = (HttpServletRequest) request;
-//            HttpServletResponse httpResponse = (HttpServletResponse) response; //언젠가 쓰겠지
-//            HttpSession session = httpRequest.getSession();
-//
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-//                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//                session.setAttribute("nickname", userDetails.getUsername());
-//            }
-//
-//            chain.doFilter(request, response);
-//        };
-//    }
+    @Bean
+    public Filter userSessionFilter() {
+        return (request, response, chain) -> {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            HttpServletResponse httpResponse = (HttpServletResponse) response; //언젠가 쓰겠지
+            HttpSession session = httpRequest.getSession();
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                session.setAttribute("nickname", userDetails.getUsername());
+            }
+
+            chain.doFilter(request, response);
+        };
+    }
 }

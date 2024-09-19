@@ -5,6 +5,7 @@ let authed_test = {
     userPw: "testbb",
     userName: "하이용17"
 };
+
 const MyPage = {
     init() {
         this.my_page();
@@ -32,10 +33,12 @@ const MyPage = {
         this.$selected_categories_container = $("#selected_categories_container");
         this.$store_list_container = $("#store_list_container");
         this.$review_container = $("#review_container");
-        this.$my_friend_list = $("#my_friend_list");
 
-        this.$friend_search = $("#friendSearch");
+
+
         this.$friend_list = $("#friendList");
+        this.$friend_search = $("#friendSearch");
+        this.$friend_info_btn = $("#friend_info_btn");
         this.$no_friends = $("#noFriends");
 
         this.$review_modal = $("#review_modal");
@@ -58,7 +61,9 @@ const MyPage = {
         this.$my_state_btn.on("click", this.on_my_state_btn_click.bind(this));
         this.$my_store_list_btn.on("click", this.on_my_store_list_btn_click.bind(this));
         this.$my_sub_btn.on("click", this.on_my_sub_btn_click.bind(this));
+
         this.$close_review_modal.on("click", this.close_review_modal.bind(this));
+
         // this.$update_user_btn.on("click", this.on_update_user_btn_click.bind(this));
         // this.$confirm_password_form.on("submit", this.on_confirm_password_form_submit.bind(this));
         // this.$cancel_confirm_btn.on("click", this.on_cancel_confirm_btn_click.bind(this));
@@ -71,8 +76,14 @@ const MyPage = {
         this.$next_store_btn.on("click", () => this.move_carousel(this.$store_list_container, "next"));
         this.$prev_review_btn.on("click", () => this.move_carousel(this.$review_container, "prev"));
         this.$next_review_btn.on("click", () => this.move_carousel(this.$review_container, "next"));
-        this.$friend_search.on("input", this.search_friends.bind(this));
 
+        this.$friend_search.on("input", this.search_friends.bind(this));
+        this.$friend_info_btn.on("click",this.on_friend_info_btn_click.bind(this));
+
+        this.$friend_list.on("click", ".friend_info_btn", (e) => {
+            const userIndex = $(e.target).closest('.friend-item').data('user-index');
+            this.go_to_friend_page(userIndex);
+        });
     },
 
     // myState 컨텐츠 요청.. 이거 가져오는거 맞나
@@ -122,6 +133,34 @@ const MyPage = {
             console.error("구독리스트 데이터 가공 실패. render_my_sub() 함수에서 에러", error);
         }
     },
+    // async response_my_friend_info(subscriberId) {
+    //     try {
+    //         const response = await $.ajax({
+    //             url: `${url_subscriptions_subscriber}${subscriberId}`,
+    //             type: 'GET',
+    //             dataType: json,
+    //             xhrFields: { withCredentials: true }
+    //         });
+    //         console.log("친구 정보 가져옴:", response);
+    //         this.render_subscriber_detail(response);
+    //     } catch (error) {
+    //         console.error(" 정보보기 실패:", error);
+    //     }
+    // },
+    // async response_friend_info(userIndex) {
+    //     try {
+    //         const response = await $.ajax({
+    //             url: `${url_subscriber}${userIndex}`,
+    //             type: 'GET',
+    //             dataType: json,
+    //             xhrFields: {withCredentials: true}
+    //         });
+    //         console.log("친구 정보보기 :", response);
+    //         this.render_my_sub(response);
+    //     } catch (error) {
+    //         console.error("구독리스트 데이터 가공 실패. render_my_sub() 함수에서 에러", error);
+    //     }
+    // },
     render_my_state(data) {
         this.$user_nickname.text(data.nickname);
         if (data.userImg) {
@@ -153,17 +192,15 @@ const MyPage = {
         });
         this.$review_container.empty();
         data.myReviewDTOList.forEach(review => {
-            const $review_item = $("<div>").addClass("flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-lg p-4");
-            const $review_text = $("<p>").text(review.content).addClass("text-sm");
+            const $review_item = $("<div>").addClass("flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-lg p-4 cursor-pointer");
+            const $review_text = $("<p>").text(review.content).addClass("text-sm cursor-pointer");
             $review_item.append($review_text);
             $review_item.on("click", () => this.open_review_modal(review.content));
             this.$review_container.append($review_item);
         });
         console.log("review_item 타입 확인용", data.myReviewDTOList); //<p>로 때려박으면 될 듯
-
         this.init_carousel();
     },
-
     render_my_sub(data) {
         const $friendList = $("#friendList");
         const $template = $friendList.find('.friend-item').first();
@@ -179,6 +216,9 @@ const MyPage = {
                 const $item = $template.clone().removeClass('hidden');
                 const formattedNickname = subscriber.nickName.charAt(0).toUpperCase() + subscriber.nickName.slice(1);
                 $item.find('.nickname').text(formattedNickname);
+                $item.attr('data-user-index', subscriber.userIndex);
+                // $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.userIndex));
+                $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(userIndex));
                 if (subscriber.userImg) {
                     $item.find('img').attr('src', subscriber.userImg).attr('alt', formattedNickname).show();
                     $item.find('.initial').hide();
@@ -187,7 +227,9 @@ const MyPage = {
                     $item.find('.initial').text(formattedNickname.charAt(0)).show();
                 }
                 $item.find('.nickname').text(subscriber.nickName);
-                $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.userIndex));
+                // $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.userIndex));
+                // $item.find('.friend_info_btn').on('click', () => this.on_friend_info_btn_click(subscriber.userIndex));
+
                 this.$friend_list.append($item);
                 $friendList.append($item);
             });
@@ -195,6 +237,31 @@ const MyPage = {
             $noFriends.removeClass('hidden');
         }
     },
+    go_to_friend_page() {
+        // window.location.href = `/friendPage?subscriberId=${subscriberId}`;
+        window.location.href = `/friendPage/`;
+    },
+    // -parameters
+    // render_my_friend_info(data) {
+    //     // const $new_window = $("#subscriber_info");
+    //     $detailModal.find(".subscriber-nickname").text(data.nickname);
+    //     $detailModal.find(".subscriber-image").attr("src", data.userImg || "/img/default-profile.png");
+    //
+    //     const $restaurantList = $detailModal.find(".subscriber-restaurants");
+    //     $restaurantList.empty();
+    //     data.myRestaurantLists.forEach(restaurant => {
+    //         $restaurantList.append(`<li>${restaurant.name}</li>`);
+    //     });
+    //
+    //     const $reviewList = $detailModal.find(".subscriber-reviews");
+    //     $reviewList.empty();
+    //     data.reviewList.forEach(review => {
+    //         $reviewList.append(`<li>${review.restaurantName}: ${review.content}</li>`);
+    //     });
+    //
+    //     $detailModal.removeClass("hidden");
+    // },
+
     init_carousel() {
         this.$store_list_container.css("transform", "translateX(0)");
         this.$review_container.css("transform", "translateX(0)");
@@ -248,22 +315,10 @@ const MyPage = {
         }
     },
 
-    go_to_friend_page(userIndex) {
-        console.info(userIndex)
-        window.location.href = `${url_subscriber}?userIndex=${userIndex}`;
-    },
     // go_to_friend_page(userIndex) {
     //     console.info(userIndex)
-    //     try {
-    //         const friend_user_index = $.ajax({
-    //             url: `${url_subscriber}${userIndex}`,
-    //             type: 'GET',
-    //             dataType: json,
-    //             xhrFields: { withCredentials: true }
-    //         });
-    //     } catch (error) {
-    //         console.error("친구 페이지로 이동 실패:", error);
-    //     }
+    //     window.location.href = `${url_subscriber}${userIndex}`;
+    //
     // },
 
     async unsubscribe(subscriberId) {
@@ -320,6 +375,11 @@ const MyPage = {
 
     close_review_modal() {
         this.$review_modal.addClass("hidden");
+    },
+    on_friend_info_btn_click(userIndex) {
+        console.info(userIndex)
+        window.location.href = `url_subscriber}${userIndex}`;
+        console.info("ddadssad"+userIndex)
     },
     // on_my_search() {
     //     const searchTerm = this.$my_search.val().toLowerCase();
