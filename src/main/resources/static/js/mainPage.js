@@ -91,7 +91,7 @@ let mainPage = {
             const selectedRestaurants = shuffledRestaurants.slice(0, 3);
 
             // 카테고리 컨테이너 생성
-            const $categoryContainer = $('<div>').addClass('flex flex-col w-full');
+            const $categoryContainer = $('<div>').addClass('flex flex-col items-center w-full mb-8');
             const $categoryTitle = $('<h1>').addClass('text-2xl relative left-8').text(`#${category} 추천`);
             $categoryContainer.append($categoryTitle); // 제목을 카테고리 컨테이너에 추가
 
@@ -99,9 +99,9 @@ let mainPage = {
             const $categorySection = $('<div>').addClass(this.commonContainerClass);
 
             selectedRestaurants.forEach((restaurant) => {
-                const $restaurantDiv = $('<div>').addClass('bg-[#e5e5e5] h-32 w-32 rounded-3xl flex flex-col items-center');
-                const $img = $('<img>').attr('src', restaurant.img_url).attr('alt', 'Restaurant Image').addClass('h-20 w-20 object-cover');
-                const $name = $('<h3>').text(restaurant.name).addClass('text-center');
+                const $restaurantDiv = $('<div>').addClass('relative bg-gray-300 h-32 w-32 rounded-3xl flex flex-col items-center overflow-hidden');
+                const $img = $('<img>').attr('src', restaurant.img_url).attr('alt', 'Restaurant Image').addClass('h-32 w-32 object-cover rounded-3xl');
+                const $name = $('<h3>').text(restaurant.name).addClass('absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 text-lg font-bold p-1');
 
                 $restaurantDiv.append($img).append($name);
 
@@ -184,29 +184,30 @@ let mainPage = {
     },
 
     displayRandomCategoryRestaurants: function (data) {
-        this.$container.empty();
+        this.$container.empty(); // 기존 내용을 지우기
 
         // 무작위로 선택된 3개의 카테고리에 따라 레스토랑 3개씩 표시
         this.randomCategories.forEach((category_name) => {
-            // 최상위 컨테이너 생성
-            const $categoryContainer = $('<div>').addClass('flex flex-col w-full');
+            // 최상위 컨테이너 생성 (flex 레이아웃 설정)
+            const $categoryContainer = $('<div>').addClass('flex flex-col w-full'); // Flex 설정
 
-            // 카테고리별로 텍스트 추가
-            const $categoryTitle = $('<h1>').addClass('text-2xl relative left-8').text(`#${category_name} 추천`);
+            // 카테고리 제목 추가 (왼쪽 정렬로 변경)
+            const $categoryTitle = $('<h1>').addClass('text-2xl text-left relative left-8 mb-4').text(`#${category_name} 추천`);
             $categoryContainer.append($categoryTitle); // 제목을 최상위 컨테이너에 추가
 
-            // 레스토랑 목록을 담을 섹션 컨테이너 생성
-            const $categorySection = $('<div>').addClass(this.commonContainerClass); // 공통 클래스 사용
+            // 레스토랑 목록을 담을 섹션 컨테이너 생성 (공통 그리드 클래스 사용)
+            const $categorySection = $('<div>').addClass(this.commonContainerClass); // 공통 그리드 클래스 사용
 
+            // 각 카테고리에서 최대 3개의 레스토랑 선택
             const categoryRestaurants = data.filter(restaurant => restaurant.category_name === category_name);
-            const selectedRestaurants = categoryRestaurants.slice(0, 3); // 각 카테고리에서 최대 3개의 레스토랑 선택
+            const selectedRestaurants = categoryRestaurants.slice(0, 3);
 
             selectedRestaurants.forEach((restaurant) => {
-                const $restaurantDiv = $('<div>').addClass('bg-[#e5e5e5] h-32 w-32 rounded-3xl flex flex-col items-center'); // 줄바꿈을 위해 mb-4 추가
-                const $img = $('<img>').attr('src', restaurant.img_url).attr('alt', 'Restaurant Image').addClass('h-20 w-20 object-cover');
-                const $name = $('<h3>').text(restaurant.name).addClass('text-center');
+                const $restaurantDiv = $('<div>').addClass('relative bg-[#e5e5e5] h-32 w-32 rounded-3xl flex flex-col items-center space-y-2 overflow-hidden');
+                const $img = $('<img>').attr('src', restaurant.img_url).attr('alt', 'Restaurant Image').addClass('h-32 w-32 object-cover rounded-3xl');
+                const $name = $('<h3>').text(restaurant.name).addClass('absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 text-lg font-bold p-1');
 
-                $restaurantDiv.append($img).append($name);
+                $restaurantDiv.append($img, $name);
 
                 // 레스토랑 클릭 시 /detailPage로 이동하는 이벤트 리스너 추가
                 $restaurantDiv.on('click', () => {
@@ -222,6 +223,11 @@ let mainPage = {
             // 최상위 컨테이너를 메인 컨테이너에 추가
             this.$container.append($categoryContainer);
         });
+
+        // 스타일을 추가하여 왼쪽으로 치우치는 문제를 해결
+        this.$container.css('display', 'flex'); // 전체 컨테이너를 Flex로 설정
+        this.$container.css('align-items', 'center'); // 가운데 정렬
+        this.$container.css('justify-content', 'center'); // 수평 가운데 정렬
     },
 
     displayAllRestaurants: function (data) {
