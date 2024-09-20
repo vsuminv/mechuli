@@ -47,7 +47,7 @@ public class SecurityConfig {
 //                                .requestMatchers("/joinPage/**","/","/myPage/**").permitAll()
 //
 
-                                .requestMatchers("/js/**","/join", "/home", "/auth/**", "/api/**", "/css/**", "/img/**", "/image/**", "/tailwinds.css", "/thymeleaf/**", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/ajax/**", "/boardPage").permitAll()
+                                .requestMatchers("/js/**","/join", "/home", "/auth/**", "/api/**", "/css/**", "/img/**", "/image/**", "/tailwinds.css", "/thymeleaf/**", "/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname", "/ajax/**").permitAll()
 //                                .requestMatchers("/js/**","/home","/auth/**","/api/**", "/css/**", "/img/**","/image/**","/tailwinds.css", "/thymeleaf/**","/csrf-token", "/ajaxCheckId", "/ajaxCheckNickname").permitAll()
                                 .requestMatchers("/joinPage","/").permitAll()
 
