@@ -49,6 +49,7 @@ public class UserService implements UserDetailsService {
 
 
     public void save(UserDTO dto) {
+
         List<RestaurantCategory> restaurantCategories = new ArrayList<>();
         for (Long categoryId : dto.getCategoryIds()) {
             RestaurantCategory category = restaurantCategoryRepository.findById(categoryId)

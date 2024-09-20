@@ -48,11 +48,13 @@ const join_page = {
     async response_category_data() {
         try {
             const response = await $.ajax({
-                url: url_api_category,
+                url: url_api_categoryAll,
                 type: 'GET',
                 dataType: 'json'
             });
             console.log('서버 응답:', response);
+            // 필요한 정보만 추출하여 렌더링 메서드 호출
+
             this.render_categories(response);
         } catch (error) {
             console.error('카테고리 가져오기 오류:', error);
@@ -84,17 +86,31 @@ const join_page = {
 
     render_categories(categories) {
         this.$category_list.empty();
+        categories.forEach((category) => {
+                const category_id = category.categoryId;
+                const category_name = category.categoryName;
 
-        Object.entries(categories).forEach(([category_name, restaurants]) => {
-            const $category_btn = $('<button>')
-                .attr('type', 'button')
-                .addClass('category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200')
-                .attr('data-category-id', category_name)
-                .text(category_name);
+                const $category_btn = $('<button>')
+                    .attr('type', 'button')
+                    .addClass('category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200')
+                    .attr('data-category-id', category_id)
+                    .text(category_name);
 
-            console.log('카테고리 렌더링:', category_name);
-            this.$category_list.append($category_btn);
-        });
+                console.log('카테고리 렌더링:', category_name);
+                this.$category_list.append($category_btn);
+            });
+
+//        Object.entries(categories).forEach(([category_name,category_id, restaurants]) => {
+//            const $category_btn = $('<button>')
+//                .attr('type', 'button')
+//                .addClass('category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200')
+//                .attr('data-category-id',  category_id)
+//                .text(category_name);
+//
+//            console.log('카테고리 렌더링:', category_name);
+//            this.$category_list.append($category_btn);
+//        });
+
     },
 
     validate_form() {
@@ -338,37 +354,87 @@ const join_page = {
         this.update_next_button();
     },
 
-    async onJoinFormSubmit(e) {
-        e.preventDefault();
-        if (this.selected_categories < 3) {
-            alert("최소 3개의 취향을 선택해 주세요");
-            return;
-        }
+//    async onJoinFormSubmit(e) {
+//        e.preventDefault();
+//        if (this.selected_categories < 3) {
+//            alert("최소 3개의 취향을 선택해 주세요");
+//            return;
+//        }
+//
+//        const user_data = {
+//            userId: this.$userId.val().trim(),
+//            userPw: this.$userPw.val().trim(),
+//            nickname: this.$nickname.val().trim(),
+//            categoryIds: $('.category-btn.selected').map(function() {
+////                return $(this).data('category-id');
+//            return parseInt($(this).data('category-id'), 10);
+//            }).get()
+//        };
+//        console.log('가입할 사용자 데이터:', user_data);
+//        try {
+//            const response = $.ajax({
+//                url: url_join,
+//                type: 'POST',
+//                contentType: 'application/json',
+//                dataType: 'json',
+//                data: JSON.stringify(user_data)
+//            });
+//            console.log('회원 가입 성공, 메인페이지로 유저정보 들고가기??', response);
+//            window.location.href = "/";
+//            console.log('회원 가입 성공:', response);
+//        } catch (error) {
+//            console.error('회원가입 실패:', error);
+//            alert("회원가입 실패. 다시 시도해주세요.");
+//        }
+//    },
 
-        const user_data = {
-            userId: this.$userId.val(),
-            userPw: this.$userPw.val(),
-            nickname: this.$nickname.val(),
-            categoryIds: $('.category-btn.selected').map(function() {
+        async onJoinFormSubmit(e) {
+            e.preventDefault();
+
+            if (this.selected_categories < 3) {
+                alert("최소 3개의 취향을 선택해 주세요");
+                return;
+            }
+
+            // 선택된 카테고리 IDs 로그 출력
+            const categoryIds = $('.category-btn.selected').map(function() {
+                const id = $(this).data('category-id');
+                console.log("찾은 카테고리 ID:", id); // 각 버튼의 data-category-id 출력
+                return parseInt(id, 10);
+            }).get();
+
+            // 디버깅: categoryIds가 올바르게 설정되었는지 확인
+            console.log("선택된 카테고리 IDs 배열:", categoryIds);
+
+            const user_data = {
+                userId: this.$userId.val(),
+                userPw: this.$userPw.val(),
+                nickname: this.$nickname.val(),
+                categoryIds: $('.category-btn.selected').map(function() {
                 return $(this).data('category-id');
-            }).get()
-        };
-        try {
-            const response = $.ajax({
-                url: url_join,
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(user_data)
-            });
-            console.log('회원 가입 성공, 메인페이지로 유저정보 들고가기??', response);
-            window.location.href = "/";
-            console.log('회원 가입 성공:', response);
-        } catch (error) {
-            console.error('회원가입 실패:', error);
-            alert("회원가입 실패. 다시 시도해주세요.");
-        }
-    },
-};
+                }).get()
+            };
+
+            // 디버깅: user_data 객체 확인
+            console.log('가입할 사용자 데이터:', user_data);
+
+//
+            try {
+                         const response = $.ajax({
+                             url: url_join,
+                             type: 'POST',
+                             contentType: 'application/json',
+                             data: JSON.stringify(user_data)
+                         });
+                         console.log('회원 가입 성공, 메인페이지로 유저정보 들고가기??', response);
+                         window.location.href = "/";
+                         console.log('회원 가입 성공:', response);
+                     } catch (error) {
+                         console.error('회원가입 실패:', error);
+                         alert("회원가입 실패. 다시 시도해주세요.");
+                     }
+                 },
+             };
 
 $(function() {
     join_page.init();
