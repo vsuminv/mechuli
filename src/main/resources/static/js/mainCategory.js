@@ -21,10 +21,10 @@ let mainCategory = {
     },
 
     displayCategories: function (data) {
-        const $container = $('#list-container');
+        const $container = $('#list-container').addClass('gap-2');
 
         // "전체" 버튼 생성 및 추가
-        const $allButton = $('<button>').text("전체").addClass('bg-[#e5e5e5] h-8 w-full rounded-xl');
+        const $allButton = $('<button>').text("전체").addClass('bg-[#e5e5e5] h-12 w-full rounded-xl text-xl');
         $container.append($allButton);
 
         // 전체 버튼 클릭 시 /api/all 데이터를 가져와서 표시
@@ -43,8 +43,8 @@ let mainCategory = {
 
         if (typeof data === 'object' && !Array.isArray(data)) {
             Object.keys(data).forEach((categoryName) => {
-                const $chooseSection = $('<div>').addClass('bg-[#e5e5e5] h-8 w-full rounded-xl flex flex-col items-center').attr('data-category', categoryName);
-                const $chooseCategoryList = $('<h1>').text(categoryName);
+                const $chooseSection = $('<div>').addClass('bg-[#e5e5e5] h-12 w-full rounded-xl flex flex-col items-center justify-center').attr('data-category', categoryName);
+                const $chooseCategoryList = $('<h1>').text(categoryName).addClass('text-center text-xl');
 
                 $chooseSection.append($chooseCategoryList);
                 $container.append($chooseSection);
