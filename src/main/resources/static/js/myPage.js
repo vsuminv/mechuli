@@ -161,7 +161,7 @@ const MyPage = {
         this.myRestaurantListDTOList.forEach(store => {
             const $store_wrapper = $("<div>").addClass("flex-none w-32 h-32 mr-4 bg-white rounded-lg shadow-md overflow-hidden");
             const $store_item = $("<div>").addClass("relative w-full h-full bg-gray-200");
-            const $star_btn = $("<button>").text("★").addClass("z-10 absolute top-0 right-0 m-2 text-yellow-500")
+            const $star_btn = $("<button>").text("★").addClass("absolute top-0 right-0 m-2 text-yellow-500")
                 .attr("id", "myPageStar-" + store.restaurant_id)
                 .on("click", () => this.handleStarClick(store.restaurant_id));  // 클릭 이벤트 등록
             const $store_img = $("<img>").attr("src", store.restaurantImg || "/img/된찌.png").attr("alt", store.restaurantName).addClass("w-full h-full object-cover");
