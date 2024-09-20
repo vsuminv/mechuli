@@ -231,11 +231,11 @@ let mainPage = {
         this.$container.addClass(this.commonContainerClass); // 공통 클래스 사용
 
         data.forEach((restaurant) => {
-            const $restaurantDiv = $('<div>').addClass('bg-[#e5e5e5] h-32 w-32 rounded-3xl flex flex-col items-center space-y-2');
-            const $img = $('<img>').attr('src', restaurant.img_url).attr('alt', 'Restaurant Image').addClass('h-20 w-20 object-cover');
-            const $name = $('<h3>').text(restaurant.name).addClass('text-center');
+            const $restaurantDiv = $('<div>').addClass('relative bg-[#e5e5e5] h-32 w-32 rounded-3xl flex flex-col items-center space-y-2 overflow-hidden');
+            const $img = $('<img>').attr('src', restaurant.img_url).attr('alt', 'Restaurant Image').addClass('h-32 w-32 object-cover rounded-3xl');
+            const $name = $('<h2>').text(restaurant.name).addClass('absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 text-lg font-bold p-1');
 
-            $restaurantDiv.append($img).append($name);
+            $restaurantDiv.append($img, $name);
 
             // 레스토랑 클릭 시 /detailPage로 이동하는 이벤트 리스너 추가
             $restaurantDiv.on('click', () => {
@@ -283,11 +283,11 @@ let mainPage = {
 
         if (restaurants && Array.isArray(restaurants)) {
             restaurants.forEach((restaurant) => {
-                const $restaurantDiv = $('<div>').addClass('bg-[#e5e5e5] h-32 w-32 rounded-3xl flex flex-col items-center space-y-2');
-                const $img = $('<img>').attr('src', restaurant.img_url).attr('alt', 'Restaurant Image').addClass('h-20 w-20 object-cover');
-                const $name = $('<h3>').text(restaurant.name).addClass('text-center');
+                const $restaurantDiv = $('<div>').addClass('relative bg-[#e5e5e5] h-32 w-32 rounded-3xl flex flex-col items-center space-y-2 overflow-hidden');
+                const $img = $('<img>').attr('src', restaurant.img_url).attr('alt', 'Restaurant Image').addClass('h-32 w-32 object-cover rounded-3xl');
+                const $name = $('<h3>').text(restaurant.name).addClass('absolute bottom-0 left-0 w-full text-center text-white bg-black bg-opacity-50 text-lg font-bold p-1');
 
-                $restaurantDiv.append($img).append($name);
+                $restaurantDiv.append($img, $name);
 
                 // 레스토랑 클릭 시 /detailPage로 이동하는 이벤트 리스너 추가
                 $restaurantDiv.on('click', () => {
