@@ -11,14 +11,14 @@ import lombok.*;
 @Builder
 public class SubscriberInfoDTO {
 
-    private Long userIndex;
+    private Long subscriberIndex;
     private String userImg;
 
     private String nickName;
 
 
     public SubscriberInfoDTO(Long userIndex, String nickName, String userImg) {
-        this.userIndex = userIndex;
+        this.subscriberIndex = userIndex;
         this.nickName = nickName;
         this.userImg = userImg;
     }

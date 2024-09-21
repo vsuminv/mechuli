@@ -9,8 +9,10 @@ import com.example.mechuli.domain.Restaurant;
 import com.example.mechuli.domain.RestaurantCategory;
 import com.example.mechuli.domain.Role;
 import com.example.mechuli.domain.UserDAO;
+import com.example.mechuli.dto.RestaurantCategoryDTO;
 import com.example.mechuli.dto.RestaurantDTO;
 import com.example.mechuli.dto.UserDTO;
+import com.example.mechuli.dto.UserInfoDTO;
 import com.example.mechuli.repository.RestaurantCategoryRepository;
 import com.example.mechuli.repository.RestaurantRepository;
 import com.example.mechuli.repository.UserRepository;
@@ -94,8 +96,9 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
         UserDAO user = currentUser.get();
-        boolean isUserDeleted = user.getIsDeleted();
-        if (isUserDeleted) {
+        Boolean isDeleted = user.getIsDeleted();
+        boolean deletedStatus = (isDeleted != null) ? isDeleted : false; // null이면 false로 처리
+        if (deletedStatus) {
             throw new UsernameNotFoundException("This account has been deactivated.");
         }
         // UserDAO가 이미 UserDetails를 구현하므로 User 객체로 변환할 필요 없음
@@ -186,6 +189,7 @@ public class UserService implements UserDetailsService {
         // S3의 이미지 URL 생성
         return amazonS3.getUrl(BUCKET_NAME, fileName).toString();
     }
+
     public boolean verifyPassword(Long userIndex, String passwordToVerify) {
         UserDAO user = userRepository.findByUserIndex(userIndex)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -194,5 +198,28 @@ public class UserService implements UserDetailsService {
         return bCryptPasswordEncoder.matches(passwordToVerify, user.getPassword());
     }
 
+
+    /////////////////
+
+    public UserInfoDTO findUserInfo(Long userIndex) {
+        UserDAO userDAO = userRepository.findByUserIndex(userIndex)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<RestaurantCategoryDTO> restaurantCategoryDTOList = new ArrayList<>();
+        for(RestaurantCategory rec : userDAO.getRestaurantCategory()) {
+            RestaurantCategoryDTO recDto = RestaurantCategoryDTO.builder()
+                    .categoryId(rec.getCategoryId())
+                    .categoryName(rec.getCategoryName())
+                    .build();
+            restaurantCategoryDTOList.add(recDto);
+        }
+
+        return UserInfoDTO.builder()
+                .userIndex(userIndex)
+                .nickname(userDAO.getNickname())
+                .userImg(userDAO.getUserImg())
+                .restaurantCategories(restaurantCategoryDTOList)
+                .build();
+    }
 }
 

@@ -3,14 +3,14 @@
     <script defer type="text/javascript" th:src="@{/js/myPage.js}"></script>
 </th:block>
 <main role="main" layout:fragment="main">
-    <div id="myPageContainer" class="text-sm w-full h-full text-yellow-700 overflow-hidden">
+    <div id="myPageContainer" class="text-sm w-full h-auto text-yellow-700 overflow-y: auto;">
         <div th:replace="~{/../component/nav :: nav}"></div>
 
-        <div id="content" class="w-4/5 mx-auto h-full">
+        <div id="content" class="w-5/6 mx-auto">
             <div id="my_state_fragment">
                 <th:block th:replace="~{contents/my/myState :: myState}"></th:block>
             </div>
-            <div id="my_store_list_fragment" class="hidden">
+            <div id="my_store_list_fragment" class="hidden mb-8">
                 <th:block th:replace="~{contents/my/myStoreList :: myStoreList}"></th:block>
             </div>
             <div id="my_sub_fragment" class="text-sm hidden overflow-auto">

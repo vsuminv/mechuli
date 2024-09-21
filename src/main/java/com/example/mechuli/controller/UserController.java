@@ -99,14 +99,15 @@ public class UserController {
 
     // 유저 정보 수정
     @PutMapping("/updateUpdate")
-    public ResponseEntity<Void> updateUser(
+    public ResponseEntity<?> updateUser(
             @AuthenticationPrincipal UserDAO authedUser,
             @RequestPart(value = "file", required = false) MultipartFile file,  // Optional file
-            @RequestPart UserDTO updateRequest) {
+            @RequestPart(value = "updateRequest", required = false) UserDTO updateRequest) {
 
         if (authedUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
 
         try {
             // 이미지 업로드 후 URL 생성
@@ -198,7 +199,19 @@ public class UserController {
         return ResponseEntity.ok("User has been deactivated.");
     }
 
+    ////////////////////////////////////
+
+    // 개인정보 조회
+    @PostMapping("/auth/myPage")
+    public ResponseEntity<UserInfoDTO> findUserInfo(@AuthenticationPrincipal UserDAO authedUser) {
+        if (authedUser == null) {
+            System.out.println("User is not authenticated.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserInfoDTO userInfoDto = userService.findUserInfo(authedUser.getUserIndex());
+
+        return ResponseEntity.ok(userInfoDto);
+    }
+
 }
-
-
-

@@ -60,8 +60,9 @@ public class SubscriptionController {
 
     //특정 구독자 정보 조회
     @GetMapping("/subscriber/{subscriberId}")
-    public ResponseEntity<SubscriberDetailDTO> getSubscriberDetail(@AuthenticationPrincipal UserDAO currentUser, @PathVariable Long subscriberId) {
+    public ResponseEntity<SubscriberDetailDTO> getSubscriberDetail(@AuthenticationPrincipal UserDAO currentUser, @PathVariable(name = "subscriberId") Long subscriberId) {
         SubscriberDetailDTO detail = subscriptionService.getSubscriberSelect(subscriberId);
+        System.out.println(detail);
         return ResponseEntity.ok(detail);
     }
 
