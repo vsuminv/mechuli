@@ -13,8 +13,6 @@ const MyPage = {
 
         this.my_btn_style(this.$my_state_btn);
 
-        console.log("초기화 완료."); // 초기화 완료 로그
-
     },
 
 
@@ -101,22 +99,17 @@ const MyPage = {
         });
 
         this.$withdraw_btn.on("click", (event) => this.withdraw_mechuli(event));
-        ////////////////////////////////////
-//        this.$user_profile_img.on("click", () => function() {this.$update_img_file.trigger('click');});
+
         this.$user_profile_img.on("click", () => {
             console.log("Profile image clicked");
             this.$update_img_file.trigger('click'); // 화살표 함수로 변경
 
         });
-//        this.$update_img_file.on("change", this.on_image_file_change.bind(this));
-//        /////////////////////////////////////
-//        this.$update_btn.on("click", () => this.submit_update());
 
-        // 추가
 
-            this.$update_img_file.on("change", this.on_image_file_change.bind(this));
+        this.$update_img_file.on("change", this.on_image_file_change.bind(this));
 
-            this.$update_btn.on("click", () => this.submit_update());
+        this.$update_btn.on("click", () => this.submit_update());
     },
 
     // myState 컨텐츠 요청.
@@ -696,14 +689,4 @@ const MyPage = {
 };
 $(document).ready(function () {
     MyPage.init();
-        console.log($('#user_profile_img')); // 제대로 선택되는지 확인
-        console.log($('#update_img_file'));
-     $('#user_profile_img').on('click', function() {
-            console.log("파일 입력 클릭 트리거됨");
-            $('#update_img_file').trigger('click');
-        });
-
-        $('#update_img_file').on('change', function(event) {
-            MyPage.on_image_file_change(event);
-        });
 });
