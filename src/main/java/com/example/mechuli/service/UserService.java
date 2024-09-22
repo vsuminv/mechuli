@@ -195,7 +195,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // 현재 비밀번호 검증
-        return bCryptPasswordEncoder.matches(passwordToVerify, user.getPassword());
+        return bCryptPasswordEncoder.matches(passwordToVerify, user.getUserPw());
     }
 
 
