@@ -1,10 +1,3 @@
-// back에 authedUser 설정 임시방편
-let authed_test = {
-    userIndex: 14,
-    userId: "test1111",
-    userPw: "testbb",
-    userName: "하이용17"
-};
 const MyPage = {
     init() {
         this.my_page();
