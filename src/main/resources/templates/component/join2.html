@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{/default/head :: head}"></head>
+
+<body>
+<main th:fragment="main" class="main-container flex flex-col min-h-screen items-center p-4">
+  <h1 class="text-4xl font-bold mt-6 mb-12">메 추~리</h1>
+  <p class="text-center mb-4">선호 취향 선택(최대 3~5개)</p>
+
+  <!-- 첫 번째 div: 2행 5열 버튼 -->
+  <div class="grid grid-cols-5 gap-2 mb-8">
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">한식</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">양식</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">중식</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">일식</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">멕시코</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">동남아</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">분식</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">카페</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">주점</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">한식</button>
+  </div>
+
+  <!-- 두 번째 div: 3행 5열 버튼 -->
+  <div class="grid grid-cols-5 gap-2 mb-8">
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">패스트푸드</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">족발</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">국수</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">치킨</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">타코야키</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">파스타</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">햄버거</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">국수</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">치킨</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">타코야키</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">패스트푸드</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">족발</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">국수</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">치킨</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">타코야키</button>
+  </div>
+
+  <!-- 세 번째 div: 3행 5열 버튼 -->
+  <div class="grid grid-cols-5 gap-2 mb-8">
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">매콤</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">고소</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">느끼</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">담백</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">상큼</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">갸벼운</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">차가운</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">진한</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">따뜻</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">달콤</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">풍미</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">국물</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">해장</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">안주</button>
+    <button class="px-4 py-2 rounded-full bg-gray-200 text-gray-900 transition-colors duration-300" onclick="toggleButton(this)">전체</button>
+  </div>
+
+  <!-- 이전, 완료 버튼 -->
+  <div class="flex justify-center gap-4 mb-4">
+    <button class="bg-gray-300 text-gray-700 px-6 py-2 rounded-full" onclick="location.href='/signup'">이전</button>
+    <button class="bg-yellow-300 text-gray-900 px-6 py-2 rounded-full">완료</button>
+  </div>
+</main>
+
+<footer th:insert="~{/default/footer :: footer}"></footer>
+<script src="/js/join2.js" defer></script>
+</body>
+</html>
