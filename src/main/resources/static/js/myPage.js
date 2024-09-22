@@ -1,5 +1,8 @@
 const MyPage = {
+
+
     init() {
+        console.log("초기화 시작")
         this.my_page();
         this.my_events();
         this.init_carousel();
@@ -10,8 +13,11 @@ const MyPage = {
 
         this.my_btn_style(this.$my_state_btn);
 
+        console.log("초기화 완료."); // 초기화 완료 로그
 
     },
+
+
     my_page() {
         this.$my_state_fragment = $("#my_state_fragment");
         this.$my_store_list_fragment = $("#my_store_list_fragment");
@@ -63,9 +69,8 @@ const MyPage = {
 
         // this.$user_profile_img = $("#user_profile_img");
         this.$update_img_file = $("#update_img_file");
-        //추가
-//        this.my_events();
     },
+
 
     my_events() {
         ////////////////////
@@ -98,18 +103,20 @@ const MyPage = {
         this.$withdraw_btn.on("click", (event) => this.withdraw_mechuli(event));
         ////////////////////////////////////
 //        this.$user_profile_img.on("click", () => function() {this.$update_img_file.trigger('click');});
-//        this.$update_img_file.on("change", this.on_image_file_change.bind(this));
-        /////////////////////////////////////
-        // 추가
-        // 이미지 클릭 시 파일 선택 창 열기
         this.$user_profile_img.on("click", () => {
-           console.log("이미지 클릭됨");
-           this.$update_img_file.click();
+            console.log("Profile image clicked");
+            this.$update_img_file.trigger('click'); // 화살표 함수로 변경
+
         });
+//        this.$update_img_file.on("change", this.on_image_file_change.bind(this));
+//        /////////////////////////////////////
+//        this.$update_btn.on("click", () => this.submit_update());
 
+        // 추가
 
-        // 파일이 선택되면 on_image_file_change 메소드 호출
-        this.$update_img_file.on("change", this.on_image_file_change.bind(this));
+            this.$update_img_file.on("change", this.on_image_file_change.bind(this));
+
+            this.$update_btn.on("click", () => this.submit_update());
     },
 
     // myState 컨텐츠 요청.
@@ -265,30 +272,16 @@ const MyPage = {
 
     render_my_sub(data) {
         const $friendList = $("#friendList");
+        const $template = $friendList.find('.friend-item').first();
         const $noFriends = $("#noFriends");
-
-         // 기존 친구 목록 비우기
         this.$friend_list.empty();
         this.$no_friends.addClass('hidden');
 
-//        $friendList.find('.friend-item:not(:first)').remove();
-//        $noFriends.addClass('hidden');
+        $friendList.find('.friend-item:not(:first)').remove();
+        $noFriends.addClass('hidden');
 
-        // 친구 목록이 비어 있음을 확인
         if (Array.isArray(data) && data.length > 0) {
             data.forEach(subscriber => {
-                // 친구 아이템 템플릿을 생성
-                const $template = $('<li class="friend-item flex items-center justify-between bg-white p-4 rounded-lg shadow mb-2 hidden">' +
-                                '<div class="flex items-center space-x-3">' +
-                                '<div class="profile w-8 h-8 bg-yellow-200 rounded-full flex items-center justify-center overflow-hidden">' +
-                                '<img class="w-full h-full object-cover" src="" alt="">' +
-                                '<span class="initial text-xl font-bold text-yellow-800"></span>' +
-                                '</div>' +
-                                '<span class="nickname text-sm font-semibold"></span>' +
-                                '</div>' +
-                                '<button class="friend_info_btn bg-red-50 hover:bg-yellow-100 font-bold py-1 px-1 rounded text-xs">정보보기</button>' +
-                                '</li>');
-
                 const $item = $template.clone().removeClass('hidden');
                 const formattedNickname = subscriber.nickName.charAt(0).toUpperCase() + subscriber.nickName.slice(1);
                 $item.find('.nickname').text(formattedNickname);
@@ -299,14 +292,13 @@ const MyPage = {
                     $item.find('img').hide();
                     $item.find('.initial').text(formattedNickname.charAt(0)).show();
                 }
-//                $item.find('.nickname').text(subscriber.nickName);
+                $item.find('.nickname').text(subscriber.nickName);
                 $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.subscriberIndex));
                 this.$friend_list.append($item);
-                $friendList.append($item); // 목록에 추가
+                $friendList.append($item);
             });
         } else {
-            $noFriends.removeClass('hidden'); // 친구가 없으면 메시지 표시
-
+            $noFriends.removeClass('hidden');
         }
     },
     init_carousel() {
@@ -582,20 +574,31 @@ const MyPage = {
         }
     },
     on_user_profile_img_click() {
-        // e.preventDefault();
-         // 클릭 이벤트 트리거
-         //추가
-         $('#update_img_file').click();
+//        // e.preventDefault();
+//         // 클릭 이벤트 트리거
+//
+//         // 추가
+         $('#update_img_file').trigger('click');
     },
-    on_image_file_change(event) {
+   on_image_file_change(event) {
+        console.log("이미지 파일이 변경됨.");
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                this.$user_profile_img.attr('src', e.target.result); // 이미지 src 업데이트
+//                this.$user_profile_img.attr('src', e.target.result); // 이미지 src 업데이트
+            // 추가
+                   console.log("이미지 로드 완료");
+                   $('#user_profile_img').attr('src', e.target.result); // 이미지 미리보기
+//            document.getElementById('user_profile_img').src = e.target.result; // 이미지 src 업데이트
+
+
             };
             reader.readAsDataURL(file);
+        }else{
+            console.error("파일이 선택되지 않았습니다.");
         }
+
     },
 
     withdraw_mechuli: function (event) {
@@ -629,6 +632,7 @@ const MyPage = {
     },
 
     submit_update: function () {
+         console.log("업데이트 제출");
         // 업데이트 전 비밀번호 재확인 함수
         // -> return true 시 아래 진행 아니면 비밀번호가 일치하지 않습니다 다시 시도하세요 alert와 함께 종료
 
@@ -655,11 +659,17 @@ const MyPage = {
         // UserDTO 객체를 FormData에 추가
         formData.append("updateRequest", new Blob([JSON.stringify(userData)], { type: "application/json" }));
 
-        // 파일 추가 (선택적)
-        let fileInput = $("#update_img_file")[0]; // <input type="file" id="fileInput">
-        if (fileInput.files.length > 0) {
-            formData.append("file", fileInput.files[0]);
+        try {
+            // 파일 추가 (선택적)
+            let fileInput = $("#update_img_file")[0]; // <input type="file" id="fileInput">
+            if (fileInput.files.length > 0) {
+                formData.append("file", fileInput.files[0]);
+            }
+        } catch(e) {
+            console.log("파일 추가 도중 문제 발생");
+            console.error(e);
         }
+
 
         if (confirm("회원 정보를 수정하시겠습니까?")) {
 
@@ -686,5 +696,14 @@ const MyPage = {
 };
 $(document).ready(function () {
     MyPage.init();
+        console.log($('#user_profile_img')); // 제대로 선택되는지 확인
+        console.log($('#update_img_file'));
+     $('#user_profile_img').on('click', function() {
+            console.log("파일 입력 클릭 트리거됨");
+            $('#update_img_file').trigger('click');
+        });
 
+        $('#update_img_file').on('change', function(event) {
+            MyPage.on_image_file_change(event);
+        });
 });
