@@ -98,6 +98,7 @@ const MyPage = {
         this.$user_profile_img.on("click", () => function() {this.$update_img_file.trigger('click');});
         this.$update_img_file.on("change", this.on_image_file_change.bind(this));
         /////////////////////////////////////
+        this.$update_btn.on("click", () => this.submit_update());
     },
 
     // myState 컨텐츠 요청.
@@ -626,11 +627,17 @@ const MyPage = {
         // UserDTO 객체를 FormData에 추가
         formData.append("updateRequest", new Blob([JSON.stringify(userData)], { type: "application/json" }));
 
-        // 파일 추가 (선택적)
-        let fileInput = $("#update_img_file")[0]; // <input type="file" id="fileInput">
-        if (fileInput.files.length > 0) {
-            formData.append("file", fileInput.files[0]);
+        try {
+            // 파일 추가 (선택적)
+            let fileInput = $("#update_img_file")[0]; // <input type="file" id="fileInput">
+            if (fileInput.files.length > 0) {
+                formData.append("file", fileInput.files[0]);
+            }
+        } catch(e) {
+            console.log("파일 추가 도중 문제 발생");
+            console.error(e);
         }
+
 
         if (confirm("회원 정보를 수정하시겠습니까?")) {
 
