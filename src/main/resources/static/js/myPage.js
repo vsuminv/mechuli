@@ -66,9 +66,10 @@ const MyPage = {
 
         this.$update_btn = $("#update_btn");
 
-        this.$update_img_file = $("#update_img_file");
-
         this.$selectedCategoryIds = [];
+
+        // this.$user_profile_img = $("#user_profile_img");
+        this.$update_img_file = $("#update_img_file");
     },
 
     my_events() {
@@ -100,7 +101,11 @@ const MyPage = {
         });
 
         this.$withdraw_btn.on("click", (event) => this.withdraw_mechuli(event));
-        this.$update_btn.on("click", () => this.submit_update())},
+        ////////////////////////////////////
+        this.$user_profile_img.on("click", () => function() {this.$update_img_file.trigger('click');});
+        this.$update_img_file.on("change", this.on_image_file_change.bind(this));
+        /////////////////////////////////////
+    },
 
     // myState 컨텐츠 요청.
     async response_my_state() {
@@ -148,6 +153,7 @@ const MyPage = {
             console.error("구독리스트 데이터 가공 실패. render_my_sub() 함수에서 에러", error);
         }
     },
+
     render_my_state(data) {
         console.log(data);
         this.$user_nickname.text(data.nickname);
@@ -156,7 +162,7 @@ const MyPage = {
         } else {
             this.$user_profile_img.attr('src', '/img/mechuri_logo.png');
         }
-
+        // this.update_user_profile_img();
         // 전체 카테고리 값 가져오기
 
         // 카테고리들 중 선택된 카테고리들은 배경색 바꾸기
@@ -553,6 +559,20 @@ const MyPage = {
             $section.removeClass('bg-[#FFDD33]').addClass('bg-[#e5e5e5]');
             this.$myCategoryNum--;
             this.$selectedCategoryIds = this.$selectedCategoryIds.filter(id => id !== categoryId); // ID를 배열에서 제거
+        }
+    },
+    on_user_profile_img_click() {
+        // e.preventDefault();
+         // 클릭 이벤트 트리거
+    },
+    on_image_file_change(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.$user_profile_img.attr('src', e.target.result); // 이미지 src 업데이트
+            };
+            reader.readAsDataURL(file);
         }
     },
 
