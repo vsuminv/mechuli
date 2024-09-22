@@ -27,8 +27,7 @@ body {
     width: 30%;
 }
 .right{
-    width: 30vw;
-    text-align: center;
+    width: 30%;
 }
 .page{
     display: grid;

@@ -5,9 +5,9 @@
 
 <main layout:fragment="main" class="main">
     <div sec:authorize="hasRole('USER')">
-    <div sec:authorize="userId"> bring on </div>
+<!--        <div sec:authorize="userId"> bring on </div>-->
     </div>
-      <div sec:authorize="!hasRole('USER')">
+    <div sec:authorize="!hasRole('USER')">
         <div th:if="${param.logout}">
             로그아웃
         </div>
