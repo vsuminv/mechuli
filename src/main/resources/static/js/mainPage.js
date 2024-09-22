@@ -24,7 +24,7 @@ let mainPage = {
 
         // 초기 데이터 가져오기
 //        this.fetchInitRestaurants();
-          this.fetchRandomRestaurants();
+        this.fetchRandomRestaurants();
 
         ////////////////////////////
         // 페이지 로드 시 로그인 상태 확인 후 식당리스트 뿌리기

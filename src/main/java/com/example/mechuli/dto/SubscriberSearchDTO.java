@@ -10,13 +10,13 @@ import lombok.*;
 @Setter
 public class SubscriberSearchDTO {
     private Long subscriberIndex;
-    private String nickname;
+    private String nickName;
     private String userImg;
     private boolean isSubscribed; // 구독 상태
 
     public SubscriberSearchDTO(Subscription subscription){
         this.subscriberIndex = subscription.getSubscriptId();
-        this.nickname = subscription.getUserId().getNickname();
+        this.nickName = subscription.getUserId().getNickname();
         this.userImg = subscription.getUserId().getUserImg();
         this.isSubscribed = isSubscribed();
 

@@ -87,18 +87,18 @@ const join_page = {
     render_categories(categories) {
         this.$category_list.empty();
         categories.forEach((category) => {
-                const category_id = category.categoryId;
-                const category_name = category.categoryName;
+            const category_id = category.categoryId;
+            const category_name = category.categoryName;
 
-                const $category_btn = $('<button>')
-                    .attr('type', 'button')
-                    .addClass('category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200')
-                    .attr('data-category-id', category_id)
-                    .text(category_name);
+            const $category_btn = $('<button>')
+                .attr('type', 'button')
+                .addClass('category-btn bg-yellow-200 hover:bg-yellow-300 font-bold py-1 px-2 rounded-full transition-colors duration-200')
+                .attr('data-category-id', category_id)
+                .text(category_name);
 
-                console.log('카테고리 렌더링:', category_name);
-                this.$category_list.append($category_btn);
-            });
+            console.log('카테고리 렌더링:', category_name);
+            this.$category_list.append($category_btn);
+        });
 
 //        Object.entries(categories).forEach(([category_name,category_id, restaurants]) => {
 //            const $category_btn = $('<button>')
@@ -133,9 +133,9 @@ const join_page = {
         const idAndNicknameRegex = /^[a-zA-Z가-힣0-9][a-zA-Z가-힣0-9]{2,9}$/;
 
         if (!idAndNicknameRegex.test(value)) {
-                this.update_validation_state(type, false, `${type === 'userId' ? '아이디' : '닉네임'}의 형식이 올바르지 않습니다.`);
-                $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
-                return;
+            this.update_validation_state(type, false, `${type === 'userId' ? '아이디' : '닉네임'}의 형식이 올바르지 않습니다.`);
+            $checkButton.prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+            return;
         }
 //        if (type === 'userId' || type === 'nickname') {
 //                if (!idAndNicknameRegex.test(value)) {
@@ -190,13 +190,13 @@ const join_page = {
 //        });
 //
 //        $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed').hide();
-           $icon.removeClass('text-red-500 text-green-500').addClass(is_valid ? 'text-green-500' : 'text-red-500');
-           $icon.html(is_valid ? '&#10004;' : '&#10008;');
+        $icon.removeClass('text-red-500 text-green-500').addClass(is_valid ? 'text-green-500' : 'text-red-500');
+        $icon.html(is_valid ? '&#10004;' : '&#10008;');
 
-           $message.removeClass('text-red-500 text-green-500 hidden').addClass(is_valid ? 'text-green-300 text-sm' : 'text-red-400 text-sm').text(message);
-           $message.fadeIn(200);
+        $message.removeClass('text-red-500 text-green-500 hidden').addClass(is_valid ? 'text-green-300 text-sm' : 'text-red-400 text-sm').text(message);
+        $message.fadeIn(200);
 
-           $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed').hide();
+        $checkButton.prop('disabled', true).addClass('opacity-50 cursor-not-allowed').hide();
 
     },
 
@@ -220,8 +220,8 @@ const join_page = {
     },
 
     onPasswordInput() {
-       const password = this.$userPw.val();
-       console.log("Password input: ", password);
+        const password = this.$userPw.val();
+        console.log("Password input: ", password);
 //       const isValid = this.validatePassword(password);
 //       const password_matches = password === this.$userPw2.val();
 
@@ -237,17 +237,17 @@ const join_page = {
 //           this.onPasswordConfirmInput();
 //           this.update_next_button();
         if (this.validatePassword(password)) {
-           this.$userPwIcon.removeClass('text-red-500').addClass('text-green-500').html('&#10004;');
+            this.$userPwIcon.removeClass('text-red-500').addClass('text-green-500').html('&#10004;');
         } else {
-           this.$userPwIcon.removeClass('text-green-500').addClass('text-red-500').html('&#10008;');
+            this.$userPwIcon.removeClass('text-green-500').addClass('text-red-500').html('&#10008;');
         }
-           this.update_next_button();
+        this.update_next_button();
 
     },
 
     onPasswordConfirmInput() {
-       const password = this.$userPw.val();
-       const passwordConfirm = this.$userPw2.val();
+        const password = this.$userPw.val();
+        const passwordConfirm = this.$userPw2.val();
 //       const isMatch = password === passwordConfirm && this.validatePassword(password);
 
 //       if (password === confirm_password && this.validatePassword(password)) {
@@ -388,55 +388,54 @@ const join_page = {
 //        }
 //    },
 
-        async onJoinFormSubmit(e) {
-            e.preventDefault();
+    async onJoinFormSubmit(e) {
+        e.preventDefault();
 
-            if (this.selected_categories < 3) {
-                alert("최소 3개의 취향을 선택해 주세요");
-                return;
-            }
+        if (this.selected_categories < 3) {
+            alert("최소 3개의 취향을 선택해 주세요");
+            return;
+        }
 
-            // 선택된 카테고리 IDs 로그 출력
-            const categoryIds = $('.category-btn.selected').map(function() {
-                const id = $(this).data('category-id');
-                console.log("찾은 카테고리 ID:", id); // 각 버튼의 data-category-id 출력
-                return parseInt(id, 10);
-            }).get();
+        // 선택된 카테고리 IDs 로그 출력
+        const categoryIds = $('.category-btn.selected').map(function() {
+            const id = $(this).data('category-id');
+            console.log("찾은 카테고리 ID:", id); // 각 버튼의 data-category-id 출력
+            return parseInt(id, 10);
+        }).get();
 
-            // 디버깅: categoryIds가 올바르게 설정되었는지 확인
-            console.log("선택된 카테고리 IDs 배열:", categoryIds);
+        // 디버깅: categoryIds가 올바르게 설정되었는지 확인
+        console.log("선택된 카테고리 IDs 배열:", categoryIds);
 
-            const user_data = {
-                userId: this.$userId.val(),
-                userPw: this.$userPw.val(),
-                nickname: this.$nickname.val(),
-                categoryIds: $('.category-btn.selected').map(function() {
+        const user_data = {
+            userId: this.$userId.val(),
+            userPw: this.$userPw.val(),
+            nickname: this.$nickname.val(),
+            categoryIds: $('.category-btn.selected').map(function() {
                 return $(this).data('category-id');
-                }).get()
-            };
+            }).get()
+        };
 
-            // 디버깅: user_data 객체 확인
-            console.log('가입할 사용자 데이터:', user_data);
+        // 디버깅: user_data 객체 확인
+        console.log('가입할 사용자 데이터:', user_data);
 
 //
-            try {
-                         const response = $.ajax({
-                             url: url_join,
-                             type: 'POST',
-                             contentType: 'application/json',
-                             data: JSON.stringify(user_data)
-                         });
-                         console.log('회원 가입 성공, 메인페이지로 유저정보 들고가기??', response);
-                         window.location.href = "/";
-                         console.log('회원 가입 성공:', response);
-                     } catch (error) {
-                         console.error('회원가입 실패:', error);
-                         alert("회원가입 실패. 다시 시도해주세요.");
-                     }
-                 },
-             };
+        try {
+            const response = $.ajax({
+                url: url_join,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(user_data)
+            });
+            console.log('회원 가입 성공, 메인페이지로 유저정보 들고가기??', response);
+            window.location.href = "/logout";
+            console.log('회원 가입 성공:', response);
+        } catch (error) {
+            console.error('회원가입 실패:', error);
+            alert("회원가입 실패. 다시 시도해주세요.");
+        }
+    },
+};
 
 $(function() {
     join_page.init();
 });
-

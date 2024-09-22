@@ -199,7 +199,19 @@ public class UserController {
         return ResponseEntity.ok("User has been deactivated.");
     }
 
+    ////////////////////////////////////
+
+    // 개인정보 조회
+    @PostMapping("/auth/myPage")
+    public ResponseEntity<UserInfoDTO> findUserInfo(@AuthenticationPrincipal UserDAO authedUser) {
+        if (authedUser == null) {
+            System.out.println("User is not authenticated.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        UserInfoDTO userInfoDto = userService.findUserInfo(authedUser.getUserIndex());
+
+        return ResponseEntity.ok(userInfoDto);
+    }
+
 }
-
-
-

@@ -180,35 +180,35 @@ let boardPage = {
             subscribeButton.addEventListener('click', () => this.toggleStarColor());
         }
     },
-     updateSubscriptionButton: function (isSubscribed) {
-            const subscribeButton = document.getElementById('subscribe'); // ★ 버튼 요소 가져오기
-            if (subscribeButton) {
-                if (isSubscribed) {
-                    subscribeButton.classList.add('text-[#ffdd33]');
-                    subscribeButton.classList.remove('text-[#e5e5e5]');
-                } else {
-                    subscribeButton.classList.add('text-[#e5e5e5]');
-                    subscribeButton.classList.remove('text-[#ffdd33]');
-                }
+    updateSubscriptionButton: function (isSubscribed) {
+        const subscribeButton = document.getElementById('subscribe'); // ★ 버튼 요소 가져오기
+        if (subscribeButton) {
+            if (isSubscribed) {
+                subscribeButton.classList.add('text-[#ffdd33]');
+                subscribeButton.classList.remove('text-[#e5e5e5]');
+            } else {
+                subscribeButton.classList.add('text-[#e5e5e5]');
+                subscribeButton.classList.remove('text-[#ffdd33]');
             }
-        },
+        }
+    },
 
-        toggleStarColor: function () {
-            $.ajax({
-                url: '/api/ajax/DoMyRestaurant',
-                method: 'POST',
-                contentType: 'application/json',
+    toggleStarColor: function () {
+        $.ajax({
+            url: '/api/ajax/DoMyRestaurant',
+            method: 'POST',
+            contentType: 'application/json',
 //
-                data: JSON.stringify({ restaurant_id: this.restaurantId }),
+            data: JSON.stringify({ restaurant_id: this.restaurantId }),
 //
-                success: (result) => {
-                    this.updateSubscriptionButton(result === 1);
-                },
-                error: (xhr, status, error) => {
-                    console.error('Error toggling subscription:',  xhr.responseText || error);
-                }
-            });
-        },
+            success: (result) => {
+                this.updateSubscriptionButton(result === 1);
+            },
+            error: (xhr, status, error) => {
+                console.error('Error toggling subscription:',  xhr.responseText || error);
+            }
+        });
+    },
 //         function getRestaurantId() {
 //                // 페이지에서 식당 ID를 얻어오는 로직을 추가해야 합니다.
 //                // 예를 들어, 식당 ID가 페이지의 data 속성에 있을 수 있습니다.
