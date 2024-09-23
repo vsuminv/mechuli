@@ -266,37 +266,52 @@ const MyPage = {
         });
     },
 
-    render_my_sub(data) {
-        const $friendList = $("#friendList");
-        const $template = $friendList.find('.friend-item').first();
-        const $noFriends = $("#noFriends");
-        this.$friend_list.empty();
-        this.$no_friends.addClass('hidden');
+   render_my_sub(data) {
+       const $friendList = $("#friendList");
+       const $noFriends = $("#noFriends");
 
-        $friendList.find('.friend-item:not(:first)').remove();
-        $noFriends.addClass('hidden');
+       // 기존 친구 목록 비우기
+       this.$friend_list.empty();
+       $noFriends.addClass('hidden');
 
-        if (Array.isArray(data) && data.length > 0) {
-            data.forEach(subscriber => {
-                const $item = $template.clone().removeClass('hidden');
-                const formattedNickname = subscriber.nickName.charAt(0).toUpperCase() + subscriber.nickName.slice(1);
-                $item.find('.nickname').text(formattedNickname);
-                if (subscriber.userImg) {
-                    $item.find('img').attr('src', subscriber.userImg).attr('alt', formattedNickname).show();
-                    $item.find('.initial').hide();
-                } else {
-                    $item.find('img').hide();
-                    $item.find('.initial').text(formattedNickname.charAt(0)).show();
-                }
-                $item.find('.nickname').text(subscriber.nickName);
-                $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.subscriberIndex));
-                this.$friend_list.append($item);
-                $friendList.append($item);
-            });
-        } else {
-            $noFriends.removeClass('hidden');
-        }
-    },
+
+
+       // 친구 목록이 비어 있음을 확인
+       if (Array.isArray(data) && data.length > 0) {
+           data.forEach(subscriber => {
+               // 친구 아이템 템플릿을 생성
+               const $template = $('<li class="friend-item flex items-center justify-between bg-white p-4 rounded-lg shadow mb-2 hidden">' +
+                   '<div class="flex items-center space-x-3">' +
+                   '<div class="profile w-8 h-8 bg-yellow-200 rounded-full flex items-center justify-center overflow-hidden">' +
+                   '<img class="w-full h-full object-cover" src="" alt="">' +
+                   '<span class="initial text-xl font-bold text-yellow-800"></span>' +
+                   '</div>' +
+                   '<span class="nickname text-sm font-semibold"></span>' +
+                   '</div>' +
+                   '<button class="friend_info_btn bg-red-50 hover:bg-yellow-100 font-bold py-1 px-1 rounded text-xs">정보보기</button>' +
+                   '</li>');
+
+               const $item = $template.clone().removeClass('hidden');
+
+               const formattedNickname = subscriber.nickName.charAt(0).toUpperCase() + subscriber.nickName.slice(1);
+               $item.find('.nickname').text(formattedNickname);
+
+               if (subscriber.userImg) {
+                   $item.find('img').attr('src', subscriber.userImg).attr('alt', formattedNickname).show();
+                   $item.find('.initial').hide();
+               } else {
+                   $item.find('img').hide();
+                   $item.find('.initial').text(formattedNickname.charAt(0)).show();
+               }
+
+               $item.find('.friend_info_btn').on('click', () => this.go_to_friend_page(subscriber.subscriberIndex));
+               this.$friend_list.append($item);
+               $friendList.append($item); // 목록에 추가
+           });
+       } else {
+           $noFriends.removeClass('hidden'); // 친구가 없으면 메시지 표시
+       }
+   },
     init_carousel() {
         this.$store_list_container.css("transform", "translateX(0)");
         this.$review_container.css("transform", "translateX(0)");
