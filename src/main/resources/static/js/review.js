@@ -179,6 +179,19 @@ const reviewPage = {
 
         reviewData.append('reviewDto', new Blob([JSON.stringify(reviewDto)], { type: 'application/json' }));
 
+        // 여러 개의 파일 입력 필드에서 파일 추가
+         const fileUpload1 = $('#file-upload1')[0]?.files[0];
+         const fileUpload2 = $('#file-upload2')[0]?.files[0];
+
+         if (fileUpload1) {
+            reviewData.append('files', fileUpload1);  // 첫 번째 파일 추가
+         }
+
+         if (fileUpload2) {
+            reviewData.append('files', fileUpload2);  // 두 번째 파일 추가
+         }
+
+
         $.ajax({
             url: `/reviews/${this.editReviewId}`,
             method: 'PUT',
