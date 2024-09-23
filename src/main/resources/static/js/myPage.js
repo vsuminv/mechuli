@@ -225,6 +225,7 @@ const MyPage = {
     // 리뷰 리스트만 렌더링하는 함수
     render_review_list() {
         this.$review_container.empty();
+        this.myReviewDTOList.sort((a, b) => new Date(b.updateDate) - new Date(a.updateDate));
         this.myReviewDTOList.forEach(review => {
             const $review_item = $("<div>").addClass("flex-none w-64 h-48 mr-4 bg-white rounded-lg shadow-lg p-4");
             const $restaurant_name = $("<h2>").text(review.restaurantName || "가게 이름 없음").addClass("text-lg font-bold");
