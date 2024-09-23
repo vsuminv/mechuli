@@ -67,7 +67,7 @@ public class SubscriptionService {
     public List<SubscriberInfoDTO> getSubscribedUsers(UserDAO currentUser) {
         List<Subscription> subscriptions = subscriptionRepository.findByUserId(currentUser);
 
-        // 구독자 인덱스와 이미지 정보만 추출하여 DTO로 변환
+        // 구독자 인덱스와 닉네임, 이미지 정보만 추출하여 DTO로 변환
         return subscriptions.stream()
                 .map(subscription -> {
                     UserDAO subscriber = subscription.getSubscriber();

@@ -4,7 +4,7 @@
         <div class="grid-col-1 m-auto">
 
             <button sec:authorize="isAnonymous()" type="button" onclick="location.href='/loginPage'">login</button>
-            <button sec:authorize="hasRole('USER')" type="button" onclick="location.href='/logout'">logout</button>
+            <button sec:authorize="isAuthenticated()" type="button" onclick="location.href='/logout'">logout</button>
 
         </div>
         <div class="grid-col-2">

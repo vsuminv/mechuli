@@ -67,6 +67,7 @@ const MyPage = {
 
         // this.$user_profile_img = $("#user_profile_img");
         this.$update_img_file = $("#update_img_file");
+        this.$password_modal = $('#passwordModal');
     },
 
 
@@ -107,9 +108,11 @@ const MyPage = {
         });
 
 
+
         this.$update_img_file.on("change", this.on_image_file_change.bind(this));
 
-        this.$update_btn.on("click", () => this.submit_update());
+        this.$update_btn.on("click", () => this.checkUserPwd());
+
     },
 
     // myState 컨텐츠 요청.
@@ -429,9 +432,9 @@ const MyPage = {
     // on_update_user_btn_click() {
     //     this.$cancel_update_btn;
     // },
-    // onUpdateUserBtnClick() {
-    //     this.$confirmPasswordModal.removeClass("hidden");
-    // },
+//     onUpdateUserBtnClick() {
+//         this.$confirmPasswordModal.removeClass("hidden");
+//    // },
     on_my_state_btn_click() {
         this.my_contents("#my_state_fragment");
         this.my_btn_style(this.$my_state_btn);
@@ -621,8 +624,53 @@ const MyPage = {
     },
 
     checkUserPwd() {
-        // ajax post 요청으로 비밀번호 입력받은 거 띄우기
-    },
+            $("#currentPassword").val('');
+            this.$password_modal.show();
+
+            // 모달 배경 클릭 시 모달 닫기
+            $('#passwordModal').off('click').on('click', (event) => {
+                // 클릭한 요소가 모달 내용이 아닐 때만 모달을 닫음
+                if (event.target === event.currentTarget) {
+                    this.$password_modal.hide(); // 모달 숨기기
+                }
+            });
+
+            // 확인 버튼 클릭 이벤트
+            $('#confirmPassword').off('click').on('click', () => { // 화살표 함수 사용
+                const userPassword = $('#currentPassword').val(); // 입력된 비밀번호 가져오기
+
+                if (!userPassword) {
+                    alert("비밀번호를 입력하지 않았습니다.");
+                    return;
+                }
+
+                // AJAX POST 요청으로 비밀번호 확인
+                $.ajax({
+                    url: '/ajax/checkPwd', // 비밀번호 확인 URL
+                    type: 'POST', // 요청 방식
+                    data: JSON.stringify({ password: userPassword }), // JSON 객체로 전송
+                    contentType: 'application/json', // Content-Type을 JSON으로 설정
+                    processData: false, // jQuery가 데이터 처리를 하지 않도록 설정
+
+                    success: (response) => {
+                        console.log(response);
+                        if (parseInt(response) === 1) {
+                            alert("비밀번호가 일치합니다.");
+                            this.submit_update();
+                        } else if (parseInt(response) === 0) {
+                            alert("비밀번호가 일치하지 않습니다.");
+                        } else {
+                            alert("서버에서 예상치 못한 응답이 발생했습니다.");
+                        }
+                        this.$password_modal.hide(); // 모달 숨기기
+                    },
+                    error: () => {
+                        alert("비밀번호 확인 중 오류가 발생했습니다.");
+                        this.$password_modal.hide(); // 모달 숨기기
+                    }
+                });
+            });
+        },
 
     submit_update: function () {
          console.log("업데이트 제출");

@@ -52,15 +52,16 @@ public class RestaurantService {
                                 restaurant.getRestaurantCategory().getCategoryName() : "없음",
                         Collectors.mapping(RestaurantDTO::new, Collectors.toList())
                 ));
-
-        // 각 카테고리별로 최대 3개의 레스토랑만 선택
-        groupedByCategory.forEach((key, list) -> {
-            if (list.size() > 3) {
-                groupedByCategory.put(key, list.subList(0, 3));
-            }
-        });
-
         return groupedByCategory;
+
+//        // 각 카테고리별로 최대 3개의 레스토랑만 선택
+//        groupedByCategory.forEach((key, list) -> {
+//            if (list.size() > 3) {
+//                groupedByCategory.put(key, list.subList(0, 3));
+//            }
+//        });
+
+
     }
 
 
